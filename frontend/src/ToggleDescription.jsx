@@ -1,5 +1,10 @@
-export default function ToggleDescription() {
+export default function ToggleDescription({ questionDescription }) {
+    console.log("Received questionDescription:", questionDescription);
+
     return (
-        <h3>Question description</h3>
+        <div>
+            <h3>Question description</h3>
+            <p>{questionDescription}</p>
+        </div>
     )
 }
