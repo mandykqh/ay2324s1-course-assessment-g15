@@ -36,7 +36,7 @@ export default function AddQuestion({ toAddQuestion }) {
                 <option value="hard">Hard</option>
 
             </select>
-            <button type="submit">Submit</button>
+            <button type="add">Add</button>
         </form >
     );
 }
