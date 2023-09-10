@@ -20,12 +20,12 @@ export default function QuestionBank() {
 
 
     const [selectedQuestionDescription, setSelectedQuestionDescription] = useState("");
-    const [isShowPopup, setIsShowPopup] = useState(false);
+    // const [isShowPopup, setIsShowPopup] = useState(false);
     const [selectedQuestionId, setSelectedQuestionId] = useState("");
 
     const togglePopup = (questionDescription, questionId) => {
         setSelectedQuestionDescription(questionDescription);
-        setIsShowPopup(!isShowPopup);
+        // setIsShowPopup(!isShowPopup);
         setSelectedQuestionId(questionId);
 
         console.log(`this is set: ${selectedQuestionDescription}`);
@@ -61,8 +61,8 @@ export default function QuestionBank() {
             </div>
             {/* {isShowPopup && < ToggleDescription description={selectedQuestionDescription} />} */}
             <div className="questionDescription">
-                {isShowPopup && <DescriptionPopup qn={selectedQuestionDescription} />}
-                {/* {isShowPopup && selectedQuestionDescription} */}
+                {/* {isShowPopup && <DescriptionPopup qn={selectedQuestionDescription} />} */}
+                {<DescriptionPopup qn={selectedQuestionDescription} />}
             </div>
             <div className="addQuestion">
                 <AddQuestion toAddQuestion={toAddQuestion} />
