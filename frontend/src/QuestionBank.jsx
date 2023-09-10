@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import AddQuestion from "./AddQuestion";
+import ToggleDescription from "./ToggleDescription";
 export default function QuestionBank() {
     const [questions, setQuestions] = useState([]);
     const toAddQuestion = newQuestion => setQuestions([...questions, newQuestion]);
@@ -16,6 +17,11 @@ export default function QuestionBank() {
         console.log("Saving Questions:", questions);
         // localStorage.setItem("questions", JSON.stringify(questions));
     }, [questions]);
+
+
+    const [showDescPopup, setShowDescPopup] = useState(false);
+    const togglePopup = () => setShowDescPopup(!showDescPopup);
+
     return (
         <div>
             <h2>Question Bank</h2>
@@ -32,13 +38,16 @@ export default function QuestionBank() {
                     {questions.map((question, id) => (
                         <tr key={question.id}>
                             <td>{id + 1}</td>
-                            <td>{question.title}</td>
+                            <td>
+                                <button onClick={togglePopup}>{question.title}</button>
+                            </td>
                             <td>{question.category}</td>
                             <td>{question.complexity}</td>
                         </tr>
                     ))}
                 </tbody>
             </table>
+            {showDescPopup && <ToggleDescription />}
             <AddQuestion toAddQuestion={toAddQuestion} />
         </div>
     );
