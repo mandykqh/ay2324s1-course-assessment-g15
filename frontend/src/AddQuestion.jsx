@@ -9,6 +9,8 @@ export default function AddQuestion({ toAddQuestion }) {
         const { title, description, category, complexity } = questionToAdd;
         const newQuestion = new Question(Math.random().toString(), title, description, category, complexity); // TODO fix rand id
         toAddQuestion(newQuestion);
+
+        setQuestionToAdd({ id: "", title: "", description: "", category: "", complexity: "" });
     }
     const handleChange = (evt) => {
         const { name, value } = evt.target;

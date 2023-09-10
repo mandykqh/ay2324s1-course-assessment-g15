@@ -6,7 +6,7 @@ export default function QuestionBank() {
 
     useEffect(() => {
         const loadedQuestions = JSON.parse(localStorage.getItem("questions")) || [];
-        console.log("Loaded Questions:", loadedQuestions);
+        // console.log("Loaded Questions:", loadedQuestions);
         if (loadedQuestions.length > 0) {
             setQuestions(loadedQuestions);
         }
@@ -14,7 +14,7 @@ export default function QuestionBank() {
 
     useEffect(() => {
         console.log("Saving Questions:", questions);
-        localStorage.setItem("questions", JSON.stringify(questions));
+        // localStorage.setItem("questions", JSON.stringify(questions));
     }, [questions]);
     return (
         <div>
