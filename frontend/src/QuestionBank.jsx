@@ -62,7 +62,7 @@ export default function QuestionBank() {
             {/* {isShowPopup && < ToggleDescription description={selectedQuestionDescription} />} */}
             <div className="questionDescription">
                 {/* {isShowPopup && <DescriptionPopup qn={selectedQuestionDescription} />} */}
-                {<DescriptionPopup qn={selectedQuestionDescription} />}
+                {<DescriptionPopup qn={selectedQuestionDescription} idx={selectedQuestionId} />}
             </div>
             <div className="addQuestion">
                 <AddQuestion toAddQuestion={toAddQuestion} />
