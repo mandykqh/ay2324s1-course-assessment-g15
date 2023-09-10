@@ -2,7 +2,7 @@ import { useState } from "react";
 import Question from "./Question";
 export default function AddQuestion({ toAddQuestion }) {
     const [questionToAdd, setQuestionToAdd] = useState({
-        title: '', description: '', category: '', complexity: ''
+        title: '', description: '', category: '', complexity: 'Easy'
     });
     const handleSubmit = evt => {
         evt.preventDefault();
