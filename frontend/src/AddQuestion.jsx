@@ -7,7 +7,7 @@ export default function AddQuestion({ toAddQuestion }) {
     const handleSubmit = evt => {
         evt.preventDefault();
         const { title, description, category, complexity } = questionToAdd;
-        const newQuestion = new Question(Math.random().toString(), title, description, category, complexity);
+        const newQuestion = new Question(Math.random().toString(), title, description, category, complexity); // TODO fix rand id
         toAddQuestion(newQuestion);
     }
     const handleChange = (evt) => {
