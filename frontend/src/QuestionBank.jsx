@@ -1,7 +1,7 @@
 export default function QuestionBank() {
     return (
         <div>
-            <h1>Question Bank</h1>
+            <h2>Question Bank</h2>
             <table>
                 <thead>
                     <tr>
@@ -11,7 +11,11 @@ export default function QuestionBank() {
                         <th>Complexity</th>
                     </tr>
                 </thead>
+                <tbody>
+
+                </tbody>
             </table>
         </div>
-    )
+    );
 }
+
