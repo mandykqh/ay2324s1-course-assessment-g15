@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import AddQuestion from "./AddQuestion";
-import ToggleDescription from "./ToggleDescription";
+import DescriptionPopup from "./DescriptionPopup";
 export default function QuestionBank() {
     const [questions, setQuestions] = useState([]);
     const toAddQuestion = newQuestion => setQuestions([...questions, newQuestion]);
@@ -15,15 +15,19 @@ export default function QuestionBank() {
 
     useEffect(() => {
         console.log("Saving Questions:", questions);
-        // localStorage.setItem("questions", JSON.stringify(questions));
+        localStorage.setItem("questions", JSON.stringify(questions));
     }, [questions]);
 
 
     const [selectedQuestionDescription, setSelectedQuestionDescription] = useState("");
     const [isShowPopup, setIsShowPopup] = useState(false);
-    const togglePopup = (questionDescription) => {
+    const [selectedQuestionId, setSelectedQuestionId] = useState("");
+
+    const togglePopup = (questionDescription, questionId) => {
         setSelectedQuestionDescription(questionDescription);
         setIsShowPopup(!isShowPopup);
+        setSelectedQuestionId(questionId);
+
         console.log(`this is set: ${selectedQuestionDescription}`);
     }
     return (
@@ -44,7 +48,7 @@ export default function QuestionBank() {
                             <tr key={question.id}>
                                 <td>{id + 1}</td>
                                 <td>
-                                    <button onClick={() => togglePopup(question.description)}>{question.title}</button>
+                                    <button onClick={() => togglePopup(question.description, id)}>{question.title}</button>
                                     {console.log("Description:", question.description)}
                                 </td>
                                 <td>{question.category}</td>
@@ -57,9 +61,8 @@ export default function QuestionBank() {
             </div>
             {/* {isShowPopup && < ToggleDescription description={selectedQuestionDescription} />} */}
             <div className="questionDescription">
-                {/* {isShowPopup && <ToggleDescription qn={selectedQuestionDescription} />} */}
-                <h4>Question description</h4>
-                {isShowPopup && selectedQuestionDescription}
+                {isShowPopup && <DescriptionPopup qn={selectedQuestionDescription} />}
+                {/* {isShowPopup && selectedQuestionDescription} */}
             </div>
             <div className="addQuestion">
                 <AddQuestion toAddQuestion={toAddQuestion} />
