@@ -50,7 +50,7 @@ export default function QuestionBank() {
                         </tr>
                     </thead>
                     <tbody>
-                        {questions.map((question, id) => (
+                        {questions.map((question, id) => ( //relook
                             <tr key={question.id}>
                                 <td>{id + 1}</td>
                                 <td>
@@ -72,7 +72,7 @@ export default function QuestionBank() {
                 {<DescriptionPopup qn={selectedQuestionDescription} idx={selectedQuestionId} />}
             </div>
             <div className="addQuestion">
-                <AddQuestion existingQuestions={questions} toAddQuestion={toAddQuestion} />
+                <AddQuestion toAddQuestion={toAddQuestion} />
 
             </div>
         </div>

@@ -1,13 +1,14 @@
 import { useState } from "react";
 import Question from "./Question";
-export default function AddQuestion({ existingQuestions, toAddQuestion }) {
+export default function AddQuestion({ toAddQuestion }) {
     const [questionToAdd, setQuestionToAdd] = useState({
         title: '', description: '', category: '', complexity: 'Easy'
     });
     const handleSubmit = evt => {
         evt.preventDefault();
         const { title, description, category, complexity } = questionToAdd;
-        const newQuestion = new Question(existingQuestions.length + 1, title, description, category, complexity); // TODO fix rand id
+        // const newQuestion = new Question(existingQuestions.length + 1, title, description, category, complexity); // TODO fix rand id
+        const newQuestion = new Question(Math.random().toString(), title, description, category, complexity); // TODO fix rand id
         toAddQuestion(newQuestion);
 
         setQuestionToAdd({ id: "", title: "", description: "", category: "", complexity: "" });
@@ -31,9 +32,9 @@ export default function AddQuestion({ existingQuestions, toAddQuestion }) {
 
             <label htmlFor="complexity">Complexity</label>
             <select id="complexity" name="complexity" value={questionToAdd.complexity} onChange={handleChange}>
-                <option value="easy">Easy</option>
-                <option value="medium">Medium</option>
-                <option value="hard">Hard</option>
+                <option value="Easy">Easy</option>
+                <option value="Medium">Medium</option>
+                <option value="Hard">Hard</option>
 
             </select>
             <button id="addButton">Add</button>
