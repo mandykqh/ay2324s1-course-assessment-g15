@@ -1,13 +1,13 @@
 import { useState } from "react";
 import Question from "./Question";
-export default function AddQuestion({ toAddQuestion }) {
+export default function AddQuestion({ existingQuestions, toAddQuestion }) {
     const [questionToAdd, setQuestionToAdd] = useState({
         title: '', description: '', category: '', complexity: 'Easy'
     });
     const handleSubmit = evt => {
         evt.preventDefault();
         const { title, description, category, complexity } = questionToAdd;
-        const newQuestion = new Question(Math.random().toString(), title, description, category, complexity); // TODO fix rand id
+        const newQuestion = new Question(existingQuestions.length + 1, title, description, category, complexity); // TODO fix rand id
         toAddQuestion(newQuestion);
 
         setQuestionToAdd({ id: "", title: "", description: "", category: "", complexity: "" });
@@ -36,7 +36,7 @@ export default function AddQuestion({ toAddQuestion }) {
                 <option value="hard">Hard</option>
 
             </select>
-            <button type="add">Add</button>
+            <button id="addButton">Add</button>
         </form >
     );
 }
