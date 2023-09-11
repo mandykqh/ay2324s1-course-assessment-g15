@@ -2,7 +2,7 @@ import { useState } from "react";
 import Question from "./Question";
 export default function AddQuestion({ toAddQuestion }) {
     const [questionToAdd, setQuestionToAdd] = useState({
-        title: '', description: '', category: '', complexity: 'Easy'
+        title: '', description: '', category: '', complexity: ''
     });
     const handleSubmit = evt => {
         evt.preventDefault();
@@ -31,7 +31,8 @@ export default function AddQuestion({ toAddQuestion }) {
             <input type="text" id="category" name="category" value={questionToAdd.category} onChange={handleChange} required />
 
             <label htmlFor="complexity">Complexity</label>
-            <select id="complexity" name="complexity" value={questionToAdd.complexity} onChange={handleChange}>
+            <select id="complexity" name="complexity" value={questionToAdd.complexity} onChange={handleChange} required>
+                <option value="" disabled selected>Select an option</option>
                 <option value="Easy">Easy</option>
                 <option value="Medium">Medium</option>
                 <option value="Hard">Hard</option>
