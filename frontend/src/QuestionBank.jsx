@@ -31,11 +31,11 @@ export default function QuestionBank() {
         console.log(`this is set: ${selectedQuestionDescription}`);
     }
 
-    // const deleteQuestion = (toDeleteQnId) => {
-    //     const remainingQuestions = questions.splice(toDeleteQnId, 0);
-    //     setQuestions(remainingQuestions);
-    //     localStorage.setItem("questions", JSON.stringify(remainingQuestions));
-    // }
+    const deleteQuestion = (toDeleteQnId) => {
+        const remainingQuestions = questions.filter(qn => qn.id !== toDeleteQnId);
+        setQuestions(remainingQuestions);
+        localStorage.setItem("questions", JSON.stringify(remainingQuestions));
+    }
     return (
         <div>
             <div className="questionBank">
@@ -59,7 +59,7 @@ export default function QuestionBank() {
                                 </td>
                                 <td>{question.category}</td>
                                 <td>{question.complexity}</td>
-                                <td><button id="deleteButton" onClick={() => deleteQuestion(id)}>Delete</button></td>
+                                <td><button id="deleteButton" onClick={() => deleteQuestion(question.id)}>Delete</button></td>
                             </tr>
                         ))}
                     </tbody>
