@@ -46,7 +46,7 @@ export default function AddQuestion({ questions, toAddQuestion }) {
 
             <label htmlFor="complexity">Complexity</label>
             <select id="complexity" name="complexity" value={questionToAdd.complexity} onChange={handleChange} required>
-                <option value="" disabled selected>Select an option</option>
+                <option value="" disabled>Select an option</option>
                 <option value="Easy">Easy</option>
                 <option value="Medium">Medium</option>
                 <option value="Hard">Hard</option>
