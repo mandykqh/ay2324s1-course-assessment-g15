@@ -8,7 +8,6 @@ export default function QuestionBank() {
     // Load questions
     useEffect(() => {
         const loadedQuestions = JSON.parse(localStorage.getItem("questions")) || [];
-        // console.log("Loaded Questions:", loadedQuestions);
         if (loadedQuestions.length > 0) {
             setQuestions(loadedQuestions);
         }
@@ -16,25 +15,22 @@ export default function QuestionBank() {
 
     // Save questions
     useEffect(() => {
-        console.log("Saving Questions:", questions);
         localStorage.setItem("questions", JSON.stringify(questions));
     }, [questions]);
 
     // Handle question description popup
-    const [selectedQuestionDescription, setSelectedQuestionDescription] = useState("");
+    const [selectedQuestion, setSelectedQuestion] = useState("");
     const [isShowPopup, setIsShowPopup] = useState(false);
     const [selectedQuestionId, setSelectedQuestionId] = useState("");
 
-    const displayDescriptionPopup = (questionDescription, questionId) => {
-        setSelectedQuestionDescription(questionDescription);
+    const displayDescriptionPopup = (question, questionId) => {
+        setSelectedQuestion(question);
         setIsShowPopup(true);
         setSelectedQuestionId(questionId);
-
-        console.log(`this is set: ${selectedQuestionDescription}`);
     }
 
-    const toCloseDescriptionPopup = (questionDescription, questionId) => {
-        setSelectedQuestionDescription("");
+    const toCloseDescriptionPopup = (question, questionId) => {
+        setSelectedQuestion("");
         setIsShowPopup(false);
     }
 
@@ -62,8 +58,7 @@ export default function QuestionBank() {
                             <tr key={question.id}>
                                 <td>{id + 1}</td>
                                 <td>
-                                    <button onClick={() => displayDescriptionPopup(question.description, id)}>{question.title}</button>
-                                    {console.log("Description:", question.description)}
+                                    <button onClick={() => displayDescriptionPopup(question, id)}>{question.title}</button>
                                 </td>
                                 <td>{question.category}</td>
                                 <td>{question.complexity}</td>
@@ -74,12 +69,9 @@ export default function QuestionBank() {
                 </table>
 
             </div>
-            {isShowPopup && < DescriptionPopup qn={selectedQuestionDescription} idx={selectedQuestionId} toClose={toCloseDescriptionPopup} />}
-            {/* <div className="questionDescription">
-                {<DescriptionPopup qn={selectedQuestionDescription} idx={selectedQuestionId} />}
-            </div> */}
+            {isShowPopup && < DescriptionPopup qn={selectedQuestion} idx={selectedQuestionId} toClose={toCloseDescriptionPopup} />}
             <div className="addQuestion">
-                <AddQuestion toAddQuestion={toAddQuestion} />
+                <AddQuestion questions={questions} toAddQuestion={toAddQuestion} />
 
             </div>
         </div>
