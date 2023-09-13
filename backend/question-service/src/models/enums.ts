@@ -1,6 +1,7 @@
 export const categoryEnum = [
-    'Array',
-    'String',
+    'Arrays',
+    'Strings',
+    'Algorithms',
     'Linked List',
     'Tree',
     'Graph',
