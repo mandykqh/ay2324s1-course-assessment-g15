@@ -18,8 +18,9 @@ app.use(compression());
 app.use(bodyParser.json());
 
 const server = http.createServer(app);
+const port = process.env.PORT || 8080;
 
-server.listen(process.env.PORT || 8080, () => {
+server.listen(port, () => {
     console.log('Server listening on port 8080');
 });
 
@@ -28,7 +29,7 @@ const MONGOURL = process.env.MONGOURL;
 mongoose.Promise = Promise;
 mongoose.connect(MONGOURL);
 mongoose.connection.on('error', () => {
-    console.log('MongoDB connection error. Please make sure MongoDB is running.');
+    console.log('MongoDB connection error.');
     process.exit();
 });
 
