@@ -37,8 +37,7 @@ export const updateQuestion = async (req: express.Request, res: express.Response
         const fieldsToUpdate = req.body;
         const questionID = req.params.questionID;
 
-        // Remove the questionID field from the fieldsToUpdate object
-        delete fieldsToUpdate.questionID;
+        delete fieldsToUpdate.questionID; // Prevent questionID from being updated
 
         const updatedQuestion = await QuestionModel.findOneAndUpdate(
             { questionID: questionID },
