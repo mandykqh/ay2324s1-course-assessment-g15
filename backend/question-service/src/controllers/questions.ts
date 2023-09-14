@@ -56,3 +56,18 @@ export const updateQuestion = async (req: express.Request, res: express.Response
         return res.sendStatus(500);
     }
 }
+
+export const deleteQuestion = async (req: express.Request, res: express.Response) => {
+    try {
+        // Delete question by questionID, not MongoDB record _id
+        const questionID = req.params.questionID;
+        const deletedQuestion = await QuestionModel.findOneAndDelete({ questionID: questionID });
+        if (!deletedQuestion) { // Query failed
+            return res.sendStatus(404);
+        }
+        return res.sendStatus(200);
+    } catch (error) {
+        console.error(error);
+        return res.sendStatus(500);
+    }
+}
