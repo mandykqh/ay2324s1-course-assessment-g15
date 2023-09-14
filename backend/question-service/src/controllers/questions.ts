@@ -25,7 +25,7 @@ export const addQuestion = async (req: express.Request, res: express.Response) =
         return res.status(201).json(question);
     } catch (error) {
         if (error.code === 11000) {
-            return res.status(409).json({ error: "Duplicate ID: This ID already exists." });
+            return res.status(409).json({ error: "Duplicate title: A question with this title already exists." });
         }
         console.error(error);
         return res.sendStatus(500);
