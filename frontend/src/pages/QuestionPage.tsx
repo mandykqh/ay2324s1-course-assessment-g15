@@ -4,10 +4,12 @@ import { questionSet } from '../MockData';
 import LocalStorageHandler from '../handlers/LocalStorageHandler';
 import { QuestionString } from '../models/Question';
 import QuestionStringBuilder from '../models/QuestionStringBuilder';
-import QuestionTable from '../question/QuestionTable';
-import AddQuestionModal from '../question/addModal/AddQuestionModal';
 import React, { useEffect, useState } from 'react';
-import DescriptionModal from '../question/descriptionModal/DescriptionModal';
+import NotificationHandler from '../handlers/NotificationHandler';
+import AddQuestionModal from '../components/question/addModal/AddQuestionModal';
+import DescriptionModal from '../components/question/descriptionModal/DescriptionModal';
+import QuestionTable from '../components/question/QuestionTable';
+import { Notification, NotificationType } from '../components/question/Notification';
 
 
 let qn = { title: '', category: '', complexity: '', description: '' };
@@ -24,6 +26,15 @@ const QuestionPage = () => {
   const [newLink, setNewLink] = useState('');
   const [currentQuestionId, setCurrentQuestionId] = useState('0');
   const [isDeleting, setIsDeleting] = useState(false);
+  const [notifShowing, setIsNotifShowing] = useState(false);
+  const [notifMessage, setNotifMessage] = useState('');
+  const [notifType, setNotifType] = useState<NotificationType>(NotificationType.SUCCESS);
+
+  function showNotification(message: string, type: NotificationType) {
+    setIsNotifShowing(true);
+    setNotifMessage(message);
+    setNotifType(type);
+  }
 
   function closeViewModal() {
     setViewModalIsVisible(false);
@@ -45,8 +56,8 @@ const QuestionPage = () => {
       setAddModalIsVisible(false);
       LocalStorageHandler.saveQuestion(newArr);
     } catch (e) {
-      console.log(e);
-      return;
+      let result = (e as Error).message;
+      showNotification(result, NotificationType.ERROR);
     }
   }
 
@@ -82,6 +93,14 @@ const QuestionPage = () => {
       <DescriptionModal
         isVisible={viewModalIsVisible} data={qn} closeHandler={closeViewModal}
       />
+
+      <Notification
+        isOpen={notifShowing}
+        setter={setIsNotifShowing}
+        message={notifMessage}
+        type={notifType}
+      />
+
       <div style={{ width: '100' }}>
         <div id='button-container'>
           <Button id='add-btn' variant='contained' onClick={() => setAddModalIsVisible(true)}>
