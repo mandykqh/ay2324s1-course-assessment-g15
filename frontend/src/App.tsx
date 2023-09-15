@@ -1,10 +1,10 @@
 import "./App.css";
-import QuestionBank from "./assets/components/question/QuestionBank";
+import QuestionPage from "./assets/pages/QuestionPage";
 
 function App() {
   return (
     <div>
-      <QuestionBank />
+      <QuestionPage />
 
     </div>
 
