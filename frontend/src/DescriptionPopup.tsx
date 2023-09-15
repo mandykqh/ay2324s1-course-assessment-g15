@@ -1,5 +1,13 @@
 import "./DescriptionPopup.css";
-export default function DescriptionPopup({ qn, idx, toClose }) {
+import Question from "./Question";
+
+interface Props {
+    qn: Question;
+    idx: number;
+    toClose: (qn: Question, idx: number) => {}
+}
+
+const DescriptionPopup: React.FC<Props> = ({ qn, idx, toClose }) => {
     return (
         <div className="descriptionPopup">
             <div className="content">
@@ -11,3 +19,5 @@ export default function DescriptionPopup({ qn, idx, toClose }) {
         </div >
     )
 }
+
+export default DescriptionPopup;

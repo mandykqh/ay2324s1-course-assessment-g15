@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
 import AddQuestion from "./AddQuestion";
 import DescriptionPopup from "./DescriptionPopup";
+import Question from "./Question";
+
 export default function QuestionBank() {
-    const [questions, setQuestions] = useState([]);
-    const toAddQuestion = newQuestion => setQuestions([...questions, newQuestion]);
+    const [questions, setQuestions] = useState<Question[]>([]);
+    const toAddQuestion = (newQuestion: Question) => setQuestions([...questions, newQuestion]);
 
     // Load questions
     useEffect(() => {
-        const loadedQuestions = JSON.parse(localStorage.getItem("questions")) || [];
+        const loadedQuestions = JSON.parse(localStorage.getItem("questions")!) || []; // USING NON-NULL OPERATOR FOR NOW
         if (loadedQuestions.length > 0) {
             setQuestions(loadedQuestions);
         }
@@ -23,19 +25,19 @@ export default function QuestionBank() {
     const [isShowPopup, setIsShowPopup] = useState(false);
     const [selectedQuestionId, setSelectedQuestionId] = useState("");
 
-    const displayDescriptionPopup = (question, questionId) => {
+    const displayDescriptionPopup = (question: string, questionId: string) => {
         setSelectedQuestion(question);
         setIsShowPopup(true);
         setSelectedQuestionId(questionId);
     }
 
-    const toCloseDescriptionPopup = (question, questionId) => {
+    const toCloseDescriptionPopup = (question: string, questionId: string) => {
         setSelectedQuestion("");
         setIsShowPopup(false);
     }
 
     // Delete question
-    const deleteQuestion = (toDeleteQnId) => {
+    const deleteQuestion = (toDeleteQnId: string) => {
         const remainingQuestions = questions.filter(qn => qn.id !== toDeleteQnId);
         setQuestions(remainingQuestions);
         localStorage.setItem("questions", JSON.stringify(remainingQuestions));
@@ -58,7 +60,7 @@ export default function QuestionBank() {
                             <tr key={question.id}>
                                 <td>{id + 1}</td>
                                 <td>
-                                    <button onClick={() => displayDescriptionPopup(question, id)}>{question.title}</button>
+                                    <button onClick={() => displayDescriptionPopup('1', id.toString())}>{question.title}</button>
                                 </td>
                                 <td>{question.category}</td>
                                 <td>{question.complexity}</td>

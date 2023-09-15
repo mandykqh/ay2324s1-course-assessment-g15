@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Question from "./Question";
 export default function AddQuestion({ questions, toAddQuestion }) {
+
     const [questionToAdd, setQuestionToAdd] = useState({
         title: '', description: '', category: '', complexity: ''
     });
