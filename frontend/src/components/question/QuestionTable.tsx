@@ -1,6 +1,6 @@
 import './QuestionTable.css';
 import { useState, useEffect } from "react";
-import { Question, QuestionString } from "../models/Question";
+import { Question, QuestionString } from '../../models/Question';
 
 interface Props {
   data: QuestionString[]

@@ -6,7 +6,7 @@ import FormControl from '@mui/material/FormControl';
 import ListItemText from '@mui/material/ListItemText';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
-import { Category } from '../../models/Question';
+import { Category } from '../../../models/Question';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;

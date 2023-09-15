@@ -1,6 +1,6 @@
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import React from "react";
-import { Complexity } from "../../models/Question";
+import { Complexity } from "../../../models/Question";
 
 interface Props {
   setter: React.Dispatch<React.SetStateAction<string>>;
