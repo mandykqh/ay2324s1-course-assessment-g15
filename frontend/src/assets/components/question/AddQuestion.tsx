@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Question from "./Question";
+import Question from "../../models/Question";
 export default function AddQuestion({ questions, toAddQuestion }) {
 
     const [questionToAdd, setQuestionToAdd] = useState({

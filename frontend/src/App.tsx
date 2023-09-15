@@ -1,5 +1,5 @@
 import "./App.css";
-import QuestionBank from "./QuestionBank";
+import QuestionBank from "./assets/components/question/QuestionBank";
 
 function App() {
   return (

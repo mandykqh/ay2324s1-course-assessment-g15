@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import AddQuestion from "./AddQuestion";
 import DescriptionPopup from "./DescriptionPopup";
-import Question from "./Question";
+import Question from "../../models/Question";
 
 export default function QuestionBank() {
     const [questions, setQuestions] = useState<Question[]>([]);

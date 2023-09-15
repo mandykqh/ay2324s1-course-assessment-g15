@@ -1,5 +1,5 @@
 import "./DescriptionPopup.css";
-import Question from "./Question";
+import Question from "./assets/models/Question";
 
 interface Props {
     qn: Question;
