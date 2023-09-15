@@ -13,7 +13,7 @@ class LocalStorageHandler {
   //Temp method for getting QuestionID
   static getNextQuestionId() {
     if (localStorage.getItem("nextId") === null) {
-      localStorage.setItem("nextId", '100')
+      localStorage.setItem("nextId", '101')
       return '100';
     }
     const nextId = (localStorage.getItem("nextId")!); //USING NON NULL OPERATOR
