@@ -5,11 +5,11 @@ import LocalStorageHandler from '../handlers/LocalStorageHandler';
 import { QuestionString } from '../models/Question';
 import QuestionStringBuilder from '../models/QuestionStringBuilder';
 import React, { useEffect, useState } from 'react';
-import NotificationHandler from '../handlers/NotificationHandler';
 import AddQuestionModal from '../components/question/addModal/AddQuestionModal';
 import DescriptionModal from '../components/question/descriptionModal/DescriptionModal';
 import QuestionTable from '../components/question/QuestionTable';
 import { Notification, NotificationType } from '../components/question/Notification';
+import QuestionValidator from '../models/QuestionValidator';
 
 
 let qn = { title: '', category: '', complexity: '', description: '' };
@@ -51,7 +51,9 @@ const QuestionPage = () => {
 
     let newArr = questions;
     try {
+      let validator = new QuestionValidator();
       newArr = [...questions, builder.build()];
+      validator.validateDuplicateQuestions(builder.build(), questions);
       setQuestions(newArr);
       setAddModalIsVisible(false);
       LocalStorageHandler.saveQuestion(newArr);

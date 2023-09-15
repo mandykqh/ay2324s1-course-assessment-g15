@@ -17,6 +17,18 @@ class QuestionValidator {
     }
     return true;
   }
+
+  // Dummy implementation for assignment 1
+  public validateDuplicateQuestions(input: QuestionString, qnList: QuestionString[]) {
+    qnList.forEach((qn) => {
+      if (qn.id === input.id) {
+        throw new Error('Duplicate question ID');
+      }
+      if (qn.title === input.title) {
+        throw new Error('Duplicate question title');
+      }
+    })
+  }
 }
 
 export default QuestionValidator;
