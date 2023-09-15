@@ -28,10 +28,7 @@ const QuestionPage = () => {
     <div id='question-page-container'>
       <DescriptionModal
         isVisible={descModalIsVisible}
-        title={qn.title}
-        category={qn.category}
-        complexity={qn.complexity}
-        description={qn.description}
+        data={qn}
         closeHandler={() => { setDescModalIsVisible(false) }}
       />
       <QuestionTable

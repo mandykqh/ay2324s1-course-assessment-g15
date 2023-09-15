@@ -3,15 +3,17 @@ import { Box, Input, Modal, Typography } from "@mui/material";
 
 interface Props {
   isVisible: boolean;
-  title: string;
-  category: string;
-  complexity: string;
-  description: string
+  data: {
+    title: string;
+    category: string;
+    complexity: string;
+    description: string
+  };
   closeHandler: () => void;
 }
 
 const DescriptionModal: React.FC<Props> =
-  ({ isVisible, title, category, complexity, description, closeHandler }) => {
+  ({ isVisible, data, closeHandler }) => {
     return (
       <Modal
         open={isVisible}
@@ -25,18 +27,18 @@ const DescriptionModal: React.FC<Props> =
             </div>
             <div id='top-row'>
               <Typography id="modal-title" variant="h5" component="h2" color={"white"}>
-                {title}
+                {data.title}
               </Typography>
             </div>
             <div id='middle-row'>
               <div id='middle-left-container'>
                 <Typography id="category-label" component="h3" color={"white"} textAlign={'left'}>
-                  {`Category: ${category}`}
+                  {`Category: ${data.category}`}
                 </Typography>
               </div>
               <div id='middle-right-container'>
                 <Typography id="complexity-label" component="h3" color={"white"}>
-                  {`Complexity: ${complexity}`}
+                  {`Complexity: ${data.complexity}`}
                 </Typography>
               </div>
             </div>
@@ -48,7 +50,7 @@ const DescriptionModal: React.FC<Props> =
                 maxRows={20}
                 fullWidth
                 disabled
-                value={description}
+                value={data.description}
               />
             </div>
           </div>
