@@ -1,20 +1,67 @@
-import './QuestionPage.css'
-import { questionSet } from "../MockData";
-import QuestionTable from "../question/QuestionTable";
-import DescriptionModal from "../question/descriptionModal/DescriptionModal";
-import { useEffect, useState } from 'react';
+import './QuestionPage.css';
+import { Button } from '@mui/material';
+import { questionSet } from '../MockData';
+import LocalStorageHandler from '../handlers/LocalStorageHandler';
 import { QuestionString } from '../models/Question';
+import QuestionStringBuilder from '../models/QuestionStringBuilder';
+import QuestionTable from '../question/QuestionTable';
+import AddQuestionModal from '../question/addModal/AddQuestionModal';
+import React, { useEffect, useState } from 'react';
+import DescriptionModal from '../question/descriptionModal/DescriptionModal';
+
 
 let qn = { title: '', category: '', complexity: '', description: '' };
 
 const QuestionPage = () => {
 
+  const [addModalIsVisible, setAddModalIsVisible] = useState(false);
+  const [viewModalIsVisible, setViewModalIsVisible] = useState(false);
   const [questions, setQuestions] = useState<QuestionString[]>([]);
-  const [descModalIsVisible, setDescModalIsVisible] = useState(false);
+  const [newTitle, setNewTitle] = useState('');
+  const [newCategories, setNewCategories] = useState('');
+  const [newComplexity, setNewComplexity] = useState('');
+  const [newDescription, setNewDescription] = useState('');
+  const [newLink, setNewLink] = useState('');
   const [currentQuestionId, setCurrentQuestionId] = useState('0');
+  const [isDeleting, setIsDeleting] = useState(false);
 
-  useEffect(() => { setQuestions(questionSet); }, []);
+  function closeViewModal() {
+    setViewModalIsVisible(false);
+  }
 
+  function submitHandler() {
+    let builder = new QuestionStringBuilder();
+    builder.setId(LocalStorageHandler.getNextQuestionId()); //TODO get ID from mongodb
+    builder.setTitle(newTitle);
+    builder.setComplexity(newComplexity);
+    builder.setCategories(newCategories);
+    builder.setLink(newLink);
+    builder.setDescription(newDescription);
+
+    let newArr = questions;
+    try {
+      newArr = [...questions, builder.build()];
+      setQuestions(newArr);
+      setAddModalIsVisible(false);
+      LocalStorageHandler.saveQuestion(newArr);
+    } catch (e) {
+      console.log(e);
+      return;
+    }
+  }
+
+  useEffect(() => {
+    if (Object.keys(LocalStorageHandler.loadQuestion()).length === 0) {
+      setQuestions(questionSet);
+      return;
+    }
+    setQuestions(LocalStorageHandler.loadQuestion());
+  }, []);
+
+  function viewDescriptionHandler(id: string) {
+    setCurrentQuestionId(id);
+    setViewModalIsVisible(true);
+  }
 
   const selectedQuestion = questions.filter(i => i.id === currentQuestionId)[0];
   if (selectedQuestion !== undefined) {
@@ -26,22 +73,36 @@ const QuestionPage = () => {
 
   return (
     <div id='question-page-container'>
+      <AddQuestionModal
+        isVisible={addModalIsVisible} closeHandler={() => setAddModalIsVisible(false)}
+        titleSetter={setNewTitle} linkSetter={setNewLink}
+        categoriesSetter={setNewCategories} complexitySetter={setNewComplexity}
+        descriptionSetter={setNewDescription} submitHandler={submitHandler}
+      />
       <DescriptionModal
-        isVisible={descModalIsVisible}
-        data={qn}
-        closeHandler={() => { setDescModalIsVisible(false) }}
+        isVisible={viewModalIsVisible} data={qn} closeHandler={closeViewModal}
       />
-      <QuestionTable
-        data={questionSet}
-        isDeleting={false}
-        viewDescriptionHandler={(id: string) => {
-          setCurrentQuestionId(id);
-          setDescModalIsVisible(true)
-        }}
-        deleteHandler={(id: string) => { }}
-      />
+      <div style={{ width: '100' }}>
+        <div id='button-container'>
+          <Button id='add-btn' variant='contained' onClick={() => setAddModalIsVisible(true)}>
+            Add
+          </Button>
+          <Button id='delete-btn' variant='contained' color='error'
+            onClick={() => setIsDeleting(!isDeleting)}>
+            Delete
+          </Button>
+        </div>
+        <QuestionTable
+          data={questions}
+          viewDescriptionHandler={viewDescriptionHandler}
+          deleteHandler={(id: string) => {
+            setQuestions(questions.filter(i => i.id !== id));
+            LocalStorageHandler.saveQuestion(questions.filter(i => i.id !== id));
+          }}
+          isDeleting={isDeleting} />
+      </div>
     </div>
-  );
-}
+  )
+};
 
 export default QuestionPage;
