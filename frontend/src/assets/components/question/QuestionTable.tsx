@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import AddQuestion from "./AddQuestion";
 import DescriptionPopup from "./DescriptionPopup";
-import Question from "../../models/Question";
+import { Question } from "../../models/Question";
 
 export default function QuestionBank() {
     const [questions, setQuestions] = useState<Question[]>([]);
@@ -74,7 +74,6 @@ export default function QuestionBank() {
             {isShowPopup && < DescriptionPopup qn={selectedQuestion} idx={selectedQuestionId} toClose={toCloseDescriptionPopup} />}
             <div className="addQuestion">
                 <AddQuestion questions={questions} toAddQuestion={toAddQuestion} />
-
             </div>
         </div>
     );
