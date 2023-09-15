@@ -1,20 +1,55 @@
-.descriptionPopup {
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    z-index: 1000;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    justify-content: center;
+#modal-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40%;
+    background-color: #282c34;
+    border: 2px solid #000;
+    box-shadow: 24;
+    padding: 20px;
+    border-radius: 50;
 }
 
-.content {
-    background-color: white;
-    border-radius: 10px;
+
+#inner-modal-container {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+}
+
+#top-row {
+    display: flex;
+    flex: 1;
+    margin-bottom: 20px;
+}
+
+#middle-row {
+    display: flex;
+    flex: 1;
+    justify-content: space-evenly;
+    margin-bottom: 10px;
+}
+
+#bottom-row {
+    display: flex;
+    flex: 1;
+}
+
+#middle-left-container {
+    text-align: left;
+    flex: 1;
+}
+
+#middle-right-container {
+    text-align: right;
+    flex: 1;
+}
+
+#description-input {
+    flex: 1;
+    background-color: #212224;
     padding: 20px;
-    width: 70%;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    -webkit-text-fill-color: white;
 }
