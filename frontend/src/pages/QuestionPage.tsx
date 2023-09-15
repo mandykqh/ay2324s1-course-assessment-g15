@@ -57,6 +57,7 @@ const QuestionPage = () => {
       setQuestions(newArr);
       setAddModalIsVisible(false);
       LocalStorageHandler.saveQuestion(newArr);
+      showNotification('Question added', NotificationType.SUCCESS);
     } catch (e) {
       let result = (e as Error).message;
       showNotification(result, NotificationType.ERROR);
