@@ -41,7 +41,7 @@ const QuestionTable: React.FC<Props> = ({ data, viewDescriptionHandler, isDeleti
           </tr>
           {questionsList.map((qn: Question, key: number) => {
             return (
-              <tr className={isDeleting ? "question-tr" : ''} key={qn.id.toString()}
+              <tr className={isDeleting ? "question-tr-deleting" : 'question-tr-viewing'} key={qn.id.toString()}
                 onClick={
                   (e) => {
                     if (isDeleting) {

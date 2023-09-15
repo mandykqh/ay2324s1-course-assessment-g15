@@ -22,8 +22,12 @@
   padding: 5px;
 }
 
-.question-tr:hover {
+.question-tr-deteting:hover {
   background-color: red;
+}
+
+.question-tr-viewing:hover {
+  background-color: #212224;
 }
 
 /* .question-tr:nth-child(even) {
