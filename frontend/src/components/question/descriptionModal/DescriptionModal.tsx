@@ -5,7 +5,7 @@ interface Props {
   isVisible: boolean;
   data: {
     title: string;
-    category: string;
+    categories: string;
     complexity: string;
     description: string
   };
@@ -33,7 +33,7 @@ const DescriptionModal: React.FC<Props> =
             <div id='middle-row'>
               <div id='middle-left-container'>
                 <Typography id="category-label" component="h3" color={"white"} textAlign={'left'}>
-                  {`Category: ${data.category}`}
+                  {`Category: ${data.categories}`}
                 </Typography>
               </div>
               <div id='middle-right-container'>

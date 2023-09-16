@@ -1,8 +1,8 @@
-import { QuestionString } from "./Question";
+import { QuestionString } from "../Commons"
 
 class QuestionValidator {
+  // check for empty fields
   public validateEmptyFields(input: QuestionString) {
-    // check for empty fields
     if (!input.title) {
       throw new Error('Title cannot be empty')
     }
@@ -15,10 +15,13 @@ class QuestionValidator {
     if (!input.link) {
       throw new Error('Link cannot be empty')
     }
+    if (!input.description) {
+      throw new Error('Description cannot be empty')
+    }
     return true;
   }
 
-  // Dummy implementation for assignment 1
+  // Temporary implementation for assignment 1 ------------------------------------------
   public validateDuplicateQuestions(input: QuestionString, qnList: QuestionString[]) {
     qnList.forEach((qn) => {
       if (qn.id === input.id) {
@@ -29,6 +32,7 @@ class QuestionValidator {
       }
     })
   }
+  // -------------------------------------------------------------------------------------------
 }
 
 export default QuestionValidator;

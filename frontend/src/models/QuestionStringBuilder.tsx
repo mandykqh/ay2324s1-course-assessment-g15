@@ -1,4 +1,6 @@
-import { QuestionString } from "./Question";
+import { QuestionString } from "../Commons";
+import LocalStorageHandler from "../handlers/LocalStorageHandler";
+import Question from "./Question";
 import QuestionValidator from "./QuestionValidator";
 
 class QuestionStringBuilder {
@@ -37,6 +39,15 @@ class QuestionStringBuilder {
 
   public setLink(value: string) {
     this.qnStr.link = value;
+  }
+
+  public setQuestionString(value: QuestionString) {
+    this.setId(LocalStorageHandler.getNextQuestionId());
+    this.setTitle(value.title);
+    this.setDescription(value.description);
+    this.setCategories(value.categories);
+    this.setComplexity(value.complexity);
+    this.setLink(value.link);
   }
 
   public build() {

@@ -1,62 +1,59 @@
 import './QuestionPage.css';
-import { Button } from '@mui/material';
-import { questionSet } from '../MockData';
+import { mockQuestions } from '../MockData';
 import LocalStorageHandler from '../handlers/LocalStorageHandler';
-import { QuestionString } from '../models/Question';
-import QuestionStringBuilder from '../models/QuestionStringBuilder';
+import { QuestionString } from '../Commons';
 import React, { useEffect, useState } from 'react';
 import AddQuestionModal from '../components/question/addModal/AddQuestionModal';
 import DescriptionModal from '../components/question/descriptionModal/DescriptionModal';
 import QuestionTable from '../components/question/QuestionTable';
 import { Notification, NotificationType } from '../components/question/Notification';
 import QuestionValidator from '../models/QuestionValidator';
+import { questionStringTemplate } from '../Commons';
+import QuestionStringBuilder from '../models/QuestionStringBuilder';
 
-
-let qn = { title: '', category: '', complexity: '', description: '' };
+// Initializes with all fields empty
+let currentQuestion = questionStringTemplate;
 
 const QuestionPage = () => {
 
   const [addModalIsVisible, setAddModalIsVisible] = useState(false);
   const [viewModalIsVisible, setViewModalIsVisible] = useState(false);
   const [questions, setQuestions] = useState<QuestionString[]>([]);
-  const [newTitle, setNewTitle] = useState('');
-  const [newCategories, setNewCategories] = useState('');
-  const [newComplexity, setNewComplexity] = useState('');
-  const [newDescription, setNewDescription] = useState('');
-  const [newLink, setNewLink] = useState('');
+  const [newQuestionData, setNewQuestionData] = useState<QuestionString>(questionStringTemplate);
   const [currentQuestionId, setCurrentQuestionId] = useState('0');
   const [isDeleting, setIsDeleting] = useState(false);
-  const [notifShowing, setIsNotifShowing] = useState(false);
+  const [notifIsVisible, setNotifIsVisible] = useState(false);
   const [notifMessage, setNotifMessage] = useState('');
   const [notifType, setNotifType] = useState<NotificationType>(NotificationType.SUCCESS);
 
   function showNotification(message: string, type: NotificationType) {
-    setIsNotifShowing(true);
+    setNotifIsVisible(true);
     setNotifMessage(message);
     setNotifType(type);
   }
 
-  function closeViewModal() {
-    setViewModalIsVisible(false);
+  // TO REMOVE AFTER ASSIGNMENT 1 -----------------------------------------
+  function checkDuplicates(qn: QuestionString, qnList: QuestionString[]) {
+    try {
+      let validator = new QuestionValidator();
+      validator.validateDuplicateQuestions(qn, qnList);
+    } catch (e) {
+      throw (e);
+    }
   }
+  // -------------------------------------------------------------------------
 
   function submitHandler() {
     let builder = new QuestionStringBuilder();
-    builder.setId(LocalStorageHandler.getNextQuestionId()); //TODO get ID from mongodb
-    builder.setTitle(newTitle);
-    builder.setComplexity(newComplexity);
-    builder.setCategories(newCategories);
-    builder.setLink(newLink);
-    builder.setDescription(newDescription);
-
-    let newArr = questions;
+    builder.setQuestionString(newQuestionData);
     try {
-      let validator = new QuestionValidator();
-      newArr = [...questions, builder.build()];
-      validator.validateDuplicateQuestions(builder.build(), questions);
+      let newQuestion = builder.build();
+      let newArr = [...questions, newQuestion];
+      checkDuplicates(newQuestion, questions);
       setQuestions(newArr);
       setAddModalIsVisible(false);
       LocalStorageHandler.saveQuestion(newArr);
+      LocalStorageHandler.advanceQuestionId();
       showNotification('Question added', NotificationType.SUCCESS);
     } catch (e) {
       let result = (e as Error).message;
@@ -66,7 +63,7 @@ const QuestionPage = () => {
 
   useEffect(() => {
     if (Object.keys(LocalStorageHandler.loadQuestion()).length === 0) {
-      setQuestions(questionSet);
+      setQuestions(mockQuestions);
       return;
     }
     setQuestions(LocalStorageHandler.loadQuestion());
@@ -79,41 +76,29 @@ const QuestionPage = () => {
 
   const selectedQuestion = questions.filter(i => i.id === currentQuestionId)[0];
   if (selectedQuestion !== undefined) {
-    qn.title = (selectedQuestion.title);
-    qn.category = (selectedQuestion.categories);
-    qn.complexity = (selectedQuestion.complexity);
-    qn.description = (selectedQuestion.description);
+    currentQuestion = selectedQuestion;
   }
 
   return (
     <div id='question-page-container'>
-      <AddQuestionModal
-        isVisible={addModalIsVisible} closeHandler={() => setAddModalIsVisible(false)}
-        titleSetter={setNewTitle} linkSetter={setNewLink}
-        categoriesSetter={setNewCategories} complexitySetter={setNewComplexity}
-        descriptionSetter={setNewDescription} submitHandler={submitHandler}
-      />
-      <DescriptionModal
-        isVisible={viewModalIsVisible} data={qn} closeHandler={closeViewModal}
-      />
-
       <Notification
-        isOpen={notifShowing}
-        setter={setIsNotifShowing}
+        isOpen={notifIsVisible}
+        setter={setNotifIsVisible}
         message={notifMessage}
         type={notifType}
       />
-
+      <AddQuestionModal
+        isVisible={addModalIsVisible}
+        closeHandler={() => setAddModalIsVisible(false)}
+        newQuestionSetter={setNewQuestionData}
+        submitHandler={submitHandler}
+      />
+      <DescriptionModal
+        isVisible={viewModalIsVisible}
+        data={currentQuestion}
+        closeHandler={() => { setViewModalIsVisible(false); }}
+      />
       <div style={{ width: '100' }}>
-        <div id='button-container'>
-          <Button id='add-btn' variant='contained' onClick={() => setAddModalIsVisible(true)}>
-            Add
-          </Button>
-          <Button id='delete-btn' variant='contained' color='error'
-            onClick={() => setIsDeleting(!isDeleting)}>
-            Delete
-          </Button>
-        </div>
         <QuestionTable
           data={questions}
           viewDescriptionHandler={viewDescriptionHandler}
@@ -121,7 +106,11 @@ const QuestionPage = () => {
             setQuestions(questions.filter(i => i.id !== id));
             LocalStorageHandler.saveQuestion(questions.filter(i => i.id !== id));
           }}
-          isDeleting={isDeleting} />
+          isDeleting={isDeleting}
+          addBtnOnClick={() => setAddModalIsVisible(true)}
+          deleteBtnOnClick={() => setIsDeleting(!isDeleting)}
+        />
+
       </div>
     </div>
   )

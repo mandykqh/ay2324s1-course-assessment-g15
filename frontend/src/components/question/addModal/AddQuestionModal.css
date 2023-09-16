@@ -82,3 +82,12 @@
   border-radius: 5px;
   align-self: flex-end;
 }
+
+.input-label {
+  -webkit-text-fill-color: #7e7e7e;
+}
+
+.select {
+  -webkit-text-fill-color: white;
+  background-color: #212224;
+}

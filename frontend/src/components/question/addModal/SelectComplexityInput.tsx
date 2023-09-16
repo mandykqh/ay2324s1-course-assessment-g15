@@ -1,43 +1,46 @@
-import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
+import './AddQuestionModal.css'
 import React from "react";
-import { Complexity } from "../../../models/Question";
+import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
+import { getComplexityStrings } from "../../../Util";
 
 interface Props {
-  setter: React.Dispatch<React.SetStateAction<string>>;
+  onChangeHandler: (value: string) => void;
 }
 
-const complexityValues = Object.values(Complexity)
-  .slice(0, Object.values(Complexity).length / 2); //TODO TIDY UP THIS
+const complexityValues = getComplexityStrings();
 
-const SelectComplexityInput: React.FC<Props> = ({ setter }) => {
+const SelectComplexityInput: React.FC<Props> = ({ onChangeHandler }) => {
   const [complexity, setComplexity] = React.useState('');
 
-  const handleChange = (event: SelectChangeEvent) => {
-    setter(event.target.value as string);
-    setComplexity(event.target.value as string);
+  function handleChange(event: SelectChangeEvent) {
+    let newValue = event.target.value as string;
+    onChangeHandler(newValue);
+    setComplexity(newValue);
   };
 
   return (
     <FormControl fullWidth>
-      <InputLabel style={{ color: '#7e7e7e' }}>Complexity</InputLabel>
+      <InputLabel className='input-label'>
+        Complexity
+      </InputLabel>
       <Select
         value={complexity}
         label="Complexity"
         onChange={handleChange}
-        style={selectStyle}
+        className='select'
       >
-        {complexityValues.map((value, index) => {
-          return (<MenuItem value={value} key={index}>
-            {value}
-          </MenuItem>);
-        })}
+        {
+          complexityValues.map((value, index) => {
+            return (
+              <MenuItem value={value} key={index}>
+                {value}
+              </MenuItem>);
+          })
+        }
       </Select>
-    </FormControl >);
+    </FormControl >
+  );
 }
 
-const selectStyle = {
-  color: 'white',
-  backgroundColor: '#212224'
-}
 
 export default SelectComplexityInput;

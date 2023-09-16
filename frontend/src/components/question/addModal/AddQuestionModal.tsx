@@ -1,24 +1,19 @@
 import './AddQuestionModal.css'
-import { Box, Input, Modal, Typography, Button } from "@mui/material";
 import React from "react";
+import { Box, Input, Modal, Typography, Button } from "@mui/material";
 import SelectComplexityInput from './SelectComplexityInput';
 import SelectCategoriesInput from './SelectCategoriesInput';
+import { QuestionString } from '../../../Commons';
 
 interface Props {
   isVisible: boolean;
   closeHandler: () => void;
-  titleSetter: React.Dispatch<React.SetStateAction<string>>;
-  linkSetter: React.Dispatch<React.SetStateAction<string>>;
-  categoriesSetter: React.Dispatch<React.SetStateAction<string>>;
-  complexitySetter: React.Dispatch<React.SetStateAction<string>>;
-  descriptionSetter: React.Dispatch<React.SetStateAction<string>>;
+  newQuestionSetter: React.Dispatch<React.SetStateAction<QuestionString>>;
   submitHandler: () => void;
 }
 
 const AddQuestionModal: React.FC<Props> =
-  ({ isVisible, closeHandler, titleSetter, linkSetter, categoriesSetter,
-    complexitySetter, descriptionSetter, submitHandler }) => {
-
+  ({ isVisible, closeHandler, newQuestionSetter, submitHandler }) => {
     return (
       <Modal
         open={isVisible}
@@ -38,26 +33,48 @@ const AddQuestionModal: React.FC<Props> =
             <Input
               id='title-input'
               placeholder="Title"
-              onChange={(e) => { titleSetter(e.target.value) }}
+              onChange={(e) => {
+                newQuestionSetter(q => {
+                  return ({ ...q, title: e.target.value });
+                })
+              }}
             />
             <Input
               id='link-input'
               placeholder="Link"
-              onChange={(e) => { linkSetter(e.target.value) }}
+              onChange={(e) => {
+                newQuestionSetter(q => {
+                  return ({ ...q, link: e.target.value });
+                })
+              }}
             />
             <div id='middle-container'>
               <div id='categories-setter-container'>
-                <SelectCategoriesInput setter={categoriesSetter} />
+                <SelectCategoriesInput
+                  onChangeHandler={(value: string) =>
+                    newQuestionSetter(q => {
+                      return ({ ...q, categories: value });
+                    })}
+                />
               </div>
               <div id='complexity-setter-container'>
-                <SelectComplexityInput setter={complexitySetter} />
+                <SelectComplexityInput
+                  onChangeHandler={(value: string) =>
+                    newQuestionSetter(q => {
+                      return ({ ...q, complexity: value });
+                    })}
+                />
               </div>
             </div>
             <Input
               id='description-input'
               placeholder="Description"
               multiline minRows={10}
-              onChange={(e) => { descriptionSetter(e.target.value) }}
+              onChange={(e) => {
+                newQuestionSetter(q => {
+                  return ({ ...q, description: e.target.value });
+                })
+              }}
             />
             <Button id='save-btn' size={'large'} onClick={submitHandler}>
               Save & Close
