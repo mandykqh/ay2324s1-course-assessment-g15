@@ -1,11 +1,10 @@
 import "./App.css";
-import QuestionBank from "./QuestionBank";
+import QuestionPage from "./pages/QuestionPage";
 
 function App() {
   return (
     <div>
-      <QuestionBank />
-
+      <QuestionPage />
     </div>
 
   )

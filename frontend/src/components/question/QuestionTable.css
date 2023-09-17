@@ -1,0 +1,31 @@
+#question-table-container {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.question-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.question-th {
+  background-color: #212224;
+  color: white;
+  border: 1px solid white;
+  padding: 5px;
+}
+
+.question-td {
+  color: white;
+  border: 1px solid white;
+  padding: 5px;
+}
+
+.question-tr-deleting:hover {
+  background-color: red;
+}
+
+.question-tr-viewing:hover {
+  background-color: #212224;
+}
