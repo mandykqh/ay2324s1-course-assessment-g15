@@ -23,6 +23,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "@types/sequelize": "^4.28.15",
     "body-parser": "^1.20.2",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.6",
@@ -30,6 +31,10 @@
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "lodash": "^4.17.21",
-    "mongoose": "^7.5.1"
+    "mongoose": "^7.5.1",
+    "pg": "^8.11.3",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.33.0",
+    "sequelize-typescript": "^2.1.5"
   }
 }
