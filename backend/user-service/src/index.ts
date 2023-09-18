@@ -5,6 +5,7 @@ import bodyParser from 'body-parser';
 import compression from 'compression';
 import cors from 'cors';
 import { sequelize } from './db/dbConfig';
+import router from './router';
 
 const app = express();
 
@@ -31,3 +32,5 @@ server.listen(port, () => {
         console.error('Error synchronizing database:', error);
     }
 })();
+
+app.use('/', router());

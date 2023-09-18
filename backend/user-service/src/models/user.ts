@@ -1,4 +1,4 @@
-import { Model, DataTypes, Sequelize } from 'sequelize';
+import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../db/dbConfig';
 
 class User extends Model {
