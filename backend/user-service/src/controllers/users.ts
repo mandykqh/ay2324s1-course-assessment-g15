@@ -55,7 +55,7 @@ export const deleteUser = async (req: express.Request, res: express.Response) =>
         if (!userToDelete) {
             return res.status(404).send('User not found');
         }
-        userToDelete.destroy();
+        await userToDelete.destroy();
         return res.status(200).json(userToDelete);
     } catch (error) {
         console.error('Error deleting user:', error);
