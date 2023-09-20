@@ -1,4 +1,4 @@
-import { Alert, Snackbar } from "@mui/material";
+// import { Alert, Snackbar } from "@mui/material";
 
 enum NotificationType {
   SUCCESS,
@@ -22,11 +22,12 @@ function NotificationToStringMapper(input: NotificationType) {
 
 const Notification: React.FC<Props> = ({ message, type, isOpen, setter }) => {
   return (
-    <Snackbar open={isOpen} autoHideDuration={2000} onClose={() => setter(false)}>
-      <Alert onClose={() => { setter(false) }} severity={NotificationToStringMapper(type)} variant='filled' sx={{ width: '100%' }}>
-        {message}
-      </Alert>
-    </Snackbar>
+    // <Snackbar open={isOpen} autoHideDuration={2000} onClose={() => setter(false)}>
+    //   <Alert onClose={() => { setter(false) }} severity={NotificationToStringMapper(type)} variant='filled' sx={{ width: '100%' }}>
+    //     {message}
+    //   </Alert>
+    // </Snackbar>
+    <div></div>
   );
 }
 

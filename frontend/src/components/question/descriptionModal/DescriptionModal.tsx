@@ -7,14 +7,11 @@ import {
   ModalBody,
   ModalCloseButton,
   Text,
-  VStack,
-  HStack,
-  Box,
   Flex,
   Spacer,
-  Textarea
+  Textarea,
+  Grid
 } from '@chakra-ui/react'
-import './DescriptionModal.css';
 import { Button } from '@chakra-ui/button';
 import { PRIMARY_COLOR } from '../../../CommonStyles';
 
@@ -45,27 +42,29 @@ const DescriptionModal: React.FC<Props> =
             <ModalHeader color={'white'}>{data.title}</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              <Flex flexDirection={'column'}>
+              <Grid gap={5}>
                 <Flex>
+                  <Text color='white' as='b' marginRight={'3px'}>
+                    Category:
+                  </Text>
                   <Text color='white'>
-                    {`Category: ${data.categories}`}
+                    {data.categories}
                   </Text>
                   <Spacer />
+                  <Text color='white' as='b' marginRight={'3px'}>
+                    Complexity:
+                  </Text>
                   <Text color='white'>
-                    {`Complexity: ${data.complexity}`}
+                    {data.complexity}
                   </Text>
                 </Flex>
                 <Textarea
-                  color={'white'}
-                  textColor={'white'}
-                  id='description-tb'
                   isReadOnly
                   rows={20}
                   resize={'none'}
-                >
-                  {data.description}
-                </Textarea>
-              </Flex>
+                  value={data.description}
+                />
+              </Grid>
             </ModalBody>
             <ModalFooter>
               <Button colorScheme='blue' mr={3} onClick={closeHandler}>

@@ -1,46 +1,47 @@
-import './AddQuestionModal.css'
-import React from "react";
-import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
-import { getComplexityStrings } from "../../../Util";
+import { useContext, useEffect, useState } from "react";
+import { getComplexityStrings, stringToOptionsMapper } from "../../../Util";
+import { Box } from '@chakra-ui/react';
+import { SECONDARY_COLOR } from '../../../CommonStyles';
+import { Select } from 'chakra-react-select';
+import { NewQuestionContext } from '../../../contexts/NewQuestionContext';
 
-interface Props {
-  onChangeHandler: (value: string) => void;
+interface SelectOption {
+  value: string;
+  label: string;
 }
 
-const complexityValues = getComplexityStrings();
+const complexityOptions = getComplexityStrings().map(value => {
+  return (
+    { value: value, label: value }
+  );
+});
 
-const SelectComplexityInput: React.FC<Props> = ({ onChangeHandler }) => {
-  const [complexity, setComplexity] = React.useState('');
+const SelectComplexityInput = () => {
+  const { questionData, setQuestionData } = useContext(NewQuestionContext);
+  const [complexity, setComplexity] = useState(questionData.complexity);
 
-  function handleChange(event: SelectChangeEvent) {
-    let newValue = event.target.value as string;
-    onChangeHandler(newValue);
-    setComplexity(newValue);
-  };
+  useEffect(() => {
+    setQuestionData({
+      ...questionData,
+      complexity: complexity
+    }
+    );
+  }, [complexity])
 
   return (
-    <FormControl fullWidth>
-      <InputLabel className='input-label'>
-        Complexity
-      </InputLabel>
-      <Select
-        value={complexity}
-        label="Complexity"
-        onChange={handleChange}
-        className='select'
-      >
-        {
-          complexityValues.map((value, index) => {
-            return (
-              <MenuItem value={value} key={index}>
-                {value}
-              </MenuItem>);
-          })
-        }
-      </Select>
-    </FormControl >
+    <>
+      <Box backgroundColor={SECONDARY_COLOR} borderRadius='5px'>
+        <Select
+          onChange={(e) => {
+            setComplexity((e as SelectOption).value);
+          }}
+          options={complexityOptions}
+          placeholder="Select Complexity"
+          value={stringToOptionsMapper(questionData.complexity)}
+        />
+      </Box>
+    </>
   );
 }
-
 
 export default SelectComplexityInput;

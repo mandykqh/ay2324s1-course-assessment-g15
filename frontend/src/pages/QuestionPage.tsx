@@ -10,6 +10,8 @@ import { Notification, NotificationType } from '../components/question/Notificat
 import QuestionValidator from '../models/QuestionValidator';
 import { questionStringTemplate } from '../Commons';
 import QuestionStringBuilder from '../models/QuestionStringBuilder';
+import { Input } from '@chakra-ui/react';
+import { NewQuestionContext } from '../contexts/NewQuestionContext';
 
 // Initializes with all fields empty
 let currentQuestion = questionStringTemplate;
@@ -19,12 +21,14 @@ const QuestionPage = () => {
   const [addModalIsVisible, setAddModalIsVisible] = useState(false);
   const [viewModalIsVisible, setViewModalIsVisible] = useState(false);
   const [questions, setQuestions] = useState<QuestionString[]>([]);
-  const [newQuestionData, setNewQuestionData] = useState<QuestionString>(questionStringTemplate);
   const [currentQuestionId, setCurrentQuestionId] = useState('0');
   const [isDeleting, setIsDeleting] = useState(false);
   const [notifIsVisible, setNotifIsVisible] = useState(false);
   const [notifMessage, setNotifMessage] = useState('');
   const [notifType, setNotifType] = useState<NotificationType>(NotificationType.SUCCESS);
+
+  const [newQuestion, setNewQuestion] = useState<QuestionString>(questionStringTemplate);
+  const ctxValue = { questionData: newQuestion, setQuestionData: setNewQuestion };
 
   function showNotification(message: string, type: NotificationType) {
     setNotifIsVisible(true);
@@ -43,9 +47,11 @@ const QuestionPage = () => {
   }
   // -------------------------------------------------------------------------
 
+
+  // TEMP FUNCTION FOR ASSIGNMENT 1: so idw tidy up :] ===============================
   function submitHandler() {
     let builder = new QuestionStringBuilder();
-    builder.setQuestionString(newQuestionData);
+    builder.setQuestionString(newQuestion);
     try {
       let newQuestion = builder.build();
       let newArr = [...questions, newQuestion];
@@ -57,9 +63,9 @@ const QuestionPage = () => {
       showNotification('Question added', NotificationType.SUCCESS);
     } catch (e) {
       let result = (e as Error).message;
-      showNotification(result, NotificationType.ERROR);
     }
   }
+  // ===============================================================================
 
   useEffect(() => {
     if (Object.keys(LocalStorageHandler.loadQuestion()).length === 0) {
@@ -80,39 +86,37 @@ const QuestionPage = () => {
   }
 
   return (
-    <div id='question-page-container'>
-      {/* <Notification
+    <NewQuestionContext.Provider value={ctxValue}>
+      <div id='question-page-container'>
+        {/* <Notification
         isOpen={notifIsVisible}
         setter={setNotifIsVisible}
         message={notifMessage}
         type={notifType}
       /> */}
-      {/* <AddQuestionModal
-        isVisible={addModalIsVisible}
-        closeHandler={() => setAddModalIsVisible(false)}
-        newQuestionSetter={setNewQuestionData}
-        submitHandler={submitHandler}
-      /> */}
-
-      <DescriptionModal
-        isVisible={viewModalIsVisible}
-        data={currentQuestion}
-        closeHandler={() => { setViewModalIsVisible(false); }}
-      />
-      <QuestionTable
-        data={questions}
-        viewDescriptionHandler={viewDescriptionHandler}
-        deleteHandler={(id: string) => {
-          setQuestions(questions.filter(i => i.id !== id));
-          LocalStorageHandler.saveQuestion(questions.filter(i => i.id !== id));
-        }}
-        isDeleting={isDeleting}
-        addBtnOnClick={() => setAddModalIsVisible(true)}
-        deleteBtnOnClick={() => setIsDeleting(!isDeleting)}
-      />
-
-
-    </div>
+        <AddQuestionModal
+          isVisible={addModalIsVisible}
+          closeHandler={() => setAddModalIsVisible(false)}
+          submitHandler={submitHandler}
+        />
+        <DescriptionModal
+          isVisible={viewModalIsVisible}
+          data={currentQuestion}
+          closeHandler={() => { setViewModalIsVisible(false); }}
+        />
+        <QuestionTable
+          data={questions}
+          viewDescriptionHandler={viewDescriptionHandler}
+          deleteHandler={(id: string) => {
+            setQuestions(questions.filter(i => i.id !== id));
+            LocalStorageHandler.saveQuestion(questions.filter(i => i.id !== id));
+          }}
+          isDeleting={isDeleting}
+          addBtnOnClick={() => setAddModalIsVisible(true)}
+          deleteBtnOnClick={() => setIsDeleting(!isDeleting)}
+        />
+      </div>
+    </NewQuestionContext.Provider>
   )
 };
 

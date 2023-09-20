@@ -13,4 +13,17 @@ function getCategoriesString() {
   return enumToString(Object.values(Category)) as string[];
 }
 
-export { getComplexityStrings, getCategoriesString };
+function stringToOptionsMapper(input: string) {
+  if (input.length === 0) {
+    return [];
+  }
+  let arr = input.split(', ').map((value: string) => {
+    return ({
+      value: value,
+      label: value
+    });
+  });
+  return arr;
+}
+
+export { getComplexityStrings, getCategoriesString, stringToOptionsMapper };
