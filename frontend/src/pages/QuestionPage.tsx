@@ -81,37 +81,37 @@ const QuestionPage = () => {
 
   return (
     <div id='question-page-container'>
-      <Notification
+      {/* <Notification
         isOpen={notifIsVisible}
         setter={setNotifIsVisible}
         message={notifMessage}
         type={notifType}
-      />
-      <AddQuestionModal
+      /> */}
+      {/* <AddQuestionModal
         isVisible={addModalIsVisible}
         closeHandler={() => setAddModalIsVisible(false)}
         newQuestionSetter={setNewQuestionData}
         submitHandler={submitHandler}
-      />
+      /> */}
+
       <DescriptionModal
         isVisible={viewModalIsVisible}
         data={currentQuestion}
         closeHandler={() => { setViewModalIsVisible(false); }}
       />
-      <div style={{ width: '100' }}>
-        <QuestionTable
-          data={questions}
-          viewDescriptionHandler={viewDescriptionHandler}
-          deleteHandler={(id: string) => {
-            setQuestions(questions.filter(i => i.id !== id));
-            LocalStorageHandler.saveQuestion(questions.filter(i => i.id !== id));
-          }}
-          isDeleting={isDeleting}
-          addBtnOnClick={() => setAddModalIsVisible(true)}
-          deleteBtnOnClick={() => setIsDeleting(!isDeleting)}
-        />
+      <QuestionTable
+        data={questions}
+        viewDescriptionHandler={viewDescriptionHandler}
+        deleteHandler={(id: string) => {
+          setQuestions(questions.filter(i => i.id !== id));
+          LocalStorageHandler.saveQuestion(questions.filter(i => i.id !== id));
+        }}
+        isDeleting={isDeleting}
+        addBtnOnClick={() => setAddModalIsVisible(true)}
+        deleteBtnOnClick={() => setIsDeleting(!isDeleting)}
+      />
 
-      </div>
+
     </div>
   )
 };

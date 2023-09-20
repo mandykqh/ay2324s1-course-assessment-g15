@@ -1,5 +1,22 @@
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  Text,
+  VStack,
+  HStack,
+  Box,
+  Flex,
+  Spacer,
+  Textarea
+} from '@chakra-ui/react'
 import './DescriptionModal.css';
-import { Box, Input, Modal, Typography } from "@mui/material";
+import { Button } from '@chakra-ui/button';
+import { PRIMARY_COLOR } from '../../../CommonStyles';
 
 interface Props {
   isVisible: boolean;
@@ -15,48 +32,51 @@ interface Props {
 const DescriptionModal: React.FC<Props> =
   ({ isVisible, data, closeHandler }) => {
     return (
-      <Modal
-        open={isVisible}
-        onClose={() => { }}
-      >
-        <Box id='modal-box'>
-          <div id='inner-modal-container'>
-            <div onClick={closeHandler} style={{ width: '20px', height: '20px', alignSelf: 'end' }}>
-              {/* TODO change this button to image */}
-              <b>X</b>
-            </div>
-            <div id='top-row'>
-              <Typography id="modal-title" variant="h5" component="h2" color={"white"}>
-                {data.title}
-              </Typography>
-            </div>
-            <div id='middle-row'>
-              <div id='middle-left-container'>
-                <Typography id="category-label" component="h3" color={"white"} textAlign={'left'}>
-                  {`Category: ${data.categories}`}
-                </Typography>
-              </div>
-              <div id='middle-right-container'>
-                <Typography id="complexity-label" component="h3" color={"white"}>
-                  {`Complexity: ${data.complexity}`}
-                </Typography>
-              </div>
-            </div>
-            <div id='bottom-row'>
-              <Input
-                id='description-input'
-                multiline
-                minRows={20}
-                maxRows={20}
-                fullWidth
-                disabled
-                value={data.description}
-              />
-            </div>
-          </div>
-        </Box>
-      </Modal>
+      <>
+        <Modal
+          isOpen={isVisible}
+          onClose={closeHandler}
+          size={'xl'}
+          autoFocus={false}
+          colorScheme={'pink'}
+        >
+          <ModalOverlay />
+          <ModalContent backgroundColor={PRIMARY_COLOR} style={{ color: 'white' }}>
+            <ModalHeader color={'white'}>{data.title}</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <Flex flexDirection={'column'}>
+                <Flex>
+                  <Text color='white'>
+                    {`Category: ${data.categories}`}
+                  </Text>
+                  <Spacer />
+                  <Text color='white'>
+                    {`Complexity: ${data.complexity}`}
+                  </Text>
+                </Flex>
+                <Textarea
+                  color={'white'}
+                  textColor={'white'}
+                  id='description-tb'
+                  isReadOnly
+                  rows={20}
+                  resize={'none'}
+                >
+                  {data.description}
+                </Textarea>
+              </Flex>
+            </ModalBody>
+            <ModalFooter>
+              <Button colorScheme='blue' mr={3} onClick={closeHandler}>
+                Close
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal >
+      </>
     );
   }
+
 
 export default DescriptionModal;

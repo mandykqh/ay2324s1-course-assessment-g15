@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button } from '@chakra-ui/react'
 
 interface Props {
   addHandler: () => void,
@@ -8,11 +8,10 @@ interface Props {
 const ManageQuestionsButtonRow: React.FC<Props> = ({ addHandler, deleteHandler }) => {
   return (
     <div id='button-container'>
-      <Button id='add-btn' variant='contained' onClick={addHandler}>
+      <Button id='add-btn' colorScheme='blue' onClick={addHandler}>
         Add
       </Button>
-      <Button id='delete-btn' variant='contained' color='error'
-        onClick={deleteHandler}>
+      <Button id='delete-btn' colorScheme='red' onClick={deleteHandler}>
         Delete
       </Button>
     </div>
