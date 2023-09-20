@@ -5,11 +5,10 @@ import { QuestionString } from '../Commons';
 import React, { useEffect, useState } from 'react';
 import AddQuestionModal from '../components/question/addModal/AddQuestionModal';
 import QuestionTable from '../components/question/QuestionTable';
-import { Notification, NotificationType } from '../components/question/Notification';
 import QuestionValidator from '../models/QuestionValidator';
 import { questionStringTemplate } from '../Commons';
 import QuestionStringBuilder from '../models/QuestionStringBuilder';
-import { Input } from '@chakra-ui/react';
+import { Input, useToast } from '@chakra-ui/react';
 import { NewQuestionContext } from '../contexts/NewQuestionContext';
 import QuestionDetailsModal from '../components/question/descriptionModal/QuestionDetailsModal';
 
@@ -22,19 +21,8 @@ const QuestionPage = () => {
   const [viewModalIsVisible, setViewModalIsVisible] = useState(false);
   const [questions, setQuestions] = useState<QuestionString[]>([]);
   const [currentQuestionId, setCurrentQuestionId] = useState('0');
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [notifIsVisible, setNotifIsVisible] = useState(false);
-  const [notifMessage, setNotifMessage] = useState('');
-  const [notifType, setNotifType] = useState<NotificationType>(NotificationType.SUCCESS);
-
   const [newQuestion, setNewQuestion] = useState<QuestionString>(questionStringTemplate);
   const ctxValue = { questionData: newQuestion, setQuestionData: setNewQuestion };
-
-  function showNotification(message: string, type: NotificationType) {
-    setNotifIsVisible(true);
-    setNotifMessage(message);
-    setNotifType(type);
-  }
 
   // TO REMOVE AFTER ASSIGNMENT 1 -----------------------------------------
   function checkDuplicates(qn: QuestionString, qnList: QuestionString[]) {
@@ -60,7 +48,6 @@ const QuestionPage = () => {
       setAddModalIsVisible(false);
       LocalStorageHandler.saveQuestion(newArr);
       LocalStorageHandler.advanceQuestionId();
-      showNotification('Question added', NotificationType.SUCCESS);
     } catch (e) {
       let result = (e as Error).message;
     }
@@ -88,12 +75,6 @@ const QuestionPage = () => {
   return (
     <NewQuestionContext.Provider value={ctxValue}>
       <div id='question-page-container'>
-        {/* <Notification
-        isOpen={notifIsVisible}
-        setter={setNotifIsVisible}
-        message={notifMessage}
-        type={notifType}
-      /> */}
         <AddQuestionModal
           isVisible={addModalIsVisible}
           closeHandler={() => setAddModalIsVisible(false)}

@@ -21,7 +21,6 @@ const QuestionTable: React.FC<Props> =
         new Question(parseInt(i.id), i.title, i.categories,
           i.complexity, i.link, i.description));
       setQuestionsList(qnArr);
-      console.log(qnArr);
     }, [data])
 
     return (
@@ -41,7 +40,10 @@ const QuestionTable: React.FC<Props> =
           <Tbody>
             {questionsList.map((qn: Question, key: number) => {
               return (
-                <Tr className='question-tr' onClick={() => { viewDescriptionHandler(qn.id.toString()) }}>
+                <Tr
+                  key={key}
+                  className='question-tr'
+                  onClick={() => { viewDescriptionHandler(qn.id.toString()) }}>
                   <Td className='question-td'>{qn.id.toString()}</Td>
                   <Td className='question-td'>{qn.title}</Td>
                   <Td className='question-td'>{qn.getCategoriesString()}</Td>
