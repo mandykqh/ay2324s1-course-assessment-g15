@@ -12,20 +12,17 @@
 .question-th {
   background-color: #212224;
   color: white;
-  border: 1px solid white;
+  border: 1px solid #999999 !important;
   padding: 5px;
 }
 
 .question-td {
   color: white;
-  border: 1px solid white;
+  border: 1px solid #999999 !important;
   padding: 5px;
 }
 
-.question-tr-deleting:hover {
-  background-color: red;
-}
-
-.question-tr-viewing:hover {
+.question-tr:hover {
   background-color: #212224;
+  cursor: pointer;
 }

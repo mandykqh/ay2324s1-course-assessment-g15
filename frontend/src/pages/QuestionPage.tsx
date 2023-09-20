@@ -4,7 +4,6 @@ import LocalStorageHandler from '../handlers/LocalStorageHandler';
 import { QuestionString } from '../Commons';
 import React, { useEffect, useState } from 'react';
 import AddQuestionModal from '../components/question/addModal/AddQuestionModal';
-import DescriptionModal from '../components/question/descriptionModal/DescriptionModal';
 import QuestionTable from '../components/question/QuestionTable';
 import { Notification, NotificationType } from '../components/question/Notification';
 import QuestionValidator from '../models/QuestionValidator';
@@ -12,6 +11,7 @@ import { questionStringTemplate } from '../Commons';
 import QuestionStringBuilder from '../models/QuestionStringBuilder';
 import { Input } from '@chakra-ui/react';
 import { NewQuestionContext } from '../contexts/NewQuestionContext';
+import QuestionDetailsModal from '../components/question/descriptionModal/QuestionDetailsModal';
 
 // Initializes with all fields empty
 let currentQuestion = questionStringTemplate;
@@ -99,21 +99,20 @@ const QuestionPage = () => {
           closeHandler={() => setAddModalIsVisible(false)}
           submitHandler={submitHandler}
         />
-        <DescriptionModal
+        <QuestionDetailsModal
           isVisible={viewModalIsVisible}
           data={currentQuestion}
           closeHandler={() => { setViewModalIsVisible(false); }}
+          deleteHandler={(id: string) => {
+            setQuestions(questions.filter(i => i.id !== id));
+            LocalStorageHandler.saveQuestion(questions.filter(i => i.id !== id));
+            setViewModalIsVisible(false);
+          }}
         />
         <QuestionTable
           data={questions}
           viewDescriptionHandler={viewDescriptionHandler}
-          deleteHandler={(id: string) => {
-            setQuestions(questions.filter(i => i.id !== id));
-            LocalStorageHandler.saveQuestion(questions.filter(i => i.id !== id));
-          }}
-          isDeleting={isDeleting}
           addBtnOnClick={() => setAddModalIsVisible(true)}
-          deleteBtnOnClick={() => setIsDeleting(!isDeleting)}
         />
       </div>
     </NewQuestionContext.Provider>

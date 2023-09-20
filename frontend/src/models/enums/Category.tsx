@@ -18,7 +18,8 @@ enum Category {
   'Bit Manipulation',
   'Divide and Conquer',
   'Design',
-  'Topological Sort'
+  'Topological Sort',
+  'Data Structures'
 }
 
 export default Category;

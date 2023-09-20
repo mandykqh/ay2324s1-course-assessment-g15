@@ -14,20 +14,17 @@ import {
 } from '@chakra-ui/react'
 import { Button } from '@chakra-ui/button';
 import { PRIMARY_COLOR } from '../../../CommonStyles';
+import { QuestionString } from '../../../Commons';
 
 interface Props {
   isVisible: boolean;
-  data: {
-    title: string;
-    categories: string;
-    complexity: string;
-    description: string
-  };
+  data: QuestionString;
   closeHandler: () => void;
+  deleteHandler: (id: string) => void;
 }
 
-const DescriptionModal: React.FC<Props> =
-  ({ isVisible, data, closeHandler }) => {
+const QuestionDetailsModal: React.FC<Props> =
+  ({ isVisible, data, closeHandler, deleteHandler }) => {
     return (
       <>
         <Modal
@@ -67,6 +64,9 @@ const DescriptionModal: React.FC<Props> =
               </Grid>
             </ModalBody>
             <ModalFooter>
+              <Button colorScheme='red' mr={3} onClick={() => deleteHandler(data.id)}>
+                Delete
+              </Button>
               <Button colorScheme='blue' mr={3} onClick={closeHandler}>
                 Close
               </Button>
@@ -78,4 +78,4 @@ const DescriptionModal: React.FC<Props> =
   }
 
 
-export default DescriptionModal;
+export default QuestionDetailsModal;

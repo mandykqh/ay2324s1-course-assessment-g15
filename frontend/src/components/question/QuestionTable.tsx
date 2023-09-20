@@ -3,27 +3,16 @@ import { useState, useEffect } from "react";
 import Question from '../../models/Question';
 import { QuestionString } from '../../Commons';
 import ManageQuestionsButtonRow from '../ManageQuestionsButtonRow';
+import { TableContainer, Table, TableCaption, Thead, Tr, Th, Tbody, Td, Tfoot } from '@chakra-ui/react';
 
 interface Props {
   data: QuestionString[]
-  isDeleting: boolean
   viewDescriptionHandler: (id: string) => void;
-  deleteHandler: (id: string) => void;
   addBtnOnClick: () => void;
-  deleteBtnOnClick: () => void;
-}
-
-const headerCell = (label: string) => {
-  return <th className="question-th">{label}</th>
-}
-
-const bodyCell = (value: string) => {
-  return <td className="question-td">{value}</td>
 }
 
 const QuestionTable: React.FC<Props> =
-  ({ data, viewDescriptionHandler, isDeleting, deleteHandler,
-    deleteBtnOnClick, addBtnOnClick }) => {
+  ({ data, viewDescriptionHandler, addBtnOnClick }) => {
     const [questionsList, setQuestionsList] = useState<Question[]>([]);
 
     // Hook to update questionsList
@@ -32,48 +21,37 @@ const QuestionTable: React.FC<Props> =
         new Question(parseInt(i.id), i.title, i.categories,
           i.complexity, i.link, i.description));
       setQuestionsList(qnArr);
+      console.log(qnArr);
     }, [data])
 
     return (
-      <div id='question-table-container'>
+      <TableContainer>
         <ManageQuestionsButtonRow
           addHandler={addBtnOnClick}
-          deleteHandler={deleteBtnOnClick}
         />
-        <table className='question-table'>
-          <tbody>
-            <tr>
-              {headerCell("Id")}
-              {headerCell("Title")}
-              {headerCell("Category")}
-              {headerCell("Complexity")}
-              {headerCell("Link")}
-            </tr>
+        <Table variant='simple' className='question-table' width={'50vw'}>
+          <Thead>
+            <Tr>
+              <Th className='question-th'>Id</Th>
+              <Th className='question-th'>Title</Th>
+              <Th className='question-th'>Category</Th>
+              <Th className='question-th'>Complexity</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
             {questionsList.map((qn: Question, key: number) => {
               return (
-                <tr
-                  className={isDeleting ? "question-tr-deleting" : 'question-tr-viewing'}
-                  key={qn.id.toString()}
-                  onClick={
-                    (e) => {
-                      if (isDeleting) {
-                        deleteHandler(qn.id.toString());
-                      } else {
-                        viewDescriptionHandler(qn.id.toString())
-                      }
-                    }
-                  }>
-                  {bodyCell(qn.id.toString())}
-                  {bodyCell(qn.title)}
-                  {bodyCell(qn.getCategoriesString())}
-                  {bodyCell(qn.getComplexityString())}
-                  {bodyCell(qn.link)}
-                </tr>
+                <Tr className='question-tr' onClick={() => { viewDescriptionHandler(qn.id.toString()) }}>
+                  <Td className='question-td'>{qn.id.toString()}</Td>
+                  <Td className='question-td'>{qn.title}</Td>
+                  <Td className='question-td'>{qn.getCategoriesString()}</Td>
+                  <Td className='question-td'>{qn.getComplexityString()}</Td>
+                </Tr>
               );
             })}
-          </tbody>
-        </table >
-      </div>
+          </Tbody>
+        </Table>
+      </TableContainer>
     );
   }
 
