@@ -37,7 +37,7 @@ const AddQuestionModal: React.FC<Props> =
       return (
         <>
           {ModalButton('Previous', () => { setPage(1) })}
-          {ModalButton('Submit', submitHandler)}
+          {ModalButton('Submit', () => { try { submitHandler() } catch { close(); } })}
         </>
       );
     }
