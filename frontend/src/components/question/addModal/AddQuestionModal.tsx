@@ -21,7 +21,8 @@ interface Props {
   submitHandler: () => void;
 }
 
-const ModalButton = (label: string, onClick: () => void) => {
+const ModalButton = ({ label, onClick }:
+  { label: string, onClick: () => void }) => {
   return (
     <Button colorScheme='blue' mr={3} onClick={onClick}>
       {label}
@@ -33,14 +34,6 @@ const AddQuestionModal: React.FC<Props> =
   ({ isVisible, closeHandler, submitHandler }) => {
     const [page, setPage] = useState(1);
     const { setQuestionData } = useContext(NewQuestionContext);
-    const SecondPageButtons = () => {
-      return (
-        <>
-          {ModalButton('Previous', () => { setPage(1) })}
-          {ModalButton('Submit', () => { try { submitHandler() } catch { close(); } })}
-        </>
-      );
-    }
 
     function close() {
       closeHandler();
@@ -71,9 +64,19 @@ const AddQuestionModal: React.FC<Props> =
           <ModalFooter>
             {
               page === 1 ?
-                ModalButton('Next', () => { setPage(2) })
+                <ModalButton label='Next' onClick={() => setPage(2)} />
                 :
-                SecondPageButtons()
+                <>
+                  <ModalButton label='Previous' onClick={() => { setPage(1) }} />
+                  <ModalButton label='Submit'
+                    onClick={() => {
+                      try {
+                        submitHandler()
+                      } catch {
+                        close();
+                      }
+                    }} />
+                </>
             }
           </ModalFooter>
         </ModalContent>

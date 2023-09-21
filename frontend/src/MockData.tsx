@@ -1,3 +1,4 @@
+import { QuestionString } from "./Commons";
 import { getCategoriesString } from "./Util";
 
 const desc1 =
@@ -45,7 +46,7 @@ const desc2 =
   + "Follow up: Can you solve it using O(1) (i.e. constant) memory?";
 
 
-const mockQuestions = [
+const mockQuestions: QuestionString[] = [
   { id: '1', title: 'Reverse a String', categories: ['Strings', 'Algorithms'], complexity: 'Easy', description: desc1, link: 'https://leetcode.com/problems/reverse-string' },
   { id: '2', title: 'Linked List Cycle Detection', categories: ['Data Structures', 'Algorithms'], complexity: 'Easy', description: desc2, link: 'https://leetcode.com/problems/linked' },
   { id: '3', title: 'Linked Listasdasd Cycle Detection', categories: getCategoriesString(), complexity: 'Easy', description: desc2, link: 'https://leetcode.com/problems/linked' },

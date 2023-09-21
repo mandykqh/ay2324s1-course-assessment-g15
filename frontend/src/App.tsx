@@ -1,4 +1,3 @@
-import "./App.css";
 import QuestionPage from "./pages/QuestionPage";
 
 function App() {
