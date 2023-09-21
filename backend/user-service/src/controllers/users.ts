@@ -5,11 +5,13 @@ import User from '../models/user';
 export const getAllUsers = async (req: express.Request, res: express.Response) => {
     try {
         const users = await User.findAll();
+        // User table does not exist
         if (!users) {
             return res.status(404).send('No users found');
         }
+        // User table exist, but there are no users in the DB
         if (users.length === 0) {
-            return res.status(204);
+            return res.status(204).send('No users found');
         }
         return res.status(200).json(users);
     } catch (error) {
