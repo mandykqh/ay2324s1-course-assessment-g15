@@ -1,5 +1,5 @@
-import Category from "./enums/Category";
-import Complexity from "./enums/Complexity";
+import Category from "../enums/Category";
+import Complexity from "../enums/Complexity";
 
 function parseCategories(inputStringArr: string[]) {
   return inputStringArr.map((c) => Category[c as keyof typeof Category]);

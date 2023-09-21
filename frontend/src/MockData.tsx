@@ -1,4 +1,6 @@
+import md5 from "md5";
 import { getCategoriesString } from "./Util";
+import User from "./models/User";
 
 const desc1 =
   "Write a function that reverses a string. The input string is given as an array of characters s. "
@@ -52,5 +54,11 @@ const mockQuestions = [
 ];
 
 
+const mockUsers = [
+  new User('johnny', 'johnny@gmail.com', md5('12456')),
+  new User('sam', 'sam@gmail.com', md5('12456')),
+  new User('bobo', 'bobo@gmail.com', md5('12456')),
+]
 
-export { mockQuestions };
+
+export { mockQuestions, mockUsers };

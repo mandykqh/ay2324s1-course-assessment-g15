@@ -1,6 +1,6 @@
 import './QuestionTable.css';
 import { useState, useEffect } from "react";
-import Question from '../../models/Question';
+import Question from '../../models/question/Question';
 import { QuestionString } from '../../Commons';
 import ManageQuestionsButtonRow from './ManageQuestionsButtonRow';
 import { TableContainer, Table, Thead, Tr, Th, Tbody, Td } from '@chakra-ui/react';

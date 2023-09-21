@@ -6,9 +6,9 @@ import { useEffect, useState } from 'react';
 
 
 
-import QuestionValidator from '../models/QuestionValidator';
+import QuestionValidator from '../models/question/QuestionValidator';
 
-import QuestionStringBuilder from '../models/QuestionStringBuilder';
+import QuestionStringBuilder from '../models/question/QuestionStringBuilder';
 
 import { useToast } from '@chakra-ui/react';
 
