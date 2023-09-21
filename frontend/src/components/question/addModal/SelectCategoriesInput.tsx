@@ -32,18 +32,18 @@ const SelectCategoriesInput = () => {
       <Box backgroundColor={SECONDARY_COLOR} borderRadius='5px'>
         <Select
           onChange={(e: MultiValue<SelectOption | unknown>) => {
-            const inputString = e.map(
+            const inputStringArr = e.map(
               (q) => {
                 return ((q as SelectOption).value);
               }
-            ).join(', ');
-            setCategories(inputString);
+            );
+            setCategories(inputStringArr);
           }}
           isMulti
           options={categoryOptions}
           placeholder="Select Category"
           closeMenuOnSelect={false}
-          value={stringToOptionsMapper(questionData.categories)}
+          value={stringToOptionsMapper(questionData.categories.join(', '))}
         />
       </Box>
     </>

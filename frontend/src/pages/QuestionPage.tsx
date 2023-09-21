@@ -87,8 +87,6 @@ const QuestionPage = () => {
   const [notifcationOptions, setNotificationOptions] = useState<NotificationOptions>({ message: '', type: 'success' });
   notificationHook(notifcationOptions, toast);
 
-  console.log(notifcationOptions);
-
   return (
     <NewQuestionContext.Provider value={ctxValue}>
       <div id='question-page-container'>

@@ -11,7 +11,7 @@ import {
   ModalFooter,
   Button,
 } from '@chakra-ui/react';
-import { PRIMARY_COLOR, SECONDARY_COLOR } from '../../../CommonStyles';
+import { PRIMARY_COLOR } from '../../../CommonStyles';
 import ModalPage2 from './ModalPage2';
 import { NewQuestionContext } from '../../../contexts/NewQuestionContext';
 

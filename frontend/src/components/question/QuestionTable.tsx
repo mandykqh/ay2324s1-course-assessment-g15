@@ -2,8 +2,8 @@ import './QuestionTable.css';
 import { useState, useEffect } from "react";
 import Question from '../../models/Question';
 import { QuestionString } from '../../Commons';
-import ManageQuestionsButtonRow from '../ManageQuestionsButtonRow';
-import { TableContainer, Table, TableCaption, Thead, Tr, Th, Tbody, Td, Tfoot } from '@chakra-ui/react';
+import ManageQuestionsButtonRow from './ManageQuestionsButtonRow';
+import { TableContainer, Table, Thead, Tr, Th, Tbody, Td } from '@chakra-ui/react';
 
 interface Props {
   data: QuestionString[]
@@ -28,7 +28,7 @@ const QuestionTable: React.FC<Props> =
         <ManageQuestionsButtonRow
           addHandler={addBtnOnClick}
         />
-        <Table variant='simple' className='question-table' width={'50vw'}>
+        <Table variant='simple' className='question-table' width={'70vw'}>
           <Thead>
             <Tr>
               <Th className='question-th'>Id</Th>
@@ -53,7 +53,7 @@ const QuestionTable: React.FC<Props> =
             })}
           </Tbody>
         </Table>
-      </TableContainer>
+      </TableContainer >
     );
   }
 

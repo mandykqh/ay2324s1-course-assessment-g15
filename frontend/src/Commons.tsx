@@ -4,15 +4,15 @@ interface QuestionString {
   id: string,
   title: string,
   complexity: string,
-  categories: string,
+  categories: string[],
   description: string,
   link: string
 }
 
-const questionStringTemplate = {
+const questionStringTemplate: QuestionString = {
   id: '',
   title: '',
-  categories: '',
+  categories: [],
   complexity: '',
   description: '',
   link: ''

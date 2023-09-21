@@ -46,9 +46,9 @@ const desc2 =
 
 
 const mockQuestions = [
-  { id: '1', title: 'Reverse a String', categories: 'Strings, Algorithms', complexity: 'Easy', description: desc1, link: 'https://leetcode.com/problems/reverse-string' },
-  { id: '2', title: 'Linked List Cycle Detection', categories: 'Data Structures, Algorithms', complexity: 'Easy', description: desc2, link: 'https://leetcode.com/problems/linked' },
-  { id: '3', title: 'Linked Listasdasd Cycle Detection', categories: getCategoriesString().join(', '), complexity: 'Easy', description: desc2, link: 'https://leetcode.com/problems/linked' },
+  { id: '1', title: 'Reverse a String', categories: ['Strings', 'Algorithms'], complexity: 'Easy', description: desc1, link: 'https://leetcode.com/problems/reverse-string' },
+  { id: '2', title: 'Linked List Cycle Detection', categories: ['Data Structures', 'Algorithms'], complexity: 'Easy', description: desc2, link: 'https://leetcode.com/problems/linked' },
+  { id: '3', title: 'Linked Listasdasd Cycle Detection', categories: getCategoriesString(), complexity: 'Easy', description: desc2, link: 'https://leetcode.com/problems/linked' },
 ];
 
 

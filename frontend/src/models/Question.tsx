@@ -1,9 +1,8 @@
 import Category from "./enums/Category";
 import Complexity from "./enums/Complexity";
 
-function parseCategories(inputString: string) {
-  return inputString.split(',')
-    .map((c) => Category[c.trim() as keyof typeof Category]);
+function parseCategories(inputStringArr: string[]) {
+  return inputStringArr.map((c) => Category[c as keyof typeof Category]);
 }
 
 function parseComplexity(inputString: string) {
@@ -18,7 +17,7 @@ class Question {
   link: string;
   description: string;
 
-  constructor(id: Number, title: string, categories: string, complexity: string, link: string, description: string) {
+  constructor(id: Number, title: string, categories: string[], complexity: string, link: string, description: string) {
     this.id = id;
     this.title = title;
     this.categories = parseCategories(categories);
