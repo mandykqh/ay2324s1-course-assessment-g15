@@ -45,7 +45,7 @@ const QuestionDetailsModal: React.FC<Props> =
                     Category:
                   </Text>
                   <Text color='white'>
-                    {data.categories}
+                    {data.categories.join(', ')}
                   </Text>
                   <Spacer />
                   <Text color='white' as='b' marginRight={'3px'}>
