@@ -1,16 +1,24 @@
-import './QuestionPage.css';
+import './QuestionPage.css'
 import { mockQuestions } from '../MockData';
 import LocalStorageHandler from '../handlers/LocalStorageHandler';
-import { QuestionString } from '../Commons';
-import React, { useEffect, useState } from 'react';
+import { NotificationOptions, QuestionString, questionStringTemplate } from '../Commons';
+import { useEffect, useState } from 'react';
+
+
+
+import QuestionValidator from '../models/QuestionValidator';
+
+import QuestionStringBuilder from '../models/QuestionStringBuilder';
+
+import { useToast } from '@chakra-ui/react';
+
+import { NewQuestionContext } from '../contexts/NewQuestionContext';
+
+import QuestionDetailsModal from '../components/question/descriptionModal/QuestionDetailsModal';
 import AddQuestionModal from '../components/question/addModal/AddQuestionModal';
 import QuestionTable from '../components/question/QuestionTable';
-import QuestionValidator from '../models/QuestionValidator';
-import { questionStringTemplate } from '../Commons';
-import QuestionStringBuilder from '../models/QuestionStringBuilder';
-import { Input, useToast } from '@chakra-ui/react';
-import { NewQuestionContext } from '../contexts/NewQuestionContext';
-import QuestionDetailsModal from '../components/question/descriptionModal/QuestionDetailsModal';
+
+import { notificationHook } from '../hooks/notificationHook';
 
 // Initializes with all fields empty
 let currentQuestion = questionStringTemplate;
@@ -23,6 +31,7 @@ const QuestionPage = () => {
   const [currentQuestionId, setCurrentQuestionId] = useState('0');
   const [newQuestion, setNewQuestion] = useState<QuestionString>(questionStringTemplate);
   const ctxValue = { questionData: newQuestion, setQuestionData: setNewQuestion };
+  const toast = useToast();
 
   // TO REMOVE AFTER ASSIGNMENT 1 -----------------------------------------
   function checkDuplicates(qn: QuestionString, qnList: QuestionString[]) {
@@ -48,8 +57,11 @@ const QuestionPage = () => {
       setAddModalIsVisible(false);
       LocalStorageHandler.saveQuestion(newArr);
       LocalStorageHandler.advanceQuestionId();
+      setNotificationOptions({ message: 'Question added!', type: 'success' });
+      setNewQuestion(questionStringTemplate);
     } catch (e) {
       let result = (e as Error).message;
+      setNotificationOptions({ message: result, type: 'error' });
     }
   }
   // ===============================================================================
@@ -72,6 +84,11 @@ const QuestionPage = () => {
     currentQuestion = selectedQuestion;
   }
 
+  const [notifcationOptions, setNotificationOptions] = useState<NotificationOptions>({ message: '', type: 'success' });
+  notificationHook(notifcationOptions, toast);
+
+  console.log(notifcationOptions);
+
   return (
     <NewQuestionContext.Provider value={ctxValue}>
       <div id='question-page-container'>
@@ -88,6 +105,7 @@ const QuestionPage = () => {
             setQuestions(questions.filter(i => i.id !== id));
             LocalStorageHandler.saveQuestion(questions.filter(i => i.id !== id));
             setViewModalIsVisible(false);
+            setNotificationOptions({ message: 'Question deleted!', type: 'success' });
           }}
         />
         <QuestionTable

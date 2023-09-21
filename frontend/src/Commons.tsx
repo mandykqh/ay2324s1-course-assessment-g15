@@ -18,6 +18,10 @@ const questionStringTemplate = {
   link: ''
 }
 
+interface NotificationOptions {
+  message: string;
+  type: 'success' | 'error'
+}
 
 export { questionStringTemplate };
-export type { QuestionString };
+export type { QuestionString, NotificationOptions };
