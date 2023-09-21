@@ -5,8 +5,8 @@
 }
 
 .question-table {
-  width: 100%;
   border-collapse: collapse;
+  text-overflow: ellipsis;
 }
 
 .question-th {
@@ -20,6 +20,10 @@
   color: white;
   border: 1px solid #999999 !important;
   padding: 5px;
+  overflow-x: hidden;
+  max-width: 200px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .question-tr:hover {
