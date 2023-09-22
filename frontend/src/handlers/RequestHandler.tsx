@@ -1,7 +1,7 @@
 import { QuestionString } from "../Commons";
-import QuestionsAPI from "../api/questions/questions";
+import QuestionAPI from "../api/questions/questions";
 class RequestHandler {
-    private static api: QuestionsAPI = new QuestionsAPI();
+    private static api: QuestionAPI = new QuestionAPI();
 
     // Hacky way to map the response from the API to the QuestionString interface
     private static mapToQuestionString(response: any): QuestionString {
@@ -15,14 +15,36 @@ class RequestHandler {
           };
     }
 
+    private static mapToResponseFormat(questionString: QuestionString): any {
+        return {
+          title: questionString.title,
+          complexity: questionString.complexity,
+          categories: questionString.categories,
+          questionDescription: questionString.description,
+          linkToQuestion: questionString.link
+        };
+      }
+      
+
     static async loadQuestions(): Promise<QuestionString[]> {
         const response = await this.api.getQuestions();
         const questions = response as QuestionString[];
         return questions.map(this.mapToQuestionString);
     }
 
-    static async saveQuestion(question: QuestionString): Promise<void> {
-        await this.api.addQuestion(question);
+    static async createQuestionAndGetID(question: QuestionString): Promise<number> {
+        const response = await this.api.createQuestion(this.mapToResponseFormat(question));
+        return response.questionID as number;
+    }
+
+    static async deleteQuestion(id: string): Promise<void> {
+        try {
+            const response = await this.api.deleteQuestion(id);
+            return response;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
     }
 }
 

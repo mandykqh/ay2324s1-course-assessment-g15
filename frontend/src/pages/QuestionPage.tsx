@@ -46,8 +46,8 @@ const QuestionPage = () => {
       checkDuplicates(newQuestion, questions);
       setQuestions(newArr);
       setAddModalIsVisible(false);
-      LocalStorageHandler.saveQuestion(newArr);
-      LocalStorageHandler.advanceQuestionId();
+      // LocalStorageHandler.saveQuestion(newArr);
+      // LocalStorageHandler.advanceQuestionId();
       setNotificationOptions({ message: 'Question added!', type: 'success' });
       setNewQuestion(questionStringTemplate);
     } catch (e) {
@@ -58,14 +58,18 @@ const QuestionPage = () => {
   // ===============================================================================
 
   useEffect(() => {
-    RequestHandler.loadQuestions().then((questions: QuestionString[]) => {
-      if (Object.keys(questions).length === 0) {
-        setQuestions(mockQuestions);
-        return;
-      }
-      setQuestions(questions);
-      console.log(questions);
-    });
+    try {
+      RequestHandler.loadQuestions().then((questions: QuestionString[]) => {
+        if (Object.keys(questions).length === 0) {
+          setQuestions(mockQuestions);
+          return;
+        }
+        setQuestions(questions);
+        console.log(questions);
+      });
+    } catch (error) {
+      setQuestions(mockQuestions);
+    }
   }, []);
 
   function viewDescriptionHandler(id: string) {
@@ -94,10 +98,14 @@ const QuestionPage = () => {
           data={currentQuestion}
           closeHandler={() => { setViewModalIsVisible(false); }}
           deleteHandler={(id: string) => {
-            setQuestions(questions.filter(i => i.id !== id));
-            LocalStorageHandler.saveQuestion(questions.filter(i => i.id !== id));
-            setViewModalIsVisible(false);
-            setNotificationOptions({ message: 'Question deleted!', type: 'success' });
+            try {
+              RequestHandler.deleteQuestion(id);
+              setNotificationOptions({ message: `Question ${id} deleted!`, type: 'success' });
+              setQuestions(questions.filter(i => i.id !== id));
+              setViewModalIsVisible(false);
+            } catch (error) {
+              setNotificationOptions({ message: `Question ${id} deletion failed!`, type: 'error' });
+            }
           }}
         />
         <QuestionTable

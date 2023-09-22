@@ -11,7 +11,7 @@ class QuestionStringBuilder {
       id: '',
       title: '',
       description: '',
-      categories: '',
+      categories: [],
       complexity: '',
       link: ''
     }
@@ -29,7 +29,7 @@ class QuestionStringBuilder {
     this.qnStr.description = value;
   }
 
-  public setCategories(value: string) {
+  public setCategories(value: string[]) {
     this.qnStr.categories = value;
   }
 
@@ -42,7 +42,7 @@ class QuestionStringBuilder {
   }
 
   public setQuestionString(value: QuestionString) {
-    this.setId(LocalStorageHandler.getNextQuestionId());
+    // this.setId(LocalStorageHandler.getNextQuestionId()); we get the new QuestionID from the backend response
     this.setTitle(value.title);
     this.setDescription(value.description);
     this.setCategories(value.categories);
