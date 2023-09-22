@@ -1,61 +1,53 @@
-import React from 'react';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import ListItemText from '@mui/material/ListItemText';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import Checkbox from '@mui/material/Checkbox';
-import { getCategoriesString } from '../../../Util';
+import { useContext, useEffect, useState } from 'react';
+import { getCategoriesString, stringToOptionsMapper } from '../../../Util';
+import { MultiValue, Select } from "chakra-react-select";
+import { Box } from '@chakra-ui/react';
+import { NewQuestionContext } from '../../../contexts/NewQuestionContext';
+import { SECONDARY_COLOR } from '../../../CommonStyles';
 
-const names = getCategoriesString();
-
-interface Props {
-  onChangeHandler: (value: string) => void;
+interface SelectOption {
+  value: string;
+  label: string;
 }
 
-const SelectCategoriesInput: React.FC<Props> = ({ onChangeHandler }) => {
-  const [categories, setCatergories] = React.useState<string[]>([]);
+const categoryOptions = getCategoriesString().map(value => {
+  return (
+    { value: value, label: value }
+  );
+});
 
-  function handleChange(event: SelectChangeEvent<typeof categories>) {
-    const { target: { value } } = event;
-    const newCat = typeof value === 'string' ? value.split(',') : value;
-    setCatergories(newCat);
-    onChangeHandler(newCat.join(' ,'))
-  };
+const SelectCategoriesInput = () => {
+  const { questionData, setQuestionData } = useContext(NewQuestionContext);
+  const [categories, setCategories] = useState(questionData.categories);
+
+  useEffect(() => {
+    setQuestionData({
+      ...questionData,
+      categories: categories
+    });
+  }, [categories])
 
   return (
-    <FormControl fullWidth>
-      <InputLabel className='input-label'>
-        Tag
-      </InputLabel>
-      <Select
-        className='select'
-        multiple
-        value={categories}
-        onChange={handleChange}
-        input={<OutlinedInput label="Tag" />}
-        renderValue={(selected) => selected.join(', ')}
-        MenuProps={MenuProps}
-      >
-        {names.map((name) => (
-          <MenuItem key={name} value={name}>
-            <Checkbox checked={categories.indexOf(name) > -1} />
-            <ListItemText primary={name} />
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl >
+    <>
+      <Box backgroundColor={SECONDARY_COLOR} borderRadius='5px'>
+        <Select
+          onChange={(e: MultiValue<SelectOption | unknown>) => {
+            const inputStringArr = e.map(
+              (q) => {
+                return ((q as SelectOption).value);
+              }
+            );
+            setCategories(inputStringArr);
+          }}
+          isMulti
+          options={categoryOptions}
+          placeholder="Select Category"
+          closeMenuOnSelect={false}
+          value={stringToOptionsMapper(questionData.categories.join(', '))}
+        />
+      </Box>
+    </>
   );
 }
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-    },
-  },
-};
 export default SelectCategoriesInput;

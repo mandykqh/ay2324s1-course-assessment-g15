@@ -10,7 +10,7 @@ class LocalStorageHandler {
     return JSON.parse(window.localStorage.getItem("Questions") || '{}');
   }
 
-  //Temp method for getting QuestionID --------------------------------------------------
+  //Temp methods for QuestionID --------------------------------------------------
   static getNextQuestionId() {
     if (localStorage.getItem("nextId") === null) {
       localStorage.setItem("nextId", '100')
@@ -19,12 +19,13 @@ class LocalStorageHandler {
     const nextId = (localStorage.getItem("nextId")!); //USING NON NULL OPERATOR
     return nextId;
   }
-  //--------------------------------------------------------------------------------------
+
 
   static advanceQuestionId() {
     const nextId = (localStorage.getItem("nextId")!); //USING NON NULL OPERATOR
     localStorage.setItem("nextId", (parseInt(nextId) + 1).toString());
   }
+  //--------------------------------------------------------------------------------------
 }
 
 export default LocalStorageHandler;

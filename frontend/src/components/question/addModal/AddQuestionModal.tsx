@@ -1,86 +1,85 @@
-import './AddQuestionModal.css'
-import React from "react";
-import { Box, Input, Modal, Typography, Button } from "@mui/material";
-import SelectComplexityInput from './SelectComplexityInput';
-import SelectCategoriesInput from './SelectCategoriesInput';
-import { QuestionString } from '../../../Commons';
+import React, { useContext, useState } from "react";
+import { QuestionString, questionStringTemplate } from '../../../Commons';
+import ModalPage1 from './ModalPage1';
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  Button,
+} from '@chakra-ui/react';
+import { PRIMARY_COLOR } from '../../../CommonStyles';
+import ModalPage2 from './ModalPage2';
+import { NewQuestionContext } from '../../../contexts/NewQuestionContext';
 
 interface Props {
   isVisible: boolean;
   closeHandler: () => void;
-  newQuestionSetter: React.Dispatch<React.SetStateAction<QuestionString>>;
   submitHandler: () => void;
 }
 
+const ModalButton = ({ label, onClick }:
+  { label: string, onClick: () => void }) => {
+  return (
+    <Button colorScheme='blue' mr={3} onClick={onClick}>
+      {label}
+    </Button>
+  );
+};
+
 const AddQuestionModal: React.FC<Props> =
-  ({ isVisible, closeHandler, newQuestionSetter, submitHandler }) => {
+  ({ isVisible, closeHandler, submitHandler }) => {
+    const [page, setPage] = useState(1);
+    const { setQuestionData } = useContext(NewQuestionContext);
+
+    function close() {
+      closeHandler();
+      setQuestionData(questionStringTemplate);
+      setPage(1);
+    }
+
     return (
       <Modal
-        open={isVisible}
+        isOpen={isVisible}
+        onClose={close}
+        autoFocus={false}
+        closeOnOverlayClick={false}
+        blockScrollOnMount={true}
       >
-        <Box id='modal-box'>
-          <div id='inner-modal-container'>
-            <div onClick={closeHandler}>
-              <Typography id='x-btn' color={'white'}>
-                X
-              </Typography>
-            </div>
-            <div id='header-container'>
-              <Typography id="modal-title" variant="h6" component="h2" color={"white"}>
-                Add Question
-              </Typography>
-            </div>
-            <Input
-              id='title-input'
-              placeholder="Title"
-              onChange={(e) => {
-                newQuestionSetter(q => {
-                  return ({ ...q, title: e.target.value });
-                })
-              }}
-            />
-            <Input
-              id='link-input'
-              placeholder="Link"
-              onChange={(e) => {
-                newQuestionSetter(q => {
-                  return ({ ...q, link: e.target.value });
-                })
-              }}
-            />
-            <div id='middle-container'>
-              <div id='categories-setter-container'>
-                <SelectCategoriesInput
-                  onChangeHandler={(value: string) =>
-                    newQuestionSetter(q => {
-                      return ({ ...q, categories: value });
-                    })}
-                />
-              </div>
-              <div id='complexity-setter-container'>
-                <SelectComplexityInput
-                  onChangeHandler={(value: string) =>
-                    newQuestionSetter(q => {
-                      return ({ ...q, complexity: value });
-                    })}
-                />
-              </div>
-            </div>
-            <Input
-              id='description-input'
-              placeholder="Description"
-              multiline minRows={10}
-              onChange={(e) => {
-                newQuestionSetter(q => {
-                  return ({ ...q, description: e.target.value });
-                })
-              }}
-            />
-            <Button id='save-btn' size={'large'} onClick={submitHandler}>
-              Save & Close
-            </Button>
-          </div>
-        </Box>
+        <ModalOverlay />
+        <ModalContent backgroundColor={PRIMARY_COLOR} maxW="50vw">
+          <ModalHeader color='white'>
+            Add Question
+          </ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            {page === 1 ?
+              <ModalPage1 /> :
+              <ModalPage2 />
+            }
+          </ModalBody>
+          <ModalFooter>
+            {
+              page === 1 ?
+                <ModalButton label='Next' onClick={() => setPage(2)} />
+                :
+                <>
+                  <ModalButton label='Previous' onClick={() => { setPage(1) }} />
+                  <ModalButton label='Submit'
+                    onClick={() => {
+                      try {
+                        submitHandler()
+                      } catch {
+                        close();
+                      }
+                    }} />
+                </>
+            }
+          </ModalFooter>
+        </ModalContent>
       </Modal >
     );
   }

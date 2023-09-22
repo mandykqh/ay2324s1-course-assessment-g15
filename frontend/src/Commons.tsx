@@ -1,34 +1,27 @@
-import { NotificationType } from "./components/question/Notification";
+
 
 interface QuestionString {
   id: string,
   title: string,
   complexity: string,
-  categories: string,
+  categories: string[],
   description: string,
   link: string
 }
 
-interface notificationState {
-  isShowing: boolean,
-  message: string,
-  type: NotificationType
-}
-
-const questionStringTemplate = {
+const questionStringTemplate: QuestionString = {
   id: '',
   title: '',
-  categories: '',
+  categories: [],
   complexity: '',
   description: '',
   link: ''
 }
 
-const initialNotificationState = {
-  isShowing: false,
-  message: '',
-  type: NotificationType.SUCCESS
+interface NotificationOptions {
+  message: string;
+  type: 'success' | 'error'
 }
 
-export { questionStringTemplate, initialNotificationState };
-export type { notificationState, QuestionString };
+export { questionStringTemplate };
+export type { QuestionString, NotificationOptions };
