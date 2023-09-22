@@ -46,7 +46,7 @@ const QuestionTable: React.FC<Props> =
           <Thead>
             <Tr>
               {headings.map((label) =>
-                <Th bgColor='#212224' border='1px solid #999999' key='label'>
+                <Th bgColor='#212224' border='1px solid #999999' key={ label }>
                   {label}
                 </Th>)}
             </Tr>

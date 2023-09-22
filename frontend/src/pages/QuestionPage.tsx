@@ -1,5 +1,6 @@
 import { mockQuestions } from '../MockData';
 import LocalStorageHandler from '../handlers/LocalStorageHandler';
+import RequestHandler from '../handlers/RequestHandler';
 import { NotificationOptions, QuestionString, questionStringTemplate } from '../Commons';
 import { useEffect, useState } from 'react';
 import QuestionValidator from '../models/QuestionValidator';
@@ -57,11 +58,14 @@ const QuestionPage = () => {
   // ===============================================================================
 
   useEffect(() => {
-    if (Object.keys(LocalStorageHandler.loadQuestion()).length === 0) {
-      setQuestions(mockQuestions);
-      return;
-    }
-    setQuestions(LocalStorageHandler.loadQuestion());
+    RequestHandler.loadQuestions().then((questions: QuestionString[]) => {
+      if (Object.keys(questions).length === 0) {
+        setQuestions(mockQuestions);
+        return;
+      }
+      setQuestions(questions);
+      console.log(questions);
+    });
   }, []);
 
   function viewDescriptionHandler(id: string) {
