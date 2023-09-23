@@ -17,9 +17,6 @@ const DummyLoginPage = () => {
 
 
   function loginHandler() {
-    // console.log(userName);
-    // console.log(password);
-
     userRequestHandler.login(userName, password).then(result => {
       if (result) {
         navigate('home');
@@ -28,8 +25,6 @@ const DummyLoginPage = () => {
       showNotification({ message: 'Invalid credentials', type: 'error' }, toast);
     })
   }
-
-  // notificationHook(notificationOptions, toast);
 
   return (
     <Center height={'100vh'}>
