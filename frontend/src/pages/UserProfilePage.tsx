@@ -1,6 +1,5 @@
 import User from '../models/User';
 import { useEffect, useState } from "react";
-import { mockUsers } from "../MockData";
 import {
   Box, Grid, Text, Input, Center, Flex
 

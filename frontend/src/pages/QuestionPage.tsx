@@ -2,8 +2,9 @@ import { mockQuestions } from '../MockData';
 import LocalStorageHandler from '../handlers/LocalStorageHandler';
 import { NotificationOptions, QuestionString, questionStringTemplate } from '../Commons';
 import { useEffect, useState } from 'react';
-import QuestionValidator from '../models/QuestionValidator';
-import QuestionStringBuilder from '../models/QuestionStringBuilder';
+import QuestionValidator from '../models/question/QuestionValidator';
+import QuestionStringBuilder from '../models/question/QuestionStringBuilder';
+
 import { useToast, Center } from '@chakra-ui/react';
 import { NewQuestionContext } from '../contexts/NewQuestionContext';
 import QuestionDetailsModal from '../components/question/descriptionModal/QuestionDetailsModal';
