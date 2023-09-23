@@ -14,6 +14,7 @@
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@types/md5": "^2.3.2",
+    "axios": "^1.5.0",
     "chakra-react-select": "^4.7.2",
     "framer-motion": "^10.16.4",
     "install": "^0.13.0",

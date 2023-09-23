@@ -10,8 +10,8 @@ import { NewQuestionContext } from '../contexts/NewQuestionContext';
 import QuestionDetailsModal from '../components/question/descriptionModal/QuestionDetailsModal';
 import AddQuestionModal from '../components/question/addModal/AddQuestionModal';
 import QuestionTable from '../components/question/QuestionTable';
-import { notificationHook } from '../hooks/notificationHook';
 import NavigationBar from '../components/NavigationBar';
+import { showNotification } from '../Util';
 
 let currentQuestion = questionStringTemplate;
 
@@ -49,11 +49,11 @@ const QuestionPage = () => {
       setAddModalIsVisible(false);
       LocalStorageHandler.saveQuestion(newArr);
       LocalStorageHandler.advanceQuestionId();
-      setNotificationOptions({ message: 'Question added!', type: 'success' });
+      showNotification({ message: 'Question added!', type: 'success' }, toast);
       setNewQuestion(questionStringTemplate);
     } catch (e) {
       let result = (e as Error).message;
-      setNotificationOptions({ message: result, type: 'error' });
+      showNotification({ message: result, type: 'error' }, toast);
     }
   }
   // ===============================================================================
@@ -76,9 +76,6 @@ const QuestionPage = () => {
     currentQuestion = selectedQuestion;
   }
 
-  const [notifcationOptions, setNotificationOptions] = useState<NotificationOptions>({ message: '', type: 'success' });
-  notificationHook(notifcationOptions, toast);
-
   return (
     <NewQuestionContext.Provider value={ctxValue}>
       <Center flexDirection={'column'}>
@@ -96,7 +93,7 @@ const QuestionPage = () => {
             setQuestions(questions.filter(i => i.id !== id));
             LocalStorageHandler.saveQuestion(questions.filter(i => i.id !== id));
             setViewModalIsVisible(false);
-            setNotificationOptions({ message: 'Question deleted!', type: 'success' });
+            showNotification({ message: 'Question deleted!', type: 'success' }, toast);
           }}
         />
         <QuestionTable
