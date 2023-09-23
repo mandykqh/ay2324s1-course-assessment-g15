@@ -1,5 +1,4 @@
 import { mockQuestions } from '../MockData';
-import LocalStorageHandler from '../handlers/LocalStorageHandler';
 import QuestionRequestHandler from '../handlers/QuestionRequestHandler';
 import { NotificationOptions, QuestionString, questionStringTemplate } from '../Commons';
 import { useEffect, useState } from 'react';
@@ -24,7 +23,6 @@ const QuestionPage = () => {
   const ctxValue = { questionData: newQuestion, setQuestionData: setNewQuestion };
   const toast = useToast();
 
-  // TO REMOVE AFTER ASSIGNMENT 1 -----------------------------------------
   function checkDuplicates(qn: QuestionString, qnList: QuestionString[]) {
     try {
       let validator = new QuestionValidator();
@@ -33,29 +31,30 @@ const QuestionPage = () => {
       throw (e);
     }
   }
-  // -------------------------------------------------------------------------
 
-
-  // TEMP FUNCTION FOR ASSIGNMENT 1: so idw tidy up :] ===============================
-  function submitHandler() {
+  async function submitHandler() {
     let builder = new QuestionStringBuilder();
     builder.setQuestionString(newQuestion);
     try {
+      // Locally check for duplicates before sending to backend
       let newQuestion = builder.build();
-      let newArr = [...questions, newQuestion];
       checkDuplicates(newQuestion, questions);
-      setQuestions(newArr);
+
+      // Send to backend, get ID
+      const newID = await QuestionRequestHandler.createQuestionAndGetID(newQuestion);
+      const updatedQuestionStringTemplate = { ...questionStringTemplate, id: newID.toString() };
+
+      // Set questions locally using new ID
+      newQuestion.id = newID.toString();
+      setQuestions([...questions, newQuestion]);
       setAddModalIsVisible(false);
-      // LocalStorageHandler.saveQuestion(newArr);
-      // LocalStorageHandler.advanceQuestionId();
       setNotificationOptions({ message: 'Question added!', type: 'success' });
-      setNewQuestion(questionStringTemplate);
+      setNewQuestion(updatedQuestionStringTemplate);
     } catch (e) {
       let result = (e as Error).message;
       setNotificationOptions({ message: result, type: 'error' });
     }
   }
-  // ===============================================================================
 
   useEffect(() => {
     try {
