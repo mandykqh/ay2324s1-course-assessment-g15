@@ -1,9 +1,10 @@
 import QuestionPage from "./pages/QuestionPage";
-
+import LoginPage from "./pages/LoginSignupPage";
 function App() {
   return (
     <div>
-      <QuestionPage />
+      {/* <QuestionPage /> */}
+      <LoginPage />
     </div>
 
   )
