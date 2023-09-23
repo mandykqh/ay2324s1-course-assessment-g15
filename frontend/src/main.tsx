@@ -8,7 +8,6 @@ import {
 } from "react-router-dom";
 import DummyLoginPage from './pages/DummyLoginPage.js';
 import QuestionPage from './pages/QuestionPage.js';
-import NavigationBar from './components/NavigationBar.js';
 import UserProfilePage from './pages/UserProfilePage.js';
 
 const router = createBrowserRouter([

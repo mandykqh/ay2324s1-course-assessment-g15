@@ -1,5 +1,6 @@
-import { Input, Box, Text, Flex, Spacer, Image, Center, Button, InputRightElement, InputGroup } from "@chakra-ui/react";
+import { Input, Box, Text, Flex, Spacer, Image, Center, Button, InputRightElement, InputGroup, background } from "@chakra-ui/react";
 import { useState } from "react";
+import { PRIMARY_COLOR, SECONDARY_COLOR } from "../../CommonStyles";
 
 interface PasswordInputProps {
   label: string;
@@ -18,6 +19,7 @@ const PasswordInput: React.FC<PasswordInputProps> = ({ label, passwordShowing, s
           pr='4.5rem'
           type={{ passwordShowing } ? 'text' : 'password'}
           placeholder={`Enter ${label.toLowerCase()}`}
+          backgroundColor={PRIMARY_COLOR}
         />
         <InputRightElement width='4.5rem'>
           <Button h='1.75rem' size='sm' onClick={() => { setter(!passwordShowing) }} >
@@ -35,7 +37,7 @@ const UserSecurity = () => {
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
 
   return (
-    <Box border={'1px solid white'} borderRadius={5} p={5} w={'50%'}>
+    <Box border={'1px solid white'} borderRadius={5} p={5} w={'70%'} backgroundColor={SECONDARY_COLOR}>
       <Box marginBottom={10}>
         <Text as='b' fontSize={25}>
           Change Password

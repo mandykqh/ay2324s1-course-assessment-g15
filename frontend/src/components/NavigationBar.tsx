@@ -3,7 +3,7 @@ import { SECONDARY_COLOR } from "../CommonStyles";
 import { useNavigate } from "react-router-dom";
 
 const HEIGHT = 50;
-const tabHeadings = ['Questions', 'History', 'More']
+
 
 interface Props {
   mb: number;
@@ -11,14 +11,28 @@ interface Props {
 
 const NavigationBar: React.FC<Props> = ({ mb }) => {
   const navigate = useNavigate();
+  const tabHeadings = [
+    {
+      label: 'Questions',
+      onClick: () => { navigate('../home') }
+    }, {
+      label: 'History',
+      onClick: () => { }
+    }, {
+      label: 'More',
+      onClick: () => { }
+    }
+  ]
   return (
     <Box w={'100vw'} h={HEIGHT} backgroundColor={SECONDARY_COLOR} mb={mb}>
       <Flex>
         <Center h={HEIGHT} ml={150}>
-          <Text as='b' fontSize={25} mr={50}>PeerPrep</Text>
+          <Box onClick={() => navigate('../home')} cursor={'pointer'}>
+            <Text as='b' fontSize={25} mr={50}>PeerPrep</Text>
+          </Box>
           <Tabs variant={'line'}>
             < TabList >
-              {tabHeadings.map(h => <Tab key={h}>{h}</Tab>)}
+              {tabHeadings.map(h => <Tab key={h.label} onClick={h.onClick}>{h.label}</Tab>)}
             </TabList>
           </Tabs>
         </Center>
