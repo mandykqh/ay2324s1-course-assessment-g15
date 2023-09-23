@@ -3,8 +3,12 @@ import React, { useState } from "react";
 function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [name, setName,] = useState("");
+
     const [displayLoginForm, setDisplayLoginForm] = useState(true);
     const [displaySignupForm, setDisplaySignupForm] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleLogin = () => {
 
@@ -21,6 +25,10 @@ function LoginPage() {
             setDisplayLoginForm(true)
             setDisplaySignupForm(false)
         }
+    }
+
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
     }
     return (
         <div>
@@ -39,11 +47,12 @@ function LoginPage() {
                     />
                     <label htmlFor="password">Password:</label>
                     <input
-                        type="password"
+                        type={showPassword ? "text" : "password"}
                         id="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
+                    <button type="button" onClick={togglePasswordVisibility}>{showPassword ? "Hide" : "Unhide"}</button>
                     <button type="button" onClick={handleLogin}>
                         Login
                     </button>
@@ -52,6 +61,7 @@ function LoginPage() {
             {displaySignupForm && (
                 < form className='signup' >
                     <h2>Let's get started!</h2>
+
                     <label htmlFor="email">Enter your email address:</label>
                     <input
                         type="email"
@@ -59,14 +69,32 @@ function LoginPage() {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                     />
-                    <label htmlFor="password">Password:</label>
+                    <label htmlFor="name">Full name</label>
                     <input
-                        type="password"
+                        type="name"
+                        id="name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                    />
+                    <label htmlFor="password">Password</label>
+                    <input
+                        type={showPassword ? "text" : "password"}
                         id="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
-                    <button type="button" onClick={handleLogin}>
+                    <button type="button" onClick={togglePasswordVisibility}>{showPassword ? "Hide" : "Unhide"}</button>
+
+                    <label htmlFor="confirmPassword">Confirm password</label>
+                    <input
+                        type={showPassword ? "text" : "password"}
+                        id="confirmPassword"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                    />
+                    <button type="button" onClick={togglePasswordVisibility}>{showPassword ? "Hide" : "Unhide"}</button>
+
+                    <button type="button" onClick={handleSignup}>
                         Sign up
                     </button>
                 </form >
