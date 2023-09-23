@@ -71,7 +71,8 @@ const AddQuestionModal: React.FC<Props> =
                   <ModalButton label='Submit'
                     onClick={() => {
                       try {
-                        submitHandler()
+                        submitHandler();
+                        close();
                       } catch {
                         close();
                       }

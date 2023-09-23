@@ -1,6 +1,6 @@
 import { mockQuestions } from '../MockData';
 import LocalStorageHandler from '../handlers/LocalStorageHandler';
-import RequestHandler from '../handlers/RequestHandler';
+import QuestionRequestHandler from '../handlers/QuestionRequestHandler';
 import { NotificationOptions, QuestionString, questionStringTemplate } from '../Commons';
 import { useEffect, useState } from 'react';
 import QuestionValidator from '../models/QuestionValidator';
@@ -59,7 +59,7 @@ const QuestionPage = () => {
 
   useEffect(() => {
     try {
-      RequestHandler.loadQuestions().then((questions: QuestionString[]) => {
+      QuestionRequestHandler.loadQuestions().then((questions: QuestionString[]) => {
         if (Object.keys(questions).length === 0) {
           setQuestions(mockQuestions);
           return;
@@ -99,7 +99,7 @@ const QuestionPage = () => {
           closeHandler={() => { setViewModalIsVisible(false); }}
           deleteHandler={(id: string) => {
             try {
-              RequestHandler.deleteQuestion(id);
+              QuestionRequestHandler.deleteQuestion(id);
               setNotificationOptions({ message: `Question ${id} deleted!`, type: 'success' });
               setQuestions(questions.filter(i => i.id !== id));
               setViewModalIsVisible(false);

@@ -27,14 +27,24 @@ class RequestHandler {
       
 
     static async loadQuestions(): Promise<QuestionString[]> {
-        const response = await this.api.getQuestions();
-        const questions = response as QuestionString[];
-        return questions.map(this.mapToQuestionString);
+        try {
+            const response = await this.api.getQuestions();
+            const questions = response as QuestionString[];
+            return questions.map(this.mapToQuestionString);
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
     }
 
     static async createQuestionAndGetID(question: QuestionString): Promise<number> {
-        const response = await this.api.createQuestion(this.mapToResponseFormat(question));
-        return response.questionID as number;
+        try {
+            const response = await this.api.createQuestion(this.mapToResponseFormat(question));
+            return response.questionID as number;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
     }
 
     static async deleteQuestion(id: string): Promise<void> {
