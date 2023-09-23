@@ -19,6 +19,7 @@ import AddQuestionModal from '../components/question/addModal/AddQuestionModal';
 import QuestionTable from '../components/question/QuestionTable';
 
 import { notificationHook } from '../hooks/notificationHook';
+import NavigationBar from '../components/NavigationBar';
 
 // Initializes with all fields empty
 let currentQuestion = questionStringTemplate;
@@ -90,6 +91,7 @@ const QuestionPage = () => {
   return (
     <NewQuestionContext.Provider value={ctxValue}>
       <div id='question-page-container'>
+        <NavigationBar mb={5} />
         <AddQuestionModal
           isVisible={addModalIsVisible}
           closeHandler={() => setAddModalIsVisible(false)}
