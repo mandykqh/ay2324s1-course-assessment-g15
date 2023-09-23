@@ -59,15 +59,18 @@ const QuestionPage = () => {
   useEffect(() => {
     try {
       QuestionRequestHandler.loadQuestions().then((questions: QuestionString[]) => {
-        if (Object.keys(questions).length === 0) {
-          setQuestions(mockQuestions);
-          return;
-        }
+        // Temporary mock data for assignment 1 ------------------------------------------
+        // if (Object.keys(questions).length === 0) {
+        //   setQuestions(mockQuestions);
+        //   return;
+        // }
+        // -------------------------------------------------------------------------------
         setQuestions(questions);
         console.log(questions);
       });
     } catch (error) {
-      setQuestions(mockQuestions);
+      console.log(error);
+      setNotificationOptions({ message: 'Failed to load questions!', type: 'error' });
     }
   }, []);
 
