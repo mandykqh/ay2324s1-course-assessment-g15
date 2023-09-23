@@ -8,5 +8,5 @@ interface ContextProps {
 
 export const NewQuestionContext = createContext<ContextProps>({
   questionData: questionStringTemplate,
-  setQuestionData: () => null
+  setQuestionData: () => { }
 });

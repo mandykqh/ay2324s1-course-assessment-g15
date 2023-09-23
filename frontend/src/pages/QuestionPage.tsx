@@ -1,27 +1,17 @@
-import './QuestionPage.css'
 import { mockQuestions } from '../MockData';
 import LocalStorageHandler from '../handlers/LocalStorageHandler';
 import { NotificationOptions, QuestionString, questionStringTemplate } from '../Commons';
 import { useEffect, useState } from 'react';
-
-
-
-import QuestionValidator from '../models/question/QuestionValidator';
-
-import QuestionStringBuilder from '../models/question/QuestionStringBuilder';
-
-import { useToast } from '@chakra-ui/react';
-
+import QuestionValidator from '../models/QuestionValidator';
+import QuestionStringBuilder from '../models/QuestionStringBuilder';
+import { useToast, Center } from '@chakra-ui/react';
 import { NewQuestionContext } from '../contexts/NewQuestionContext';
-
 import QuestionDetailsModal from '../components/question/descriptionModal/QuestionDetailsModal';
 import AddQuestionModal from '../components/question/addModal/AddQuestionModal';
 import QuestionTable from '../components/question/QuestionTable';
-
 import { notificationHook } from '../hooks/notificationHook';
 import NavigationBar from '../components/NavigationBar';
 
-// Initializes with all fields empty
 let currentQuestion = questionStringTemplate;
 
 const QuestionPage = () => {
@@ -90,7 +80,7 @@ const QuestionPage = () => {
 
   return (
     <NewQuestionContext.Provider value={ctxValue}>
-      <div id='question-page-container'>
+      <Center>
         <NavigationBar mb={5} />
         <AddQuestionModal
           isVisible={addModalIsVisible}
@@ -113,7 +103,7 @@ const QuestionPage = () => {
           viewDescriptionHandler={viewDescriptionHandler}
           addBtnOnClick={() => setAddModalIsVisible(true)}
         />
-      </div>
+      </Center>
     </NewQuestionContext.Provider>
   )
 };

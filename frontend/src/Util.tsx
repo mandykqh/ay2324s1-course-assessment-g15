@@ -17,13 +17,10 @@ function stringToOptionsMapper(input: string) {
   if (input.length === 0) {
     return [];
   }
-  let arr = input.split(', ').map((value: string) => {
-    return ({
-      value: value,
-      label: value
-    });
-  });
-  return arr;
+  return input.split(', ').map((value: string) => ({
+    value: value,
+    label: value
+  }));
 }
 
 export { getComplexityStrings, getCategoriesString, stringToOptionsMapper };

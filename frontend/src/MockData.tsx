@@ -1,6 +1,5 @@
-import md5 from "md5";
+import { QuestionString } from "./Commons";
 import { getCategoriesString } from "./Util";
-import User from "./models/User";
 
 const desc1 =
   "Write a function that reverses a string. The input string is given as an array of characters s. "
@@ -47,18 +46,12 @@ const desc2 =
   + "Follow up: Can you solve it using O(1) (i.e. constant) memory?";
 
 
-const mockQuestions = [
+const mockQuestions: QuestionString[] = [
   { id: '1', title: 'Reverse a String', categories: ['Strings', 'Algorithms'], complexity: 'Easy', description: desc1, link: 'https://leetcode.com/problems/reverse-string' },
   { id: '2', title: 'Linked List Cycle Detection', categories: ['Data Structures', 'Algorithms'], complexity: 'Easy', description: desc2, link: 'https://leetcode.com/problems/linked' },
   { id: '3', title: 'Linked Listasdasd Cycle Detection', categories: getCategoriesString(), complexity: 'Easy', description: desc2, link: 'https://leetcode.com/problems/linked' },
 ];
 
 
-const mockUsers = [
-  new User('johnny', 'johnny@gmail.com', md5('12456')),
-  new User('sam', 'sam@gmail.com', md5('12456')),
-  new User('bobo', 'bobo@gmail.com', md5('12456')),
-]
 
-
-export { mockQuestions, mockUsers };
+export { mockQuestions };

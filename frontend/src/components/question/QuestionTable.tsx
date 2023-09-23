@@ -1,9 +1,23 @@
-import './QuestionTable.css';
 import { useState, useEffect } from "react";
 import Question from '../../models/question/Question';
 import { QuestionString } from '../../Commons';
 import ManageQuestionsButtonRow from './ManageQuestionsButtonRow';
 import { TableContainer, Table, Thead, Tr, Th, Tbody, Td } from '@chakra-ui/react';
+
+interface tdProps {
+  value: string;
+}
+
+const QuestionTd: React.FC<tdProps> = ({ value }) => {
+  return (
+    <Td
+      border='1px solid #9999'
+      maxW='200px'
+      textOverflow='ellipsis'
+      overflowX='hidden'
+    >{value}</Td>
+  );
+}
 
 interface Props {
   data: QuestionString[]
@@ -14,7 +28,7 @@ interface Props {
 const QuestionTable: React.FC<Props> =
   ({ data, viewDescriptionHandler, addBtnOnClick }) => {
     const [questionsList, setQuestionsList] = useState<Question[]>([]);
-
+    const headings = ['Id', 'Title', 'Category', 'Complexity'];
     // Hook to update questionsList
     useEffect(() => {
       const qnArr = data.map((i: QuestionString) =>
@@ -31,10 +45,10 @@ const QuestionTable: React.FC<Props> =
         <Table variant='simple' className='question-table' width={'70vw'}>
           <Thead>
             <Tr>
-              <Th className='question-th'>Id</Th>
-              <Th className='question-th'>Title</Th>
-              <Th className='question-th'>Category</Th>
-              <Th className='question-th'>Complexity</Th>
+              {headings.map((label) =>
+                <Th bgColor='#212224' border='1px solid #999999' key='label'>
+                  {label}
+                </Th>)}
             </Tr>
           </Thead>
           <Tbody>
@@ -42,12 +56,13 @@ const QuestionTable: React.FC<Props> =
               return (
                 <Tr
                   key={key}
-                  className='question-tr'
-                  onClick={() => { viewDescriptionHandler(qn.id.toString()) }}>
-                  <Td className='question-td'>{qn.id.toString()}</Td>
-                  <Td className='question-td'>{qn.title}</Td>
-                  <Td className='question-td'>{qn.getCategoriesString()}</Td>
-                  <Td className='question-td'>{qn.getComplexityString()}</Td>
+                  onClick={() => { viewDescriptionHandler(qn.id.toString()) }}
+                  _hover={{ backgroundColor: '#212224', cursor: 'pointer' }}
+                >
+                  <QuestionTd value={qn.id.toString()} />
+                  <QuestionTd value={qn.title} />
+                  <QuestionTd value={qn.getCategoriesString()} />
+                  <QuestionTd value={qn.getComplexityString()} />
                 </Tr>
               );
             })}

@@ -7,7 +7,7 @@ interface Props {
 const ManageQuestionsButtonRow: React.FC<Props> = ({ addHandler }) => {
   return (
     <div id='button-container'>
-      <Button id='add-btn' colorScheme='blue' onClick={addHandler}>
+      <Button colorScheme='blue' onClick={addHandler} m={5} float='right'>
         Add
       </Button>
     </div>
