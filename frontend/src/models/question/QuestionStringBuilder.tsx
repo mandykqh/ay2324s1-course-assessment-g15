@@ -1,7 +1,6 @@
-import { QuestionString } from "../Commons";
-import LocalStorageHandler from "../handlers/LocalStorageHandler";
-import Question from "./Question";
+import { QuestionString } from "../../Commons";
 import QuestionValidator from "./QuestionValidator";
+import LocalStorageHandler from "../../handlers/LocalStorageHandler";
 
 class QuestionStringBuilder {
   qnStr: QuestionString;
@@ -11,7 +10,7 @@ class QuestionStringBuilder {
       id: '',
       title: '',
       description: '',
-      categories: '',
+      categories: [],
       complexity: '',
       link: ''
     }
@@ -29,7 +28,7 @@ class QuestionStringBuilder {
     this.qnStr.description = value;
   }
 
-  public setCategories(value: string) {
+  public setCategories(value: string[]) {
     this.qnStr.categories = value;
   }
 
