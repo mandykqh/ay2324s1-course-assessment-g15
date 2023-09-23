@@ -81,7 +81,7 @@ const QuestionPage = () => {
 
   return (
     <NewQuestionContext.Provider value={ctxValue}>
-      <Center>
+      <Center flexDirection={'column'}>
         <NavigationBar mb={5} />
         <AddQuestionModal
           isVisible={addModalIsVisible}
