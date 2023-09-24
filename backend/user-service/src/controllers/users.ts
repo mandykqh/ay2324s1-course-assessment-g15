@@ -20,6 +20,19 @@ export const getAllUsers = async (req: express.Request, res: express.Response) =
     }
 };
 
+export const getUserByID = async (req: express.Request, res: express.Response) => {
+    try {
+        const user = await User.findOne( { where: { id: req.params.id } } );
+        if (!user) {
+            return res.status(404).send('No user with that ID found.');
+        }
+        return res.status(200).json(user);
+    } catch (error) {
+        console.error('Error getting user:', error);
+        return res.status(500).send('Internal server error');
+    }
+}
+
 export const addUser = async (req: express.Request, res: express.Response) => {
     try {
         const user = await User.create(req.body);
