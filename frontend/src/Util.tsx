@@ -25,7 +25,7 @@ function stringToOptionsMapper(input: string) {
   }));
 }
 
-export function showNotification(options: NotificationOptions, toast: (options: UseToastOptions) => {}) {
+function showNotification(options: NotificationOptions, toast: (options: UseToastOptions) => {}) {
   toast({
     title: options.type === 'success' ? 'Success' : 'Error',
     description: options.message,
@@ -33,6 +33,14 @@ export function showNotification(options: NotificationOptions, toast: (options: 
     duration: 3000,
     isClosable: true,
   })
+}
+
+export function showSuccess(message: string, toast: (options: UseToastOptions) => {}) {
+  showNotification({ message: message, type: 'success' }, toast);
+}
+
+export function showError(message: string, toast: (options: UseToastOptions) => {}) {
+  showNotification({ message: message, type: 'error' }, toast);
 }
 
 export { getComplexityStrings, getCategoriesString, stringToOptionsMapper };

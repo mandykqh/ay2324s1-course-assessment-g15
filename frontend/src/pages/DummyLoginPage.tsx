@@ -1,29 +1,32 @@
 import { Input, Box, Text, Center, Button, useToast } from "@chakra-ui/react";
 import { useState } from "react";
 import { SECONDARY_COLOR } from "../CommonStyles";
-import { useNavigate, useNavigation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import UserRequestHandler from "../handlers/UserRequestHandler";
-import { showNotification } from "../Util";
-import { NotificationOptions } from "../Commons";
+import { showError } from "../Util";
+import LocalStorageHandler from "../handlers/LocalStorageHandler";
 
 const DummyLoginPage = () => {
   const userRequestHandler = new UserRequestHandler();
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
-  const [notificationOptions, setNotificationOptions] = useState<NotificationOptions>({ message: '', type: 'success' });
   const navigate = useNavigate();
   const toast = useToast();
 
-
-
   function loginHandler() {
-    userRequestHandler.login(userName, password).then(result => {
-      if (result) {
+    userRequestHandler.login(userName, password)
+      .then(result => {
+        console.log(result);
+        LocalStorageHandler.storeUserData({
+          id: result.id,
+          username: result.username,
+          email: result.email,
+        });
         navigate('home');
-        return;
-      }
-      showNotification({ message: 'Invalid credentials', type: 'error' }, toast);
-    })
+      })
+      .catch(e => {
+        showError((e as Error).message, toast);
+      })
   }
 
   return (

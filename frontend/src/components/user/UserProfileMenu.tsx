@@ -44,7 +44,7 @@ interface MenuProps {
 const UserProfileMenu: React.FC<MenuProps> =
   ({ currentMenuIndex, setCurrentMenuIndex }) => {
     return (
-      <Box width='20vw' height={'100vh'} borderRight={'1px solid white'}>
+      <Box width='20vw' height={'100vh'} pb={10} pt={10} mt={10}>
         <MenuItem
           index={0}
           selectedIndex={currentMenuIndex}

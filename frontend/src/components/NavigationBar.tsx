@@ -1,6 +1,7 @@
 import { Box, Flex, Text, Center, Tab, TabList, TabPanel, TabPanels, Tabs, Spacer, Image, Button, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
 import { SECONDARY_COLOR } from "../CommonStyles";
 import { useNavigate } from "react-router-dom";
+import LocalStorageHandler from "../handlers/LocalStorageHandler";
 
 const HEIGHT = 50;
 
@@ -24,7 +25,7 @@ const NavigationBar: React.FC<Props> = ({ mb }) => {
     }
   ]
   return (
-    <Box w={'100vw'} h={HEIGHT} backgroundColor={SECONDARY_COLOR} mb={mb}>
+    <Box w={'100%'} h={HEIGHT} backgroundColor={SECONDARY_COLOR} mb={mb} position={'absolute'}>
       <Flex>
         <Center h={HEIGHT} ml={150}>
           <Box onClick={() => navigate('../home')} cursor={'pointer'}>
@@ -45,7 +46,7 @@ const NavigationBar: React.FC<Props> = ({ mb }) => {
           </MenuButton>
           <MenuList>
             <MenuItem onClick={() => navigate('../profile')}>Edit profile</MenuItem>
-            <MenuItem>Sign out</MenuItem>
+            <MenuItem onClick={() => { navigate('..'); LocalStorageHandler.clear() }}>Sign out</MenuItem>
           </MenuList>
         </Menu>
       </Flex >

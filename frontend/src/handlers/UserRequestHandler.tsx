@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
-import { QuestionString } from '../Commons';
+import { QuestionString, UserDataString } from '../Commons';
 
 const BASE_URL = "http://localhost:5000/users";
 
@@ -19,18 +19,29 @@ class UserRequestHandler {
     });
   }
 
-  // TEMP IMPLEMENTATION
+  // TEMP IMPLEMENTATION - TO CHANGE AFTER API CHANGE---------------------------
   public async login(userName: string, password: string) {
     var data: UserData[];
-    const response = await this.client.get('/');
-    data = response.data;
-    console.log(data);
-    let result = data.filter((d) => d.username === userName);
-    if (result.length === 0) {
-      return false;
+    try {
+      const response = await this.client.get('/');
+      data = response.data;
+      let result = data.filter((d) => d.username === userName);
+      if (result.length === 0 || result[0].password !== password) {
+        throw Error('Invalid Credentials');
+      }
+      return result[0];
+    } catch (e) {
+      throw e;
     }
-    return true;
-    // return (data.filter((d) => d.username === userName)[0].password === password)
+  }
+  //----------------------------------------------------------------------------
+
+  public async updatePersonalInfo(data: UserDataString) {
+    this.client.patch(`/${data.id}`, {
+      id: data.id,
+      username: data.username,
+      email: data.email
+    })
   }
 }
 

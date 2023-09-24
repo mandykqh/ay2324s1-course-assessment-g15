@@ -1,17 +1,16 @@
 import { mockQuestions } from '../MockData';
 import LocalStorageHandler from '../handlers/LocalStorageHandler';
-import { NotificationOptions, QuestionString, questionStringTemplate } from '../Commons';
+import { QuestionString, questionStringTemplate } from '../Commons';
 import { useEffect, useState } from 'react';
 import QuestionValidator from '../models/question/QuestionValidator';
 import QuestionStringBuilder from '../models/question/QuestionStringBuilder';
-
 import { useToast, Center } from '@chakra-ui/react';
 import { NewQuestionContext } from '../contexts/NewQuestionContext';
 import QuestionDetailsModal from '../components/question/descriptionModal/QuestionDetailsModal';
 import AddQuestionModal from '../components/question/addModal/AddQuestionModal';
 import QuestionTable from '../components/question/QuestionTable';
 import NavigationBar from '../components/NavigationBar';
-import { showNotification } from '../Util';
+import { showError, showSuccess } from '../Util';
 
 let currentQuestion = questionStringTemplate;
 
@@ -49,11 +48,11 @@ const QuestionPage = () => {
       setAddModalIsVisible(false);
       LocalStorageHandler.saveQuestion(newArr);
       LocalStorageHandler.advanceQuestionId();
-      showNotification({ message: 'Question added!', type: 'success' }, toast);
+      showSuccess('Question Added', toast);
       setNewQuestion(questionStringTemplate);
     } catch (e) {
       let result = (e as Error).message;
-      showNotification({ message: result, type: 'error' }, toast);
+      showError(result, toast);
     }
   }
   // ===============================================================================
@@ -78,8 +77,8 @@ const QuestionPage = () => {
 
   return (
     <NewQuestionContext.Provider value={ctxValue}>
-      <Center flexDirection={'column'}>
-        <NavigationBar mb={5} />
+      <NavigationBar mb={100} />
+      <Center flexDirection={'column'} pt={50}>
         <AddQuestionModal
           isVisible={addModalIsVisible}
           closeHandler={() => setAddModalIsVisible(false)}
@@ -93,7 +92,8 @@ const QuestionPage = () => {
             setQuestions(questions.filter(i => i.id !== id));
             LocalStorageHandler.saveQuestion(questions.filter(i => i.id !== id));
             setViewModalIsVisible(false);
-            showNotification({ message: 'Question deleted!', type: 'success' }, toast);
+            showSuccess('Question Deleted!', toast);
+
           }}
         />
         <QuestionTable

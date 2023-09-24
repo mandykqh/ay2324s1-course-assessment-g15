@@ -18,10 +18,16 @@ const questionStringTemplate: QuestionString = {
   link: ''
 }
 
+interface UserDataString {
+  id: string;
+  username: string;
+  email: string;
+}
+
 interface NotificationOptions {
   message: string;
   type: 'success' | 'error'
 }
 
 export { questionStringTemplate };
-export type { QuestionString, NotificationOptions };
+export type { QuestionString, NotificationOptions, UserDataString };
