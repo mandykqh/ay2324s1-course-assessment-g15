@@ -66,7 +66,6 @@ const UserPersonalInfo = ({ user }: { user: UserDataString }) => {
   }
 
   function handleSave() {
-
     const newData = {
       id: LocalStorageHandler.getUserData()!.id,
       username: name,
@@ -89,7 +88,6 @@ const UserPersonalInfo = ({ user }: { user: UserDataString }) => {
       backgroundColor={SECONDARY_COLOR}
     >
       <Text as='b' fontSize={25}>Personal Info</Text>
-
       <Box>
         <Label value={'Name'} />
         <Flex>
@@ -97,7 +95,6 @@ const UserPersonalInfo = ({ user }: { user: UserDataString }) => {
           <Spacer />
           <EditButton isEditing={isEditingName} setter={setIsEditingName} />
         </Flex>
-
         <Label value={'Email'} />
         <Flex>
           {isEditingEmail ? <EditiableInput value={email} setter={setEmail} /> : <ValueLabel value={email} />}
@@ -105,7 +102,6 @@ const UserPersonalInfo = ({ user }: { user: UserDataString }) => {
           <EditButton isEditing={isEditingEmail} setter={setIsEditingEmail} />
         </Flex>
       </Box>
-
       <Button
         colorScheme={'blue'}
         float={'right'}
