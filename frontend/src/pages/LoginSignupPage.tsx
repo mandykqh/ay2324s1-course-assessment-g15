@@ -1,4 +1,4 @@
-import { Button, Card, CardHeader, FormControl, FormLabel, Heading, Input } from "@chakra-ui/react";
+import { Button, Card, CardHeader, FormControl, FormLabel, Heading, Input, InputGroup, InputRightElement } from "@chakra-ui/react";
 import React, { useState } from "react";
 
 function LoginPage() {
@@ -28,8 +28,24 @@ function LoginPage() {
         }
     }
 
-    const togglePasswordVisibility = () => {
-        setShowPassword(!showPassword);
+    function PasswordInput() {
+        const [show, setShow] = React.useState(false)
+        const handleClick = () => setShow(!show)
+
+        return (
+            <InputGroup size='md'>
+                <Input
+                    pr='4.5rem'
+                    type={show ? 'text' : 'password'}
+                    placeholder='Cannot be less than 8 characters'
+                />
+                <InputRightElement width='4.5rem'>
+                    <Button h='1.75rem' size='sm' onClick={handleClick}>
+                        {show ? 'Hide' : 'Show'}
+                    </Button>
+                </InputRightElement>
+            </InputGroup>
+        )
     }
     return (
         <div>
@@ -47,16 +63,10 @@ function LoginPage() {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
+                            placeholder='name@example.com'
                         />
                         <FormLabel htmlFor="password">Password:</FormLabel>
-                        <Input
-                            type={showPassword ? "text" : "password"}
-                            id="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
-                        <Button type="button" onClick={togglePasswordVisibility}>{showPassword ? "Hide" : "Unhide"}</Button>
+                        <PasswordInput />
                         <Button type="submit" onClick={handleLogin}>
                             Login
                         </Button>
@@ -78,6 +88,7 @@ function LoginPage() {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
+                            placeholder='name@example.com'
                         />
                         <FormLabel htmlFor="name">Full name</FormLabel>
                         <Input
@@ -86,27 +97,12 @@ function LoginPage() {
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             required
+                            placeholder='Enter your full name'
                         />
                         <FormLabel htmlFor="password">Password</FormLabel>
-                        <Input
-                            type={showPassword ? "text" : "password"}
-                            id="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
-                        <button type="button" onClick={togglePasswordVisibility}>{showPassword ? "Hide" : "Unhide"}</button>
-
+                        <PasswordInput />
                         <FormLabel htmlFor="confirmPassword">Confirm password</FormLabel>
-                        <Input
-                            type={showPassword ? "text" : "password"}
-                            id="confirmPassword"
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                            required
-                        />
-                        <Button type="button" onClick={togglePasswordVisibility}>{showPassword ? "Hide" : "Unhide"}</Button>
-
+                        <PasswordInput />
                         <Button type="submit" onClick={handleSignup}>
                             Sign up
                         </Button>
