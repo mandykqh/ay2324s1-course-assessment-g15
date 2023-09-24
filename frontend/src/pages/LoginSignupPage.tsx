@@ -1,3 +1,4 @@
+import { Button, Card, CardHeader, FormControl, FormLabel, Heading, Input } from "@chakra-ui/react";
 import React, { useState } from "react";
 
 function LoginPage() {
@@ -32,72 +33,86 @@ function LoginPage() {
     }
     return (
         <div>
-            <h1>Welcome to PeerPrep</h1>
-            <button id='logintab' onClick={() => toggleForm(false)}>Log in</button>
-            <button id='signuptab' onClick={() => toggleForm(true)}>Sign up</button>
+            <Heading>Welcome to PeerPrep</Heading>
+            <Button id='logintab' onClick={() => toggleForm(false)}>Log in</Button>
+            <Button id='signuptab' onClick={() => toggleForm(true)}>Sign up</Button>
 
             {displayLoginForm && (
-                <form className='login'>
-                    <label htmlFor="email">Enter your email address:</label>
-                    <input
-                        type="email"
-                        id="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                    <label htmlFor="password">Password:</label>
-                    <input
-                        type={showPassword ? "text" : "password"}
-                        id="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                    <button type="button" onClick={togglePasswordVisibility}>{showPassword ? "Hide" : "Unhide"}</button>
-                    <button type="button" onClick={handleLogin}>
-                        Login
-                    </button>
-                </form>)
+                <Card maxW='600px'>
+                    <FormControl>
+                        <FormLabel htmlFor="email">Enter your email address:</FormLabel>
+                        <Input
+                            type="email"
+                            id="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                        <FormLabel htmlFor="password">Password:</FormLabel>
+                        <Input
+                            type={showPassword ? "text" : "password"}
+                            id="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
+                        <Button type="button" onClick={togglePasswordVisibility}>{showPassword ? "Hide" : "Unhide"}</Button>
+                        <Button type="submit" onClick={handleLogin}>
+                            Login
+                        </Button>
+                    </FormControl>
+                </Card>)
             }
+
+
             {displaySignupForm && (
-                < form className='signup' >
-                    <h2>Let's get started!</h2>
+                <Card maxW='600px'>
+                    <CardHeader>
+                        <Heading size='24px' >Let's get started!</Heading>
+                    </CardHeader>
+                    <FormControl className='signup' >
+                        <FormLabel htmlFor="email">Enter your email address:</FormLabel>
+                        <Input
+                            type="email"
+                            id="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                        <FormLabel htmlFor="name">Full name</FormLabel>
+                        <Input
+                            type="name"
+                            id="name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            required
+                        />
+                        <FormLabel htmlFor="password">Password</FormLabel>
+                        <Input
+                            type={showPassword ? "text" : "password"}
+                            id="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
+                        <button type="button" onClick={togglePasswordVisibility}>{showPassword ? "Hide" : "Unhide"}</button>
 
-                    <label htmlFor="email">Enter your email address:</label>
-                    <input
-                        type="email"
-                        id="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                    <label htmlFor="name">Full name</label>
-                    <input
-                        type="name"
-                        id="name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                    />
-                    <label htmlFor="password">Password</label>
-                    <input
-                        type={showPassword ? "text" : "password"}
-                        id="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                    <button type="button" onClick={togglePasswordVisibility}>{showPassword ? "Hide" : "Unhide"}</button>
+                        <FormLabel htmlFor="confirmPassword">Confirm password</FormLabel>
+                        <Input
+                            type={showPassword ? "text" : "password"}
+                            id="confirmPassword"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            required
+                        />
+                        <Button type="button" onClick={togglePasswordVisibility}>{showPassword ? "Hide" : "Unhide"}</Button>
 
-                    <label htmlFor="confirmPassword">Confirm password</label>
-                    <input
-                        type={showPassword ? "text" : "password"}
-                        id="confirmPassword"
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                    />
-                    <button type="button" onClick={togglePasswordVisibility}>{showPassword ? "Hide" : "Unhide"}</button>
+                        <Button type="submit" onClick={handleSignup}>
+                            Sign up
+                        </Button>
+                    </FormControl >
+                </Card>
 
-                    <button type="button" onClick={handleSignup}>
-                        Sign up
-                    </button>
-                </form >
             )}
 
         </div >
