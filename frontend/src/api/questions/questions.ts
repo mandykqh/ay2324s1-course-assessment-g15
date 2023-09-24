@@ -14,14 +14,13 @@ export default class QuestionAPI {
         return response.data as T;
     }
     
-    public async deleteQuestion(id: string): Promise<void> {
+    public async deleteQuestionFromID(id: string): Promise<void> {
         const response = await QuestionAPI.api.delete(`/${id}`);
         return response.data;
     }
 
-    public async updateQuestion<T>(question: T): Promise<T> {
-        const id = (question as any).questionID;
-        const response = await QuestionAPI.api.put(`/${id}`, question);
+    public async updateQuestionFromID<T>(id: string, question: T): Promise<T> {
+        const response = await QuestionAPI.api.patch(`/${id}`, question);
         return response.data as T;
     }
 }

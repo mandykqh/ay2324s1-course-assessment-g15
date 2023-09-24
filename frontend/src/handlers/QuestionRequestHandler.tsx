@@ -49,8 +49,19 @@ class RequestHandler {
 
     static async deleteQuestion(id: string): Promise<void> {
         try {
-            const response = await this.api.deleteQuestion(id);
+            const response = await this.api.deleteQuestionFromID(id);
             return response;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+
+    static async updateQuestion(question: QuestionString): Promise<QuestionString> {
+        try {
+            const responseFormat = this.mapToResponseFormat(question);
+            const response = await this.api.updateQuestionFromID(question.id, responseFormat);
+            return this.mapToQuestionString(response);
         } catch (error) {
             console.log(error);
             throw error;
