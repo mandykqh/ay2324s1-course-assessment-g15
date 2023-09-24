@@ -66,19 +66,18 @@ const UserPersonalInfo = ({ user }: { user: UserDataString }) => {
   }
 
   function handleSave() {
-    try {
-      const newData = {
-        id: LocalStorageHandler.getUserData()!.id,
-        username: name,
-        email: email
-      }
-      userRequestHandler.updatePersonalInfo(newData);
+
+    const newData = {
+      id: LocalStorageHandler.getUserData()!.id,
+      username: name,
+      email: email
+    }
+    userRequestHandler.updatePersonalInfo(newData).then(() => {
       LocalStorageHandler.storeUserData(newData);
       resetFields();
       showSuccess('Updated successfully', toast);
-    } catch (e) {
-      showError((e as Error).message, toast);
     }
+    ).catch((e) => showError((e as Error).message, toast));
   }
 
   return (

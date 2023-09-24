@@ -43,6 +43,28 @@ class UserRequestHandler {
       email: data.email
     })
   }
+
+  public async updatePassword(id: string, currentPassword: string, newPassword: string) {
+    try {
+      const response = await this.client.get(`/${id}`);
+      if (response.data.password !== currentPassword) {
+        throw Error('Incorrect current password');
+      }
+      this.client.patch(`/${id}`, {
+        password: newPassword
+      })
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  public async deleteUser(id: string) {
+    try {
+      await this.client.delete(`/${id}`);
+    } catch (e) {
+      throw e;
+    }
+  }
 }
 
 export default UserRequestHandler;

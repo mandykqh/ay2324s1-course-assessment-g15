@@ -1,16 +1,21 @@
-import { Input, Box, Text, Flex, Spacer, Image, Center, Button, InputRightElement, InputGroup, background } from "@chakra-ui/react";
-import { useState } from "react";
+import { Input, Box, Text, Flex, Spacer, Image, Center, Button, InputRightElement, InputGroup, background, useToast } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import { PRIMARY_COLOR, SECONDARY_COLOR } from "../../CommonStyles";
+import UserRequestHandler from "../../handlers/UserRequestHandler";
+import LocalStorageHandler from "../../handlers/LocalStorageHandler";
+import { showError, showSuccess } from "../../Util";
+import { useNavigate } from "react-router-dom";
 
 interface PasswordInputProps {
   label: string;
   passwordShowing: boolean;
   hiddenSetter: React.Dispatch<React.SetStateAction<boolean>>;
   valueSetter: React.Dispatch<React.SetStateAction<string>>;
+  value: string;
 }
 
 const PasswordInput: React.FC<PasswordInputProps> =
-  ({ label, passwordShowing, hiddenSetter, valueSetter }) => {
+  ({ label, passwordShowing, hiddenSetter, valueSetter, value }) => {
     return (
       <Box mb={5}>
         <Text as='b'>
@@ -23,6 +28,7 @@ const PasswordInput: React.FC<PasswordInputProps> =
             placeholder={`Enter ${label.toLowerCase()}`}
             backgroundColor={PRIMARY_COLOR}
             onChange={(e) => valueSetter(e.target.value)}
+            value={value}
           />
           <InputRightElement width='4.5rem'>
             <Button h='1.75rem' size='sm' onClick={() => { hiddenSetter(!passwordShowing) }} >
@@ -41,12 +47,53 @@ const UserSecurity = () => {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [deleteInput, setDeleteInput] = useState('');
+  const userRequestHandler = new UserRequestHandler();
+  const toast = useToast();
+  const navigate = useNavigate();
 
+  function resetFields() {
+    setCurrentPasswordVisible(false);
+    setNewPasswordVisible(false);
+    setConfirmPasswordVisible(false);
+    setCurrentPassword('');
+    setNewPassword('');
+    setConfirmPassword('');
+  }
 
   function changePasswordHandler() {
-    console.log(currentPassword);
-    console.log(newPassword);
-    console.log(confirmPassword);
+    if (newPassword.length === 0) {
+      showError('New password cannot be empty!', toast);
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      showError('New password and confirm password do not match', toast);
+      return;
+    }
+    userRequestHandler.updatePassword(LocalStorageHandler.getUserData()!.id, currentPassword, newPassword)
+      .then(
+        () => {
+          showSuccess('Password Updated', toast);
+          resetFields();
+        }
+      ).catch((e) => {
+        showError((e as Error).message, toast);
+      });
+  }
+
+  function deleteHandler() {
+    if (deleteInput !== 'DELETE') {
+      showError(`Please enter 'DELETE' to delete your account`, toast);
+      return;
+    }
+    userRequestHandler.deleteUser(LocalStorageHandler.getUserData()!.id)
+      .then(() => {
+        showSuccess('Account deleted!', toast); // TO DEDICATE A PAGE FOR ACCOUN DELETION
+        navigate('..');
+      }
+      ).catch((e) =>
+        showError((e as Error).message, toast)
+      )
   }
 
   return (
@@ -62,18 +109,21 @@ const UserSecurity = () => {
           passwordShowing={currentPasswordVisible}
           hiddenSetter={setCurrentPasswordVisible}
           valueSetter={setCurrentPassword}
+          value={currentPassword}
         />
         <PasswordInput
           label='New password'
           passwordShowing={newPasswordVisible}
           hiddenSetter={setNewPasswordVisible}
           valueSetter={setNewPassword}
+          value={newPassword}
         />
         <PasswordInput
           label='Confirm password'
           passwordShowing={confirmPasswordVisible}
           hiddenSetter={setConfirmPasswordVisible}
           valueSetter={setConfirmPassword}
+          value={confirmPassword}
         />
         <Button
           colorScheme={'blue'}
@@ -99,12 +149,13 @@ const UserSecurity = () => {
             <Text as='sub' color={'#999999'}>To confirm this, type "DELETE"</Text>
           </Box>
           <Center height={50}>
-            <Input></Input>
+            <Input onChange={(e) => { setDeleteInput(e.target.value) }}></Input>
           </Center>
           <Button
             colorScheme={'red'}
             float={'right'}
             marginTop={5}
+            onClick={deleteHandler}
           >
             Delete Account
           </Button>
