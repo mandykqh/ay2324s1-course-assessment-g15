@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { QuestionString, questionStringTemplate } from '../../../Commons';
-import ModalPage1 from './ModalPage1';
+import ModalPage1 from '../modalPages/ModalPage1';
 import {
   Modal,
   ModalOverlay,
@@ -12,7 +12,7 @@ import {
   Button,
 } from '@chakra-ui/react';
 import { PRIMARY_COLOR } from '../../../CommonStyles';
-import ModalPage2 from './ModalPage2';
+import ModalPage2 from '../modalPages/ModalPage2';
 import { NewQuestionContext } from '../../../contexts/NewQuestionContext';
 
 interface Props {
