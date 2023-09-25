@@ -1,19 +1,14 @@
+// ModalPage2.tsx
+import React, { useEffect } from "react";
 import { Grid, Textarea, Text } from "@chakra-ui/react";
 import { SECONDARY_COLOR } from "../../../CommonStyles";
-import { useState, useContext, useEffect } from "react";
-import { NewQuestionContext } from "../../../contexts/NewQuestionContext";
 
-const ModalPage2 = () => {
-  const { questionData, setQuestionData } = useContext(NewQuestionContext);
-  const [description, setDescription] = useState(questionData.description);
+interface ModalPage2Props {
+  description: string;
+  onDescriptionChange: (description: string) => void;
+}
 
-  useEffect(() => {
-    setQuestionData({
-      ...questionData,
-      description: description
-    });
-  }, [description]);
-
+const ModalPage2: React.FC<ModalPage2Props> = ({ description, onDescriptionChange }) => {
   return (
     <Grid gap={2}>
       <Text as='b'>Description</Text>
@@ -22,8 +17,8 @@ const ModalPage2 = () => {
         placeholder='Enter Question Description'
         resize={'none'}
         backgroundColor={SECONDARY_COLOR}
-        onChange={(e) => { setDescription(e.target.value); }}
-        value={questionData.description}
+        onChange={(e) => onDescriptionChange(e.target.value)} // Use the provided callback function
+        value={description} // Use the provided prop
       />
     </Grid>
   );

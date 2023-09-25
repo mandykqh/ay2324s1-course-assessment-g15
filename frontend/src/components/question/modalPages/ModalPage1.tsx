@@ -2,22 +2,21 @@ import { Grid, Input, Text } from "@chakra-ui/react";
 import { SECONDARY_COLOR } from "../../../CommonStyles";
 import SelectCategoriesInput from "../selectors/SelectCategoriesInput";
 import SelectComplexityInput from "../selectors/SelectComplexityInput";
-import { NewQuestionContext } from "../../../contexts/NewQuestionContext";
-import { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
-const ModalPage1 = () => {
-  const { questionData, setQuestionData } = useContext(NewQuestionContext);
-  const [title, setTitle] = useState(questionData.title);
-  const [link, setLink] = useState(questionData.link);
+interface ModalPage1Props {
+  title: string;
+  link: string;
+  onTitleChange: (title: string) => void;
+  onLinkChange: (link: string) => void;
+}
 
-  useEffect(() => {
-    setQuestionData({ ...questionData, title: title });
-  }, [title]);
-
-  useEffect(() => {
-    setQuestionData({ ...questionData, link: link });
-  }, [link]);
-
+const ModalPage1: React.FC<ModalPage1Props> = ({
+  title,
+  link,
+  onTitleChange,
+  onLinkChange,
+}) => {
   return (
     <Grid gap={4}>
       <Grid gap={1}>
@@ -25,8 +24,8 @@ const ModalPage1 = () => {
         <Input
           placeholder={'Enter Question Title'}
           backgroundColor={SECONDARY_COLOR}
-          onChange={(e) => setTitle(e.target.value)}
-          value={questionData.title}
+          onChange={(e) => onTitleChange(e.target.value)} // Use the provided callback function
+          value={title} // Use the provided prop
         />
       </Grid>
       <Grid gap={1}>
@@ -34,8 +33,8 @@ const ModalPage1 = () => {
         <Input
           placeholder={'Enter Question Link'}
           backgroundColor={SECONDARY_COLOR}
-          onChange={(e) => setLink(e.target.value)}
-          value={questionData.link}
+          onChange={(e) => onLinkChange(e.target.value)} // Use the provided callback function
+          value={link} // Use the provided prop
         />
       </Grid>
       <Grid gap={1}>

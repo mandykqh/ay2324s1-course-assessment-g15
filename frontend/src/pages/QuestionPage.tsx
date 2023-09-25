@@ -10,6 +10,7 @@ import QuestionDetailsModal from '../components/question/descriptionModal/Questi
 import AddQuestionModal from '../components/question/addModal/AddQuestionModal';
 import QuestionTable from '../components/question/QuestionTable';
 import { notificationHook } from '../hooks/notificationHook';
+import EditQuestionModal from '../components/question/editModal/EditQuestionModal';
 
 let currentQuestion = questionStringTemplate;
 
@@ -17,9 +18,11 @@ const QuestionPage = () => {
 
   const [addModalIsVisible, setAddModalIsVisible] = useState(false);
   const [viewModalIsVisible, setViewModalIsVisible] = useState(false);
+  const [editModalIsVisible, setEditModalIsVisible] = useState(false);
   const [questions, setQuestions] = useState<QuestionString[]>([]);
   const [currentQuestionId, setCurrentQuestionId] = useState('0');
   const [newQuestion, setNewQuestion] = useState<QuestionString>(questionStringTemplate);
+  const [questionToEdit, setQuestionToEdit] = useState<QuestionString | null>(null);
   const ctxValue = { questionData: newQuestion, setQuestionData: setNewQuestion };
   const toast = useToast();
 
@@ -53,6 +56,14 @@ const QuestionPage = () => {
     } catch (e) {
       let result = (e as Error).message;
       setNotificationOptions({ message: result, type: 'error' });
+    }
+  }
+
+  function editQuestionHandler(id: string) {
+    const questionToEdit = questions.find((question) => question.id === id);
+    if (questionToEdit) {
+      setQuestionToEdit(questionToEdit);
+      setEditModalIsVisible(true);
     }
   }
 
@@ -99,6 +110,7 @@ const QuestionPage = () => {
           isVisible={viewModalIsVisible}
           data={currentQuestion}
           closeHandler={() => { setViewModalIsVisible(false); }}
+          editHandler={ editQuestionHandler }
           deleteHandler={(id: string) => {
             try {
               QuestionRequestHandler.deleteQuestion(id);
@@ -109,6 +121,12 @@ const QuestionPage = () => {
               setNotificationOptions({ message: `Question ${id} deletion failed!`, type: 'error' });
             }
           }}
+        />
+        <EditQuestionModal
+          isVisible={editModalIsVisible}
+          questionToEdit={questionToEdit == null ? questionStringTemplate : questionToEdit}
+          closeHandler={() => setEditModalIsVisible(false)}
+          updateHandler={() => {}}
         />
         <QuestionTable
           data={questions}
