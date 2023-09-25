@@ -42,7 +42,7 @@ class QuestionStringBuilder {
   }
 
   public setQuestionString(value: QuestionString) {
-    // this.setId(LocalStorageHandler.getNextQuestionId()); we get the new QuestionID from the backend response
+    this.setId(value.id || '');
     this.setTitle(value.title);
     this.setDescription(value.description);
     this.setCategories(value.categories);

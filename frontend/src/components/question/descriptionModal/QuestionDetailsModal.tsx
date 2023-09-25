@@ -20,12 +20,12 @@ interface Props {
   isVisible: boolean;
   data: QuestionString;
   closeHandler: () => void;
-  editHandler: (id: string) => void;
+  editModalHandler: (id: string) => void;
   deleteHandler: (id: string) => void;
 }
 
 const QuestionDetailsModal: React.FC<Props> =
-  ({ isVisible, data, closeHandler, editHandler, deleteHandler }) => {
+  ({ isVisible, data, closeHandler, editModalHandler: editHandler, deleteHandler }) => {
     return (
       <>
         <Modal

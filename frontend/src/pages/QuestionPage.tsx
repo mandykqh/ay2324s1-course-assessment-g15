@@ -11,6 +11,7 @@ import AddQuestionModal from '../components/question/addModal/AddQuestionModal';
 import QuestionTable from '../components/question/QuestionTable';
 import { notificationHook } from '../hooks/notificationHook';
 import EditQuestionModal from '../components/question/editModal/EditQuestionModal';
+import { set } from 'lodash';
 
 let currentQuestion = questionStringTemplate;
 
@@ -22,7 +23,6 @@ const QuestionPage = () => {
   const [questions, setQuestions] = useState<QuestionString[]>([]);
   const [currentQuestionId, setCurrentQuestionId] = useState('0');
   const [newQuestion, setNewQuestion] = useState<QuestionString>(questionStringTemplate);
-  const [questionToEdit, setQuestionToEdit] = useState<QuestionString | null>(null);
   const ctxValue = { questionData: newQuestion, setQuestionData: setNewQuestion };
   const toast = useToast();
 
@@ -59,11 +59,25 @@ const QuestionPage = () => {
     }
   }
 
-  function editQuestionHandler(id: string) {
-    const questionToEdit = questions.find((question) => question.id === id);
-    if (questionToEdit) {
-      setQuestionToEdit(questionToEdit);
-      setEditModalIsVisible(true);
+  async function submitUpdateHandler(question: QuestionString) {
+    try {
+      let builder = new QuestionStringBuilder()
+      builder.setQuestionString(question);
+      let updatedQuestion = builder.build();
+      
+      // Filter out the question to be updated, then check for duplicates (prevent error when updating without changing title)
+      let newArray = questions.filter((qn) => qn.id !== updatedQuestion.id);
+      checkDuplicates(updatedQuestion, newArray);
+  
+      const updatedQuestionString = await QuestionRequestHandler.updateQuestion(updatedQuestion);
+  
+      setQuestions(questions.map((q) => (q.id === updatedQuestionString.id ? updatedQuestionString : q)));
+      setEditModalIsVisible(false);
+      setNotificationOptions({ message: `Question ${question.id} updated!`, type: 'success' });
+    } catch (e) {
+      let result = (e as Error).message;
+      setNotificationOptions({ message: result, type: 'error' });
+      // setEditModalIsVisible(false);  Might be annoying to close on error and lose updates?
     }
   }
 
@@ -110,7 +124,11 @@ const QuestionPage = () => {
           isVisible={viewModalIsVisible}
           data={currentQuestion}
           closeHandler={() => { setViewModalIsVisible(false); }}
-          editHandler={ editQuestionHandler }
+          editModalHandler={ (id: string) => {
+            setCurrentQuestionId(id);
+            setViewModalIsVisible(false);
+            setEditModalIsVisible(true);
+          } }
           deleteHandler={(id: string) => {
             try {
               QuestionRequestHandler.deleteQuestion(id);
@@ -124,9 +142,9 @@ const QuestionPage = () => {
         />
         <EditQuestionModal
           isVisible={editModalIsVisible}
-          questionToEdit={questionToEdit == null ? questionStringTemplate : questionToEdit}
+          questionToEdit={currentQuestion}
           closeHandler={() => setEditModalIsVisible(false)}
-          updateHandler={() => {}}
+          submitUpdateHandler={submitUpdateHandler}
         />
         <QuestionTable
           data={questions}

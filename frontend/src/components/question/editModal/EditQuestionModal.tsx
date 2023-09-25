@@ -1,72 +1,57 @@
 import React, { useEffect, useContext, useState } from "react";
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Button } from '@chakra-ui/react';
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  Button
+} from '@chakra-ui/react';
 import { PRIMARY_COLOR } from '../../../CommonStyles';
 import ModalPage1 from '../modalPages/ModalPage1';
 import ModalPage2 from '../modalPages/ModalPage2';
 import { NewQuestionContext } from '../../../contexts/NewQuestionContext';
-import { QuestionString, questionStringTemplate } from '../../../Commons';
+import { QuestionString } from '../../../Commons';
 
 interface Props {
   isVisible: boolean;
-  questionToEdit: QuestionString;
+  questionToEdit: QuestionString; // Added this prop to pass in the question to edit
   closeHandler: () => void;
-  updateHandler: (updatedQuestion: QuestionString) => void;
+  submitUpdateHandler: (updatedQuestion: QuestionString) => void;
 }
 
-const ModalButton = ({ label, onClick }: { label: string; onClick: () => void }) => {
+const ModalButton = ({ label, color, onClick }: { label: string; color: string, onClick: () => void }) => {
   return (
-    <Button colorScheme='blue' mr={3} onClick={onClick}>
+    <Button colorScheme={ color } mr={3} onClick={onClick}>
       {label}
     </Button>
   );
 };
 
-const EditQuestionModal: React.FC<Props> = ({ isVisible, questionToEdit, closeHandler, updateHandler }) => {
+const EditQuestionModal: React.FC<Props> = ({ isVisible, questionToEdit, closeHandler, submitUpdateHandler }) => {
   const [page, setPage] = useState(1);
-  const { setQuestionData } = useContext(NewQuestionContext);
-
-  // State variables for form fields
-  const [questionTitle, setQuestionTitle] = useState('');
-  const [questionLink, setQuestionLink] = useState('');
-  const [questionDescription, setQuestionDescription] = useState('');
-  const [questionCategories, setQuestionCategories] = useState<string[]>([]);
-  const [questionComplexity, setQuestionComplexity] = useState('');
+  const { setQuestionData, questionData } = useContext(NewQuestionContext);
 
   function close() {
     closeHandler();
-    setQuestionData(questionStringTemplate);
+    setQuestionData(questionData);
     setPage(1);
   }
 
   useEffect(() => {
     if (questionToEdit) {
-      // Populate fields with data from questionToEdit when it changes
-      setQuestionTitle(questionToEdit.title);
-      setQuestionLink(questionToEdit.link);
-      setQuestionDescription(questionToEdit.description);
-      setQuestionCategories(questionToEdit.categories);
-      setQuestionComplexity(questionToEdit.complexity);
+      setQuestionData({
+        id: questionToEdit.id,
+        title: questionToEdit.title,
+        link: questionToEdit.link,
+        description: questionToEdit.description,
+        categories: questionToEdit.categories,
+        complexity: questionToEdit.complexity,
+      });
     }
-    console.log(questionTitle, questionLink, questionDescription, questionCategories, questionComplexity);
   }, [questionToEdit]);
-
-  const handleUpdate = () => {
-    // Create a new question object with the updated data
-    const updatedQuestion: QuestionString = {
-      ...questionToEdit,
-      title: questionTitle,
-      link: questionLink,
-      description: questionDescription,
-      categories: questionCategories,
-      complexity: questionComplexity,
-    };
-
-    // Call the submitHandler and pass the updated question
-    updateHandler(updatedQuestion);
-
-    // Close the modal
-    close();
-  };
 
   return (
     <Modal
@@ -85,31 +70,39 @@ const EditQuestionModal: React.FC<Props> = ({ isVisible, questionToEdit, closeHa
         <ModalBody>
           {page === 1 ? (
             <ModalPage1
-              title={questionTitle}
-              link={questionLink}
-              onTitleChange={setQuestionTitle}
-              onLinkChange={setQuestionLink}
+              title={questionData.title}
+              link={questionData.link}
+              onTitleChange={(value) => setQuestionData({ ...questionData, title: value })}
+              onLinkChange={(value) => setQuestionData({ ...questionData, link: value })}
             />
           ) : (
             <ModalPage2
-              description={questionDescription}
-              onDescriptionChange={setQuestionDescription}
+              description={questionData.description}
+              onDescriptionChange={(value) => setQuestionData({ ...questionData, description: value })}
             />
           )}
         </ModalBody>
         <ModalFooter>
           {page === 1 ? (
-            <ModalButton label='Next' onClick={() => setPage(2)} />
+            <ModalButton label='Next' color='blue' onClick={() => setPage(2)} />
           ) : (
             <>
-              <ModalButton label='Previous' onClick={() => setPage(1)} />
-              <ModalButton label='Update question' onClick={handleUpdate} />
+              <ModalButton label='Previous' color='blue' onClick={() => { setPage(1) }} />
+              <ModalButton label='Submit update' color='cyan' 
+                onClick={() => {
+                  try {
+                    submitUpdateHandler(questionData);
+                    close();
+                  } catch {
+                    close();
+                  }
+                }} />
             </>
           )}
         </ModalFooter>
       </ModalContent>
-    </Modal>
+    </Modal >
   );
-};
+}
 
 export default EditQuestionModal;
