@@ -1,5 +1,6 @@
 import { Box, Button, Card, CardBody, CardHeader, Center, Container, Flex, FormControl, FormLabel, HStack, Heading, Input, InputGroup, InputRightElement, VStack } from "@chakra-ui/react";
 import React, { useState } from "react";
+
 import './UserAuthentication.css'
 
 function LoginPage() {
@@ -10,7 +11,6 @@ function LoginPage() {
 
     const [displayLoginForm, setDisplayLoginForm] = useState(true);
     const [displaySignupForm, setDisplaySignupForm] = useState(false);
-    const [showPassword, setShowPassword] = useState(false);
 
     const handleLogin = () => {
 
@@ -54,9 +54,21 @@ function LoginPage() {
             <Flex justify="center" align="center" minHeight="100vh">
                 <Box w='100%' className="welcome">
                     <Center>
-                        <Heading>Welcome to PeerPrep</Heading>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
+                            <Heading className='welcome-text'>
+                                <span id='bracket'>{'{ '}</span>
+                                <span id='welcome-to'>Welcome to</span>
+                                <br />
+                                <span id='peerprep' >PeerPrep</span>
+                                <span id='bracket' >{' }'}</span>
+                            </Heading>
+                            <br />
+                            <img src="../src/assets/peerprep-keycaps.svg" alt="PeerPrep keycaps icon" id='peerprep-keycaps' />
+                        </div>
                     </Center>
                 </Box>
+                {/* <img src="../src/assets/login-vector.svg" alt="PeerPrep keycaps icon" id='peerprep-keycaps' /> */}
+
                 <Box w='100%' className="userAuthentication">
                     <Button id='logintab' onClick={() => toggleForm(false)}>Log in</Button>
                     <Button id='signuptab' onClick={() => toggleForm(true)}>Sign up</Button>
@@ -76,9 +88,11 @@ function LoginPage() {
                                     />
                                     <FormLabel htmlFor="password">Password:</FormLabel>
                                     <PasswordInput />
-                                    <Button type="submit" onClick={handleLogin}>
-                                        Login
-                                    </Button>
+                                    <Center>
+                                        <Button className='submit-btn' type="submit" onClick={handleLogin} bg='#9967FF' mt='4'>
+                                            Login
+                                        </Button>
+                                    </Center>
                                 </FormControl>
                             </CardBody>
                         </Card>)
@@ -114,9 +128,11 @@ function LoginPage() {
                                     <PasswordInput />
                                     <FormLabel htmlFor="confirmPassword">Confirm password</FormLabel>
                                     <PasswordInput />
-                                    <Button type="submit" onClick={handleSignup}>
-                                        Sign up
-                                    </Button>
+                                    <Center>
+                                        <Button className='submit-btn' type="submit" onClick={handleSignup} bg='#9967FF' mt='4'>
+                                            Sign up
+                                        </Button>
+                                    </Center>
                                 </FormControl >
                             </CardBody>
                         </Card>
@@ -126,7 +142,7 @@ function LoginPage() {
 
             </Flex>
 
-        </div>
+        </div >
 
     );
 }

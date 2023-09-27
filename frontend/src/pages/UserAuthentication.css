@@ -1,4 +1,43 @@
-/* .welcome {
-    align-items: center;
-    justify-content: center;
-} */
+.welcome {
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.welcome-text {
+    transform: skewX(5deg) skewY(4deg);
+
+}
+
+#bracket {
+    color: #F1DB65;
+    font-size: 55px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+#welcome-to {
+    font-size: 45px;
+    font-weight: 700;
+}
+
+#peerprep {
+    color: #6DD7C4;
+    font-size: 55px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+#peerprep-keycaps {
+    display: block;
+}
+
+.submit-btn {
+    padding: 20px;
+}
+
+#logintab {
+    padding: 20px;
+}
