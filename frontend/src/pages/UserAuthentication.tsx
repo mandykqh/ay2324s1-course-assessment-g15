@@ -82,7 +82,7 @@ function LoginPage() {
                                         type="email"
                                         id="email"
                                         value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
+                                        // onChange={(e) => setEmail(e.target.value)}
                                         required
                                         placeholder='name@example.com'
                                     />
@@ -111,7 +111,7 @@ function LoginPage() {
                                         type="email"
                                         id="email"
                                         value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
+                                        // onChange={(e) => setEmail(e.target.value)}
                                         required
                                         placeholder='name@example.com'
                                     />
@@ -120,7 +120,7 @@ function LoginPage() {
                                         type="name"
                                         id="name"
                                         value={name}
-                                        onChange={(e) => setName(e.target.value)}
+                                        // onChange={(e) => setName(e.target.value)}
                                         required
                                         placeholder='Enter your full name'
                                     />
