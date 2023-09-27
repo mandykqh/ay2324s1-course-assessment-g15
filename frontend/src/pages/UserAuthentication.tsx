@@ -51,7 +51,7 @@ function LoginPage() {
     return (
         <div>
 
-            <Flex>
+            <Flex justify="center" align="center" minHeight="100vh">
                 <Box w='100%' className="welcome">
                     <Center>
                         <Heading>Welcome to PeerPrep</Heading>
