@@ -44,13 +44,14 @@ class UserRequestHandler {
     })
   }
 
-  public async updatePassword(id: string, currentPassword: string, newPassword: string) {
+  public async updatePassword(username: string, currentPassword: string, newPassword: string) {
     try {
-      const response = await this.client.get(`/${id}`);
+      const response = await this.client.get(`/${username}`);
+      console.log(username);
       if (response.data.password !== currentPassword) {
         throw Error('Incorrect current password');
       }
-      this.client.patch(`/${id}`, {
+      this.client.patch(`/${username}`, {
         password: newPassword
       })
     } catch (e) {
@@ -58,9 +59,9 @@ class UserRequestHandler {
     }
   }
 
-  public async deleteUser(id: string) {
+  public async deleteUser(username: string) {
     try {
-      await this.client.delete(`/${id}`);
+      await this.client.delete(`/${username}`);
     } catch (e) {
       throw e;
     }
