@@ -18,22 +18,19 @@ class UserRequestHandler {
     });
   }
 
-  // TEMP IMPLEMENTATION - TO CHANGE AFTER API CHANGE---------------------------
   public async login(userName: string, password: string) {
     var data: UserData[];
     try {
       const response = await this.client.get('/');
       data = response.data;
-      let result = data.filter((d) => d.username === userName);
-      if (result.length === 0 || result[0].password !== password) {
+      if (data.length === 0 || data[0].password !== password) {
         throw Error('Invalid Credentials');
       }
-      return result[0];
+      return data[0];
     } catch (e) {
       throw e;
     }
   }
-  //----------------------------------------------------------------------------
 
   public async updatePersonalInfo(data: UserDataString, currentName: string) {
     this.client.patch(`/${currentName}`, {

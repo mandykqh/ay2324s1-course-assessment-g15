@@ -16,7 +16,6 @@ const DummyLoginPage = () => {
   function loginHandler() {
     userRequestHandler.login(userName, password)
       .then(result => {
-        console.log(result);
         LocalStorageHandler.storeUserData({
           id: result.id,
           username: result.username,
