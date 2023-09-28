@@ -1,8 +1,7 @@
 import { QuestionString } from "../Commons"
 
 class QuestionValidator {
-  // check for empty fields
-  public validateEmptyFields(input: QuestionString) {
+  public validateEmptyFields(input: QuestionString): void {
     if (!input.title) {
       throw new Error('Title cannot be empty')
     }
@@ -18,21 +17,7 @@ class QuestionValidator {
     if (!input.description) {
       throw new Error('Description cannot be empty')
     }
-    return true;
   }
-
-  // Temporary implementation for assignment 1 ------------------------------------------
-  public validateDuplicateQuestions(input: QuestionString, qnList: QuestionString[]) {
-    qnList.forEach((qn) => {
-      if (qn.id === input.id) {
-        throw new Error('Duplicate question ID');
-      }
-      if (qn.title === input.title) {
-        throw new Error('Duplicate question title');
-      }
-    })
-  }
-  // -------------------------------------------------------------------------------------------
 }
 
 export default QuestionValidator;

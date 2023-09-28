@@ -18,10 +18,14 @@ const questionStringTemplate: QuestionString = {
   link: ''
 }
 
-interface UserDataString {
-  id: string;
-  username: string;
-  email: string;
+
+export const emptyQuestionString: QuestionString = {
+  id: '',
+  title: '',
+  categories: [],
+  complexity: '',
+  description: '',
+  link: ''
 }
 
 interface NotificationOptions {

@@ -35,12 +35,13 @@ export const addQuestion = async (req: express.Request, res: express.Response) =
 export const updateQuestion = async (req: express.Request, res: express.Response) => {
     try {
         const fieldsToUpdate = req.body;
-        const questionID = req.params.questionID;
+        const id = req.params.id;
 
-        delete fieldsToUpdate.questionID; // Prevent questionID from being updated
+        delete fieldsToUpdate.id; // Prevent questionID from being updated
+        // check for duplicate
 
         const updatedQuestion = await QuestionModel.findOneAndUpdate(
-            { questionID: questionID },
+            { id: id },
             fieldsToUpdate,
             { new: true }
         );
@@ -51,6 +52,9 @@ export const updateQuestion = async (req: express.Request, res: express.Response
 
         return res.status(200).json(updatedQuestion);
     } catch (error) {
+        if (error.code === 11000) {
+            return res.status(409).json({ error: "Duplicate title: A question with this title already exists." });
+        }
         console.error(error);
         return res.sendStatus(500).send('internal server error');
     }
@@ -59,8 +63,8 @@ export const updateQuestion = async (req: express.Request, res: express.Response
 export const deleteQuestion = async (req: express.Request, res: express.Response) => {
     try {
         // Delete question by questionID, not MongoDB record _id
-        const questionID = req.params.questionID;
-        const deletedQuestion = await QuestionModel.findOneAndDelete({ questionID: questionID });
+        const id = req.params.id;
+        const deletedQuestion = await QuestionModel.findOneAndDelete({ id: id });
         if (!deletedQuestion) { // Query failed
             return res.sendStatus(404).send('question not found');
         }
