@@ -18,6 +18,16 @@ const questionStringTemplate: QuestionString = {
   link: ''
 }
 
+
+export const emptyQuestionString: QuestionString = {
+  id: '',
+  title: '',
+  categories: [],
+  complexity: '',
+  description: '',
+  link: ''
+}
+
 interface NotificationOptions {
   message: string;
   type: 'success' | 'error'

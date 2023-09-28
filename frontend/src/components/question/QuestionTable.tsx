@@ -31,6 +31,9 @@ const QuestionTable: React.FC<Props> =
     const headings = ['Id', 'Title', 'Category', 'Complexity'];
     // Hook to update questionsList
     useEffect(() => {
+      if (data.length === 0) {
+        return;
+      }
       const qnArr = data.map((i: QuestionString) =>
         new Question(parseInt(i.id), i.title, i.categories,
           i.complexity, i.link, i.description));
@@ -46,7 +49,7 @@ const QuestionTable: React.FC<Props> =
           <Thead>
             <Tr>
               {headings.map((label) =>
-                <Th bgColor='#212224' border='1px solid #999999' key={ label }>
+                <Th bgColor='#212224' border='1px solid #999999' key={label}>
                   {label}
                 </Th>)}
             </Tr>

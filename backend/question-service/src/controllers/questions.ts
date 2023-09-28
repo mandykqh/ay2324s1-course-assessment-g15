@@ -35,9 +35,9 @@ export const addQuestion = async (req: express.Request, res: express.Response) =
 export const updateQuestion = async (req: express.Request, res: express.Response) => {
     try {
         const fieldsToUpdate = req.body;
-        const questionID = req.params.questionID;
+        const questionID = req.params.id;
 
-        delete fieldsToUpdate.questionID; // Prevent questionID from being updated
+        delete fieldsToUpdate.id; // Prevent questionID from being updated
 
         const updatedQuestion = await QuestionModel.findOneAndUpdate(
             { questionID: questionID },
@@ -59,7 +59,7 @@ export const updateQuestion = async (req: express.Request, res: express.Response
 export const deleteQuestion = async (req: express.Request, res: express.Response) => {
     try {
         // Delete question by questionID, not MongoDB record _id
-        const questionID = req.params.questionID;
+        const questionID = req.params.id;
         const deletedQuestion = await QuestionModel.findOneAndDelete({ questionID: questionID });
         if (!deletedQuestion) { // Query failed
             return res.sendStatus(404).send('question not found');

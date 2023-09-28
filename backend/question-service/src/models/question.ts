@@ -3,7 +3,7 @@ import { complexityEnum, categoryEnum } from './enums';
 import { CounterModel } from './counter';
 
 const QuestionSchema = new mongoose.Schema({
-  questionID: {
+  id: {
     type: Number,
     unique: true, // PK
   },
@@ -12,19 +12,19 @@ const QuestionSchema = new mongoose.Schema({
     required: true,
     unique: true,
     trim: true,
-  //   validate: {
-  //     validator: async function (value: string) {
-  //       // Check if a document with the same title (case-insensitive) already exists
-  //       const lowerCaseTitle = value.toLowerCase();
-  //       const existingQuestion = await this.constructor.findOne({
-  //         title: { lowerCaseTitle },
-  //       });
+    //   validate: {
+    //     validator: async function (value: string) {
+    //       // Check if a document with the same title (case-insensitive) already exists
+    //       const lowerCaseTitle = value.toLowerCase();
+    //       const existingQuestion = await this.constructor.findOne({
+    //         title: { lowerCaseTitle },
+    //       });
 
-  //       // If an existing question is found, it's a duplicate
-  //       return !existingQuestion;
-  //     },
-  //     message: 'Title must be unique (case-insensitive).',
-  //   },
+    //       // If an existing question is found, it's a duplicate
+    //       return !existingQuestion;
+    //     },
+    //     message: 'Title must be unique (case-insensitive).',
+    //   },
   },
   categories: {
     type: [String],
@@ -36,12 +36,12 @@ const QuestionSchema = new mongoose.Schema({
     enum: complexityEnum,
     required: true,
   },
-  linkToQuestion: {
+  link: {
     type: String,
     required: true,
     trim: true,
   },
-  questionDescription: {
+  description: {
     type: String,
     required: true,
     trim: true,
@@ -64,7 +64,7 @@ QuestionSchema.pre('save', async function (next) {
       { upsert: true, new: true }
     );
 
-    this.questionID = counter.value;
+    this.id = counter.value;
     next();
   } catch (error) {
     next(error);

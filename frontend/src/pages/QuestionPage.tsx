@@ -1,6 +1,5 @@
-import { mockQuestions } from '../MockData';
 import QuestionRequestHandler from '../handlers/QuestionRequestHandler';
-import { NotificationOptions, QuestionString, questionStringTemplate } from '../Commons';
+import { QuestionString, emptyQuestionString, questionStringTemplate } from '../Commons';
 import { useEffect, useState } from 'react';
 import QuestionValidator from '../models/QuestionValidator';
 import QuestionStringBuilder from '../models/QuestionStringBuilder';
@@ -9,11 +8,9 @@ import { NewQuestionContext } from '../contexts/NewQuestionContext';
 import QuestionDetailsModal from '../components/question/descriptionModal/QuestionDetailsModal';
 import AddQuestionModal from '../components/question/addModal/AddQuestionModal';
 import QuestionTable from '../components/question/QuestionTable';
-import { notificationHook } from '../hooks/notificationHook';
 import EditQuestionModal from '../components/question/editModal/EditQuestionModal';
-import { set } from 'lodash';
 
-let currentQuestion = questionStringTemplate;
+let currentQuestion = emptyQuestionString;
 
 const QuestionPage = () => {
 
@@ -21,27 +18,15 @@ const QuestionPage = () => {
   const [viewModalIsVisible, setViewModalIsVisible] = useState(false);
   const [editModalIsVisible, setEditModalIsVisible] = useState(false);
   const [questions, setQuestions] = useState<QuestionString[]>([]);
-  const [currentQuestionId, setCurrentQuestionId] = useState('0');
-  const [newQuestion, setNewQuestion] = useState<QuestionString>(questionStringTemplate);
-  const ctxValue = { questionData: newQuestion, setQuestionData: setNewQuestion };
-  const toast = useToast();
-
-  function checkDuplicates(qn: QuestionString, qnList: QuestionString[]) {
-    try {
-      let validator = new QuestionValidator();
-      validator.validateDuplicateQuestions(qn, qnList);
-    } catch (e) {
-      throw (e);
-    }
-  }
+  const [questionCache, setQuestionCache] = useState<QuestionString>(emptyQuestionString);
+  const ctxValue = { questionData: questionCache, setQuestionData: setQuestionCache };
 
   async function submitHandler() {
     let builder = new QuestionStringBuilder();
-    builder.setQuestionString(newQuestion);
+    builder.setQuestionString(questionCache);
     try {
       // Locally check for duplicates before sending to backend
       let newQuestion = builder.build();
-      checkDuplicates(newQuestion, questions);
 
       // Send to backend, get ID
       const newID = await QuestionRequestHandler.createQuestionAndGetID(newQuestion);
@@ -51,11 +36,11 @@ const QuestionPage = () => {
       newQuestion.id = newID.toString();
       setQuestions([...questions, newQuestion]);
       setAddModalIsVisible(false);
-      setNotificationOptions({ message: 'Question added!', type: 'success' });
-      setNewQuestion(updatedQuestionStringTemplate);
+      console.log('Question added');
+      setQuestionCache(updatedQuestionStringTemplate);
     } catch (e) {
       let result = (e as Error).message;
-      setNotificationOptions({ message: result, type: 'error' });
+      console.log(result);
     }
   }
 
@@ -64,20 +49,17 @@ const QuestionPage = () => {
       let builder = new QuestionStringBuilder()
       builder.setQuestionString(question);
       let updatedQuestion = builder.build();
-      
+
       // Filter out the question to be updated, then check for duplicates (prevent error when updating without changing title)
       let newArray = questions.filter((qn) => qn.id !== updatedQuestion.id);
-      checkDuplicates(updatedQuestion, newArray);
-  
       const updatedQuestionString = await QuestionRequestHandler.updateQuestion(updatedQuestion);
-  
+
       setQuestions(questions.map((q) => (q.id === updatedQuestionString.id ? updatedQuestionString : q)));
       setEditModalIsVisible(false);
-      setNotificationOptions({ message: `Question ${question.id} updated!`, type: 'success' });
+      console.log(`Question ${question.id} updated!`);
     } catch (e) {
       let result = (e as Error).message;
-      setNotificationOptions({ message: result, type: 'error' });
-      // setEditModalIsVisible(false);  Might be annoying to close on error and lose updates?
+      console.log(result);
     }
   }
 
@@ -91,26 +73,20 @@ const QuestionPage = () => {
         // }
         // -------------------------------------------------------------------------------
         setQuestions(questions);
-        console.log(questions);
       });
     } catch (error) {
-      console.log(error);
-      setNotificationOptions({ message: 'Failed to load questions!', type: 'error' });
+      console.log('Failed to load questions');
     }
   }, []);
 
   function viewDescriptionHandler(id: string) {
-    setCurrentQuestionId(id);
+    const selectedQuestion = questions.filter(i => i.id.toString() === id)[0];
+    if (selectedQuestion !== undefined) {
+      setQuestionCache(selectedQuestion);
+      console.log(selectedQuestion);
+    }
     setViewModalIsVisible(true);
   }
-
-  const selectedQuestion = questions.filter(i => i.id === currentQuestionId)[0];
-  if (selectedQuestion !== undefined) {
-    currentQuestion = selectedQuestion;
-  }
-
-  const [notifcationOptions, setNotificationOptions] = useState<NotificationOptions>({ message: '', type: 'success' });
-  notificationHook(notifcationOptions, toast);
 
   return (
     <NewQuestionContext.Provider value={ctxValue}>
@@ -122,21 +98,21 @@ const QuestionPage = () => {
         />
         <QuestionDetailsModal
           isVisible={viewModalIsVisible}
-          data={currentQuestion}
+          data={questionCache}
           closeHandler={() => { setViewModalIsVisible(false); }}
-          editModalHandler={ (id: string) => {
-            setCurrentQuestionId(id);
+          editModalHandler={(id: string) => {
             setViewModalIsVisible(false);
             setEditModalIsVisible(true);
-          } }
+          }}
           deleteHandler={(id: string) => {
             try {
               QuestionRequestHandler.deleteQuestion(id);
-              setNotificationOptions({ message: `Question ${id} deleted!`, type: 'success' });
+              console.log('deleted');
               setQuestions(questions.filter(i => i.id !== id));
+
               setViewModalIsVisible(false);
             } catch (error) {
-              setNotificationOptions({ message: `Question ${id} deletion failed!`, type: 'error' });
+              console.log('delete fail');
             }
           }}
         />
