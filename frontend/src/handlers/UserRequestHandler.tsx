@@ -35,8 +35,8 @@ class UserRequestHandler {
   }
   //----------------------------------------------------------------------------
 
-  public async updatePersonalInfo(data: UserDataString) {
-    this.client.patch(`/${data.id}`, {
+  public async updatePersonalInfo(data: UserDataString, currentName: string) {
+    this.client.patch(`/${currentName}`, {
       id: data.id,
       username: data.username,
       email: data.email
@@ -46,7 +46,6 @@ class UserRequestHandler {
   public async updatePassword(username: string, currentPassword: string, newPassword: string) {
     try {
       const response = await this.client.get(`/${username}`);
-      console.log(username);
       if (response.data.password !== currentPassword) {
         throw Error('Incorrect current password');
       }

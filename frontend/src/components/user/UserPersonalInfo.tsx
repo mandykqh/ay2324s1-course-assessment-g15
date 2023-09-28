@@ -59,6 +59,7 @@ const UserPersonalInfo = ({ user }: { user: UserDataString }) => {
   const [email, setEmail] = useState(LocalStorageHandler.getUserData()!.email);
   const userRequestHandler = new UserRequestHandler();
   const toast = useToast();
+  const [currentName, setCurrentName] = useState(LocalStorageHandler.getUserData()!.username);
 
   function resetFields() {
     setIsEditingEmail(false);
@@ -71,8 +72,10 @@ const UserPersonalInfo = ({ user }: { user: UserDataString }) => {
       username: name,
       email: email
     }
-    userRequestHandler.updatePersonalInfo(newData).then(() => {
+
+    userRequestHandler.updatePersonalInfo(newData, currentName).then(() => {
       LocalStorageHandler.storeUserData(newData);
+      setCurrentName(name);
       resetFields();
       showSuccess('Updated successfully', toast);
     }
