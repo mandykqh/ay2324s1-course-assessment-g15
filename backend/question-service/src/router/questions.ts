@@ -5,6 +5,6 @@ import { getAllQuestions, addQuestion, updateQuestion, deleteQuestion } from '..
 export default (router: express.Router) => {
     router.get('/questions', getAllQuestions);
     router.post('/questions', addQuestion);
-    router.patch('/questions/:questionID', updateQuestion);
-    router.delete('/questions/:questionID', deleteQuestion);
+    router.patch('/questions/:id', updateQuestion);
+    router.delete('/questions/:id', deleteQuestion);
 }

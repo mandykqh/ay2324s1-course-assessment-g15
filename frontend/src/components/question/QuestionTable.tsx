@@ -1,14 +1,9 @@
 import { useState, useEffect } from "react";
 import Question from '../../models/Question';
 import { QuestionString } from '../../Commons';
-import ManageQuestionsButtonRow from './ManageQuestionsButtonRow';
-import { TableContainer, Table, Thead, Tr, Th, Tbody, Td } from '@chakra-ui/react';
+import { TableContainer, Table, Thead, Tr, Th, Tbody, Td, Button, Box } from '@chakra-ui/react';
 
-interface tdProps {
-  value: string;
-}
-
-const QuestionTd: React.FC<tdProps> = ({ value }) => {
+const QuestionTd = ({ value }: { value: string }) => {
   return (
     <Td
       border='1px solid #9999'
@@ -31,6 +26,9 @@ const QuestionTable: React.FC<Props> =
     const headings = ['Id', 'Title', 'Category', 'Complexity'];
     // Hook to update questionsList
     useEffect(() => {
+      if (data.length === 0) {
+        return;
+      }
       const qnArr = data.map((i: QuestionString) =>
         new Question(parseInt(i.id), i.title, i.categories,
           i.complexity, i.link, i.description));
@@ -39,14 +37,16 @@ const QuestionTable: React.FC<Props> =
 
     return (
       <TableContainer>
-        <ManageQuestionsButtonRow
-          addHandler={addBtnOnClick}
-        />
+        <Box>
+          <Button colorScheme='blue' onClick={addBtnOnClick} m={5} float='right'>
+            Add
+          </Button>
+        </Box>
         <Table variant='simple' className='question-table' width={'70vw'}>
           <Thead>
             <Tr>
               {headings.map((label) =>
-                <Th bgColor='#212224' border='1px solid #999999' key='label'>
+                <Th bgColor='#212224' border='1px solid #999999' key={label}>
                   {label}
                 </Th>)}
             </Tr>

@@ -1,84 +1,79 @@
-import { mockQuestions } from '../MockData';
-import LocalStorageHandler from '../handlers/LocalStorageHandler';
-import { NotificationOptions, QuestionString, questionStringTemplate } from '../Commons';
+import QuestionRequestHandler from '../handlers/QuestionRequestHandler';
+import { QuestionString, emptyQuestionString, questionStringTemplate } from '../Commons';
 import { useEffect, useState } from 'react';
-import QuestionValidator from '../models/QuestionValidator';
-import QuestionStringBuilder from '../models/QuestionStringBuilder';
-import { useToast, Center } from '@chakra-ui/react';
-import { NewQuestionContext } from '../contexts/NewQuestionContext';
-import QuestionDetailsModal from '../components/question/descriptionModal/QuestionDetailsModal';
-import AddQuestionModal from '../components/question/addModal/AddQuestionModal';
+import { Center } from '@chakra-ui/react';
+import { QuestionCacheContext } from '../contexts/QuestionCacheContext';
+import QuestionDetailsModal from '../components/question/modals/QuestionDetailsModal';
+import AddQuestionModal from '../components/question/modals/AddQuestionModal';
 import QuestionTable from '../components/question/QuestionTable';
-import { notificationHook } from '../hooks/notificationHook';
+import EditQuestionModal from '../components/question/modals/EditQuestionModal';
+import QuestionValidator from '../models/QuestionValidator';
 
-let currentQuestion = questionStringTemplate;
+let currentQuestion = emptyQuestionString;
 
 const QuestionPage = () => {
-
   const [addModalIsVisible, setAddModalIsVisible] = useState(false);
   const [viewModalIsVisible, setViewModalIsVisible] = useState(false);
+  const [editModalIsVisible, setEditModalIsVisible] = useState(false);
   const [questions, setQuestions] = useState<QuestionString[]>([]);
-  const [currentQuestionId, setCurrentQuestionId] = useState('0');
-  const [newQuestion, setNewQuestion] = useState<QuestionString>(questionStringTemplate);
-  const ctxValue = { questionData: newQuestion, setQuestionData: setNewQuestion };
-  const toast = useToast();
+  const [questionCache, setQuestionCache] = useState<QuestionString>(emptyQuestionString);
+  const ctxValue = { questionCache: questionCache, setQuestionCache: setQuestionCache };
 
-  // TO REMOVE AFTER ASSIGNMENT 1 -----------------------------------------
-  function checkDuplicates(qn: QuestionString, qnList: QuestionString[]) {
+  function clearQuestionCache() {
+    setQuestionCache(emptyQuestionString);
+  }
+
+  async function submitHandler() {
     try {
       let validator = new QuestionValidator();
-      validator.validateDuplicateQuestions(qn, qnList);
-    } catch (e) {
-      throw (e);
-    }
-  }
-  // -------------------------------------------------------------------------
-
-
-  // TEMP FUNCTION FOR ASSIGNMENT 1: so idw tidy up :] ===============================
-  function submitHandler() {
-    let builder = new QuestionStringBuilder();
-    builder.setQuestionString(newQuestion);
-    try {
-      let newQuestion = builder.build();
-      let newArr = [...questions, newQuestion];
-      checkDuplicates(newQuestion, questions);
-      setQuestions(newArr);
+      validator.validateEmptyFields(questionCache);
+      await QuestionRequestHandler.createQuestionAndGetID(questionCache).then((id) => {
+        setQuestions([...questions, { ...questionCache, id: id }]);
+      }
+      );
       setAddModalIsVisible(false);
-      LocalStorageHandler.saveQuestion(newArr);
-      LocalStorageHandler.advanceQuestionId();
-      setNotificationOptions({ message: 'Question added!', type: 'success' });
-      setNewQuestion(questionStringTemplate);
+      console.log('Question added');
     } catch (e) {
       let result = (e as Error).message;
-      setNotificationOptions({ message: result, type: 'error' });
+      console.log(result);
     }
   }
-  // ===============================================================================
+
+  async function submitUpdateHandler(question: QuestionString) {
+    try {
+      let validator = new QuestionValidator();
+      validator.validateEmptyFields(questionCache);
+      await QuestionRequestHandler.updateQuestion(questionCache).then(() => {
+        setQuestions(questions.map((q) => (q.id === questionCache.id ? questionCache : q)!));
+        setEditModalIsVisible(false);
+        console.log(`Question ${question.id} updated!`);
+      });
+    } catch (e) {
+      console.log((e as Error).message);
+    }
+  }
 
   useEffect(() => {
-    if (Object.keys(LocalStorageHandler.loadQuestion()).length === 0) {
-      setQuestions(mockQuestions);
-      return;
+    try {
+      QuestionRequestHandler.loadQuestions().then((questions: QuestionString[]) => {
+        setQuestions(questions);
+      });
+    } catch (error) {
+      console.log('Failed to load questions');
     }
-    setQuestions(LocalStorageHandler.loadQuestion());
   }, []);
 
   function viewDescriptionHandler(id: string) {
-    setCurrentQuestionId(id);
+    const selectedQuestion = questions.filter(i => i.id.toString() === id)[0];
+    if (selectedQuestion !== undefined) {
+      setQuestionCache(selectedQuestion);
+      console.log(selectedQuestion);
+    }
     setViewModalIsVisible(true);
   }
 
-  const selectedQuestion = questions.filter(i => i.id === currentQuestionId)[0];
-  if (selectedQuestion !== undefined) {
-    currentQuestion = selectedQuestion;
-  }
-
-  const [notifcationOptions, setNotificationOptions] = useState<NotificationOptions>({ message: '', type: 'success' });
-  notificationHook(notifcationOptions, toast);
-
   return (
-    <NewQuestionContext.Provider value={ctxValue}>
+    <QuestionCacheContext.Provider value={ctxValue}>
       <Center>
         <AddQuestionModal
           isVisible={addModalIsVisible}
@@ -87,22 +82,39 @@ const QuestionPage = () => {
         />
         <QuestionDetailsModal
           isVisible={viewModalIsVisible}
-          data={currentQuestion}
+          data={questionCache}
           closeHandler={() => { setViewModalIsVisible(false); }}
-          deleteHandler={(id: string) => {
-            setQuestions(questions.filter(i => i.id !== id));
-            LocalStorageHandler.saveQuestion(questions.filter(i => i.id !== id));
+          editModalHandler={() => {
             setViewModalIsVisible(false);
-            setNotificationOptions({ message: 'Question deleted!', type: 'success' });
+            setEditModalIsVisible(true);
           }}
+          deleteHandler={(id: string) => {
+            try {
+              QuestionRequestHandler.deleteQuestion(id);
+              console.log('deleted');
+              setQuestions(questions.filter(i => i.id !== id));
+              setViewModalIsVisible(false);
+            } catch (error) {
+              console.log('delete fail');
+            }
+          }}
+        />
+        <EditQuestionModal
+          isVisible={editModalIsVisible}
+          questionToEdit={currentQuestion}
+          closeHandler={() => setEditModalIsVisible(false)}
+          submitUpdateHandler={submitUpdateHandler}
         />
         <QuestionTable
           data={questions}
           viewDescriptionHandler={viewDescriptionHandler}
-          addBtnOnClick={() => setAddModalIsVisible(true)}
+          addBtnOnClick={() => {
+            clearQuestionCache();
+            setAddModalIsVisible(true)
+          }}
         />
       </Center>
-    </NewQuestionContext.Provider>
+    </QuestionCacheContext.Provider>
   )
 };
 

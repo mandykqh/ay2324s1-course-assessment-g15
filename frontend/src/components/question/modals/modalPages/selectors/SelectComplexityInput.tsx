@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from "react";
-import { getComplexityStrings, stringToOptionsMapper } from "../../../Util";
+import { getComplexityStrings, stringToOptionsMapper } from "../../../../../Util";
 import { Box } from '@chakra-ui/react';
-import { SECONDARY_COLOR } from '../../../CommonStyles';
+import { SECONDARY_COLOR } from '../../../../../CommonStyles';
 import { Select } from 'chakra-react-select';
-import { NewQuestionContext } from '../../../contexts/NewQuestionContext';
+import { QuestionCacheContext } from '../../../../../contexts/QuestionCacheContext';
 
 interface SelectOption {
   value: string;
@@ -17,12 +17,12 @@ const complexityOptions = getComplexityStrings().map(value => {
 });
 
 const SelectComplexityInput = () => {
-  const { questionData, setQuestionData } = useContext(NewQuestionContext);
-  const [complexity, setComplexity] = useState(questionData.complexity);
+  const { questionCache, setQuestionCache } = useContext(QuestionCacheContext);
+  const [complexity, setComplexity] = useState(questionCache.complexity);
 
   useEffect(() => {
-    setQuestionData({
-      ...questionData,
+    setQuestionCache({
+      ...questionCache,
       complexity: complexity
     }
     );
@@ -37,7 +37,7 @@ const SelectComplexityInput = () => {
           }}
           options={complexityOptions}
           placeholder="Select Complexity"
-          value={stringToOptionsMapper(questionData.complexity)}
+          value={stringToOptionsMapper(questionCache.complexity)}
         />
       </Box>
     </>

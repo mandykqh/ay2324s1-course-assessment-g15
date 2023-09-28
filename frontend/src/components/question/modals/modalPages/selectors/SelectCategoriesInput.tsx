@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from 'react';
-import { getCategoriesString, stringToOptionsMapper } from '../../../Util';
+import { getCategoriesString, stringToOptionsMapper } from '../../../../../Util';
 import { MultiValue, Select } from "chakra-react-select";
 import { Box } from '@chakra-ui/react';
-import { NewQuestionContext } from '../../../contexts/NewQuestionContext';
-import { SECONDARY_COLOR } from '../../../CommonStyles';
+import { QuestionCacheContext } from '../../../../../contexts/QuestionCacheContext';
+import { SECONDARY_COLOR } from '../../../../../CommonStyles';
 
 interface SelectOption {
   value: string;
@@ -17,12 +17,12 @@ const categoryOptions = getCategoriesString().map(value => {
 });
 
 const SelectCategoriesInput = () => {
-  const { questionData, setQuestionData } = useContext(NewQuestionContext);
-  const [categories, setCategories] = useState(questionData.categories);
+  const { questionCache, setQuestionCache } = useContext(QuestionCacheContext);
+  const [categories, setCategories] = useState(questionCache.categories);
 
   useEffect(() => {
-    setQuestionData({
-      ...questionData,
+    setQuestionCache({
+      ...questionCache,
       categories: categories
     });
   }, [categories])
@@ -43,7 +43,7 @@ const SelectCategoriesInput = () => {
           options={categoryOptions}
           placeholder="Select Category"
           closeMenuOnSelect={false}
-          value={stringToOptionsMapper(questionData.categories.join(', '))}
+          value={stringToOptionsMapper(questionCache.categories.join(', '))}
         />
       </Box>
     </>
