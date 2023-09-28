@@ -1,7 +1,7 @@
 import QuestionRequestHandler from '../handlers/QuestionRequestHandler';
 import { QuestionString, emptyQuestionString } from '../commons';
 import { useEffect, useState } from 'react';
-import { Center } from '@chakra-ui/react';
+import { Center, useToast } from '@chakra-ui/react';
 import { QuestionCacheContext } from '../contexts/QuestionCacheContext';
 import QuestionDetailsModal from '../components/question/modals/QuestionDetailsModal';
 import AddQuestionModal from '../components/question/modals/AddQuestionModal';
@@ -9,6 +9,7 @@ import QuestionTable from '../components/question/QuestionTable';
 import EditQuestionModal from '../components/question/modals/EditQuestionModal';
 import QuestionValidator from '../models/question/QuestionValidator';
 import NavigationBar from '../components/NavigationBar';
+import { showError, showSuccess } from '../Util';
 
 let currentQuestion = emptyQuestionString;
 
@@ -19,6 +20,7 @@ const QuestionPage = () => {
   const [questions, setQuestions] = useState<QuestionString[]>([]);
   const [questionCache, setQuestionCache] = useState<QuestionString>(emptyQuestionString);
   const ctxValue = { questionCache: questionCache, setQuestionCache: setQuestionCache };
+  const toast = useToast();
 
   function clearQuestionCache() {
     setQuestionCache(emptyQuestionString);
@@ -33,10 +35,9 @@ const QuestionPage = () => {
       }
       );
       setAddModalIsVisible(false);
-      console.log('Question added');
+      showSuccess('Question added', toast);
     } catch (e) {
-      let result = (e as Error).message;
-      console.log(result);
+      showError((e as Error).message, toast);
     }
   }
 
@@ -47,10 +48,10 @@ const QuestionPage = () => {
       await QuestionRequestHandler.updateQuestion(questionCache).then(() => {
         setQuestions(questions.map((q) => (q.id === questionCache.id ? questionCache : q)!));
         setEditModalIsVisible(false);
-        console.log(`Question ${question.id} updated!`);
+        showSuccess(`Question ${question.id} updated!`, toast)
       });
     } catch (e) {
-      console.log((e as Error).message);
+      showError((e as Error).message, toast);
     }
   }
 
@@ -60,7 +61,7 @@ const QuestionPage = () => {
         setQuestions(questions);
       });
     } catch (error) {
-      console.log('Failed to load questions');
+      showError('Failed to load questions', toast);
     }
   }, []);
 
@@ -92,11 +93,11 @@ const QuestionPage = () => {
           deleteHandler={(id: string) => {
             try {
               QuestionRequestHandler.deleteQuestion(id);
-              console.log('deleted');
+              showSuccess('Question deleted!', toast)
               setQuestions(questions.filter(i => i.id !== id));
               setViewModalIsVisible(false);
             } catch (error) {
-              console.log('delete fail');
+              showError('delete fail', toast);
             }
           }}
         />
