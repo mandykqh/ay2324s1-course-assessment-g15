@@ -1,43 +1,34 @@
 import QuestionRequestHandler from '../handlers/QuestionRequestHandler';
 import { QuestionString, emptyQuestionString, questionStringTemplate } from '../Commons';
 import { useEffect, useState } from 'react';
-import QuestionValidator from '../models/QuestionValidator';
-import QuestionStringBuilder from '../models/QuestionStringBuilder';
-import { useToast, Center } from '@chakra-ui/react';
-import { NewQuestionContext } from '../contexts/NewQuestionContext';
-import QuestionDetailsModal from '../components/question/descriptionModal/QuestionDetailsModal';
-import AddQuestionModal from '../components/question/addModal/AddQuestionModal';
+import { Center } from '@chakra-ui/react';
+import { QuestionCacheContext } from '../contexts/QuestionCacheContext';
+import QuestionDetailsModal from '../components/question/modals/QuestionDetailsModal';
+import AddQuestionModal from '../components/question/modals/AddQuestionModal';
 import QuestionTable from '../components/question/QuestionTable';
-import EditQuestionModal from '../components/question/editModal/EditQuestionModal';
+import EditQuestionModal from '../components/question/modals/EditQuestionModal';
+import QuestionValidator from '../models/QuestionValidator';
 
 let currentQuestion = emptyQuestionString;
 
 const QuestionPage = () => {
-
   const [addModalIsVisible, setAddModalIsVisible] = useState(false);
   const [viewModalIsVisible, setViewModalIsVisible] = useState(false);
   const [editModalIsVisible, setEditModalIsVisible] = useState(false);
   const [questions, setQuestions] = useState<QuestionString[]>([]);
   const [questionCache, setQuestionCache] = useState<QuestionString>(emptyQuestionString);
-  const ctxValue = { questionData: questionCache, setQuestionData: setQuestionCache };
+  const ctxValue = { questionCache: questionCache, setQuestionCache: setQuestionCache };
 
   async function submitHandler() {
-    let builder = new QuestionStringBuilder();
-    builder.setQuestionString(questionCache);
     try {
-      // Locally check for duplicates before sending to backend
-      let newQuestion = builder.build();
-
-      // Send to backend, get ID
-      const newID = await QuestionRequestHandler.createQuestionAndGetID(newQuestion);
-      const updatedQuestionStringTemplate = { ...questionStringTemplate, id: newID.toString() };
-
-      // Set questions locally using new ID
-      newQuestion.id = newID.toString();
-      setQuestions([...questions, newQuestion]);
+      let validator = new QuestionValidator();
+      validator.validateEmptyFields(questionCache);
+      await QuestionRequestHandler.createQuestionAndGetID(questionCache).then((id) => {
+        setQuestions([...questions, { ...questionCache, id: id }]);
+      }
+      );
       setAddModalIsVisible(false);
       console.log('Question added');
-      setQuestionCache(updatedQuestionStringTemplate);
     } catch (e) {
       let result = (e as Error).message;
       console.log(result);
@@ -46,32 +37,21 @@ const QuestionPage = () => {
 
   async function submitUpdateHandler(question: QuestionString) {
     try {
-      let builder = new QuestionStringBuilder()
-      builder.setQuestionString(question);
-      let updatedQuestion = builder.build();
-
-      // Filter out the question to be updated, then check for duplicates (prevent error when updating without changing title)
-      let newArray = questions.filter((qn) => qn.id !== updatedQuestion.id);
-      const updatedQuestionString = await QuestionRequestHandler.updateQuestion(updatedQuestion);
-
-      setQuestions(questions.map((q) => (q.id === updatedQuestionString.id ? updatedQuestionString : q)));
-      setEditModalIsVisible(false);
-      console.log(`Question ${question.id} updated!`);
+      let validator = new QuestionValidator();
+      validator.validateEmptyFields(questionCache);
+      await QuestionRequestHandler.updateQuestion(questionCache).then(() => {
+        setQuestions(questions.map((q) => (q.id === questionCache.id ? questionCache : q)!));
+        setEditModalIsVisible(false);
+        console.log(`Question ${question.id} updated!`);
+      });
     } catch (e) {
-      let result = (e as Error).message;
-      console.log(result);
+      console.log((e as Error).message);
     }
   }
 
   useEffect(() => {
     try {
       QuestionRequestHandler.loadQuestions().then((questions: QuestionString[]) => {
-        // Temporary mock data for assignment 1 ------------------------------------------
-        // if (Object.keys(questions).length === 0) {
-        //   setQuestions(mockQuestions);
-        //   return;
-        // }
-        // -------------------------------------------------------------------------------
         setQuestions(questions);
       });
     } catch (error) {
@@ -89,7 +69,7 @@ const QuestionPage = () => {
   }
 
   return (
-    <NewQuestionContext.Provider value={ctxValue}>
+    <QuestionCacheContext.Provider value={ctxValue}>
       <Center>
         <AddQuestionModal
           isVisible={addModalIsVisible}
@@ -109,7 +89,6 @@ const QuestionPage = () => {
               QuestionRequestHandler.deleteQuestion(id);
               console.log('deleted');
               setQuestions(questions.filter(i => i.id !== id));
-
               setViewModalIsVisible(false);
             } catch (error) {
               console.log('delete fail');
@@ -128,7 +107,7 @@ const QuestionPage = () => {
           addBtnOnClick={() => setAddModalIsVisible(true)}
         />
       </Center>
-    </NewQuestionContext.Provider>
+    </QuestionCacheContext.Provider>
   )
 };
 

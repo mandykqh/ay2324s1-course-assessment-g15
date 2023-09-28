@@ -1,6 +1,9 @@
 import React, { useContext, useState } from "react";
-import { QuestionString, questionStringTemplate } from '../../../Commons';
-import ModalPage1 from '../modalPages/ModalPage1';
+import { questionStringTemplate } from '../../../Commons';
+import ModalPage1 from './modalPages/ModalPage1';
+import ModalPage2 from './modalPages/ModalPage2';
+import { PRIMARY_COLOR } from '../../../CommonStyles';
+import { QuestionCacheContext } from '../../../contexts/QuestionCacheContext';
 import {
   Modal,
   ModalOverlay,
@@ -11,9 +14,7 @@ import {
   ModalFooter,
   Button,
 } from '@chakra-ui/react';
-import { PRIMARY_COLOR } from '../../../CommonStyles';
-import ModalPage2 from '../modalPages/ModalPage2';
-import { NewQuestionContext } from '../../../contexts/NewQuestionContext';
+
 interface Props {
   isVisible: boolean;
   closeHandler: () => void;
@@ -30,11 +31,11 @@ const ModalButton = ({ label, onClick }: { label: string; onClick: () => void })
 
 const AddQuestionModal: React.FC<Props> = ({ isVisible, closeHandler, submitHandler }) => {
   const [page, setPage] = useState(1);
-  const { setQuestionData, questionData } = useContext(NewQuestionContext);
+  const { questionCache, setQuestionCache } = useContext(QuestionCacheContext);
 
   function close() {
     closeHandler();
-    setQuestionData(questionStringTemplate);
+    setQuestionCache(questionStringTemplate);
     setPage(1);
   }
 
@@ -53,37 +54,30 @@ const AddQuestionModal: React.FC<Props> = ({ isVisible, closeHandler, submitHand
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          {page === 1 ? (
+          {page === 1 &&
             <ModalPage1
-              title={questionData.title}
-              link={questionData.link}
-              onTitleChange={(value) => setQuestionData({ ...questionData, title: value })}
-              onLinkChange={(value) => setQuestionData({ ...questionData, link: value })}
+              title={questionCache.title}
+              link={questionCache.link}
+              onTitleChange={(value) => setQuestionCache({ ...questionCache, title: value })}
+              onLinkChange={(value) => setQuestionCache({ ...questionCache, link: value })}
             />
-          ) : (
+          }
+          {page === 2 &&
             <ModalPage2
-              description={questionData.description}
-              onDescriptionChange={(value) => setQuestionData({ ...questionData, description: value })}
+              description={questionCache.description}
+              onDescriptionChange={(value) => setQuestionCache({ ...questionCache, description: value })}
             />
-          )}
+          }
         </ModalBody>
         <ModalFooter>
-          {page === 1 ? (
-            <ModalButton label='Next' onClick={() => setPage(2)} />
-          ) : (
+          {page === 1 && <ModalButton label='Next' onClick={() => setPage(2)} />}
+          {page === 2 &&
             <>
               <ModalButton label='Previous' onClick={() => { setPage(1) }} />
               <ModalButton label='Submit'
-                onClick={() => {
-                  try {
-                    submitHandler();
-                    close();
-                  } catch {
-                    close();
-                  }
-                }} />
+                onClick={submitHandler} />
             </>
-          )}
+          }
         </ModalFooter>
       </ModalContent>
     </Modal >

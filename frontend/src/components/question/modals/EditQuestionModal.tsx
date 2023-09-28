@@ -1,4 +1,9 @@
 import React, { useEffect, useContext, useState } from "react";
+import { PRIMARY_COLOR } from '../../../CommonStyles';
+import ModalPage1 from './modalPages/ModalPage1';
+import ModalPage2 from './modalPages/ModalPage2';
+import { QuestionCacheContext } from '../../../contexts/QuestionCacheContext';
+import { QuestionString } from '../../../Commons';
 import {
   Modal,
   ModalOverlay,
@@ -9,11 +14,6 @@ import {
   ModalFooter,
   Button
 } from '@chakra-ui/react';
-import { PRIMARY_COLOR } from '../../../CommonStyles';
-import ModalPage1 from '../modalPages/ModalPage1';
-import ModalPage2 from '../modalPages/ModalPage2';
-import { NewQuestionContext } from '../../../contexts/NewQuestionContext';
-import { QuestionString } from '../../../Commons';
 
 interface Props {
   isVisible: boolean;
@@ -24,7 +24,7 @@ interface Props {
 
 const ModalButton = ({ label, color, onClick }: { label: string; color: string, onClick: () => void }) => {
   return (
-    <Button colorScheme={ color } mr={3} onClick={onClick}>
+    <Button colorScheme={color} mr={3} onClick={onClick}>
       {label}
     </Button>
   );
@@ -32,17 +32,17 @@ const ModalButton = ({ label, color, onClick }: { label: string; color: string, 
 
 const EditQuestionModal: React.FC<Props> = ({ isVisible, questionToEdit, closeHandler, submitUpdateHandler }) => {
   const [page, setPage] = useState(1);
-  const { setQuestionData, questionData } = useContext(NewQuestionContext);
+  const { questionCache, setQuestionCache } = useContext(QuestionCacheContext);
 
   function close() {
     closeHandler();
-    setQuestionData(questionData);
+    setQuestionCache(questionCache);
     setPage(1);
   }
 
   useEffect(() => {
     if (questionToEdit) {
-      setQuestionData({
+      setQuestionCache({
         id: questionToEdit.id,
         title: questionToEdit.title,
         link: questionToEdit.link,
@@ -68,37 +68,30 @@ const EditQuestionModal: React.FC<Props> = ({ isVisible, questionToEdit, closeHa
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          {page === 1 ? (
+          {page === 1 &&
             <ModalPage1
-              title={questionData.title}
-              link={questionData.link}
-              onTitleChange={(value) => setQuestionData({ ...questionData, title: value })}
-              onLinkChange={(value) => setQuestionData({ ...questionData, link: value })}
+              title={questionCache.title}
+              link={questionCache.link}
+              onTitleChange={(value) => setQuestionCache({ ...questionCache, title: value })}
+              onLinkChange={(value) => setQuestionCache({ ...questionCache, link: value })}
             />
-          ) : (
+          }
+          {page === 2 &&
             <ModalPage2
-              description={questionData.description}
-              onDescriptionChange={(value) => setQuestionData({ ...questionData, description: value })}
+              description={questionCache.description}
+              onDescriptionChange={(value) => setQuestionCache({ ...questionCache, description: value })}
             />
-          )}
+          }
         </ModalBody>
         <ModalFooter>
-          {page === 1 ? (
-            <ModalButton label='Next' color='blue' onClick={() => setPage(2)} />
-          ) : (
+          {page === 1 && <ModalButton label='Next' color='blue' onClick={() => setPage(2)} />}
+          {page === 2 &&
             <>
               <ModalButton label='Previous' color='blue' onClick={() => { setPage(1) }} />
-              <ModalButton label='Submit update' color='cyan' 
-                onClick={() => {
-                  try {
-                    submitUpdateHandler(questionData);
-                    close();
-                  } catch {
-                    close();
-                  }
-                }} />
+              <ModalButton label='Submit update' color='cyan'
+                onClick={() => submitUpdateHandler(questionCache)} />
             </>
-          )}
+          }
         </ModalFooter>
       </ModalContent>
     </Modal >

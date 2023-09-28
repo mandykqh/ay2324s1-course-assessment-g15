@@ -1,14 +1,9 @@
 import { useState, useEffect } from "react";
 import Question from '../../models/Question';
 import { QuestionString } from '../../Commons';
-import ManageQuestionsButtonRow from './ManageQuestionsButtonRow';
-import { TableContainer, Table, Thead, Tr, Th, Tbody, Td } from '@chakra-ui/react';
+import { TableContainer, Table, Thead, Tr, Th, Tbody, Td, Button, Box } from '@chakra-ui/react';
 
-interface tdProps {
-  value: string;
-}
-
-const QuestionTd: React.FC<tdProps> = ({ value }) => {
+const QuestionTd = ({ value }: { value: string }) => {
   return (
     <Td
       border='1px solid #9999'
@@ -42,9 +37,11 @@ const QuestionTable: React.FC<Props> =
 
     return (
       <TableContainer>
-        <ManageQuestionsButtonRow
-          addHandler={addBtnOnClick}
-        />
+        <Box>
+          <Button colorScheme='blue' onClick={addBtnOnClick} m={5} float='right'>
+            Add
+          </Button>
+        </Box>
         <Table variant='simple' className='question-table' width={'70vw'}>
           <Thead>
             <Tr>
