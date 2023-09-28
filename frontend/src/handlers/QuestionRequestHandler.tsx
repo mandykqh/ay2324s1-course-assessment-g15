@@ -1,13 +1,16 @@
+import axios from "axios";
 import { QuestionString } from "../Commons";
-import QuestionAPI from "../api/questions/questions";
-class RequestHandler {
-    private static api: QuestionAPI = new QuestionAPI();
+import { QUESTIONS_SERVICE_URL } from "../configs";
 
-    // Hacky way to map the response from the API to the QuestionString interface
+class QuestionRequestHandler {
+    private static client = axios.create({
+        baseURL: QUESTIONS_SERVICE_URL,
+    });;
+
     static async loadQuestions(): Promise<QuestionString[]> {
         try {
-            const response = await this.api.getQuestions();
-            const questions = response as QuestionString[];
+            const response = await this.client.get(`/`);
+            const questions = response.data as QuestionString[];
             return questions;
         } catch (error) {
             console.log(error);
@@ -17,8 +20,8 @@ class RequestHandler {
 
     static async createQuestionAndGetID(question: QuestionString): Promise<number> {
         try {
-            const response = await this.api.createQuestion(question);
-            return parseInt(response.id);
+            const response = await this.client.post(`/`, question);
+            return parseInt(response.data.id);
         } catch (error) {
             console.log(error);
             throw error;
@@ -27,8 +30,8 @@ class RequestHandler {
 
     static async deleteQuestion(id: string): Promise<void> {
         try {
-            const response = await this.api.deleteQuestionFromID(id);
-            return response;
+            const response = await this.client.delete(`/${id}`);
+            return response.data;
         } catch (error) {
             console.log(error);
             throw error;
@@ -38,8 +41,8 @@ class RequestHandler {
     static async updateQuestion(question: QuestionString): Promise<QuestionString> {
         try {
             const responseFormat = question;
-            const response = await this.api.updateQuestionFromID(question.id, responseFormat);
-            return response;
+            const response = await this.client.patch(`/${question.id}`, responseFormat);
+            return response.data;
         } catch (error) {
             console.log(error);
             throw error;
@@ -47,4 +50,4 @@ class RequestHandler {
     }
 }
 
-export default RequestHandler;
+export default QuestionRequestHandler;
