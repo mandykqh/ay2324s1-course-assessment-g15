@@ -2,7 +2,7 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import DummyLoginPage from './pages/DummyLoginPage.js';
+import UserAuthentication from './pages/UserAuthentication.js';
 import QuestionPage from './pages/QuestionPage.js';
 import UserProfilePage from './pages/UserProfilePage.js';
 import HistoryPage from "./pages/HistoryPage.js";
@@ -11,7 +11,7 @@ import MorePage from "./pages/MorePage.js";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <DummyLoginPage />
+    element: <UserAuthentication />
   },
   {
     path: "home",
