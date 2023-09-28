@@ -1,7 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
-import { QuestionString, UserDataString } from '../Commons';
-
-const BASE_URL = "http://localhost:5000/users";
+import { UserDataString } from '../Commons';
+import { USERS_SERVICE_URL } from '../configs';
 
 interface UserData {
   id: string
@@ -15,7 +14,7 @@ class UserRequestHandler {
 
   constructor() {
     this.client = axios.create({
-      baseURL: BASE_URL
+      baseURL: USERS_SERVICE_URL
     });
   }
 

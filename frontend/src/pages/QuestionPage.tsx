@@ -7,7 +7,8 @@ import QuestionDetailsModal from '../components/question/modals/QuestionDetailsM
 import AddQuestionModal from '../components/question/modals/AddQuestionModal';
 import QuestionTable from '../components/question/QuestionTable';
 import EditQuestionModal from '../components/question/modals/EditQuestionModal';
-import QuestionValidator from '../models/QuestionValidator';
+import QuestionValidator from '../models/question/QuestionValidator';
+import NavigationBar from '../components/NavigationBar';
 
 let currentQuestion = emptyQuestionString;
 
@@ -74,7 +75,8 @@ const QuestionPage = () => {
 
   return (
     <QuestionCacheContext.Provider value={ctxValue}>
-      <Center>
+      <NavigationBar index={0} />
+      <Center pt={50}>
         <AddQuestionModal
           isVisible={addModalIsVisible}
           closeHandler={() => setAddModalIsVisible(false)}

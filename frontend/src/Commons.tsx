@@ -28,10 +28,16 @@ export const emptyQuestionString: QuestionString = {
   link: ''
 }
 
+export interface UserDataString {
+  id: string;
+  username: string;
+  email: string;
+}
+
 interface NotificationOptions {
   message: string;
   type: 'success' | 'error'
 }
 
 export { questionStringTemplate };
-export type { QuestionString, NotificationOptions, UserDataString };
+export type { QuestionString, NotificationOptions };
