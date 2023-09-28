@@ -14,7 +14,7 @@ const DummyLoginPage = () => {
   const toast = useToast();
 
   function loginHandler() {
-    userRequestHandler.login(userName, password)
+    UserRequestHandler.login(userName, password)
       .then(result => {
         LocalStorageHandler.storeUserData({
           id: result.id,

@@ -70,7 +70,7 @@ const UserSecurity = () => {
       showError('New password and confirm password do not match', toast);
       return;
     }
-    userRequestHandler.updatePassword(LocalStorageHandler.getUserData()!.username, currentPassword, newPassword)
+    UserRequestHandler.updatePassword(LocalStorageHandler.getUserData()!.username, currentPassword, newPassword)
       .then(
         () => {
           showSuccess('Password Updated', toast);
@@ -86,7 +86,7 @@ const UserSecurity = () => {
       showError(`Please enter 'DELETE' to delete your account`, toast);
       return;
     }
-    userRequestHandler.deleteUser(LocalStorageHandler.getUserData()!.username)
+    UserRequestHandler.deleteUser(LocalStorageHandler.getUserData()!.username)
       .then(() => {
         showSuccess('Account deleted!', toast); // TO DEDICATE A PAGE FOR ACCOUN DELETION
         navigate('..');

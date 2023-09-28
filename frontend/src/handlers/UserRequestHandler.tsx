@@ -10,15 +10,12 @@ interface UserData {
 }
 
 class UserRequestHandler {
-  client: AxiosInstance;
+  static client = axios.create({
+    baseURL: USERS_SERVICE_URL
+  });;
 
-  constructor() {
-    this.client = axios.create({
-      baseURL: USERS_SERVICE_URL
-    });
-  }
 
-  public async login(userName: string, password: string) {
+  public static async login(userName: string, password: string) {
     var data: UserData[];
     try {
       const response = await this.client.get('/');
@@ -32,7 +29,7 @@ class UserRequestHandler {
     }
   }
 
-  public async updatePersonalInfo(data: UserDataString, currentName: string) {
+  public static async updatePersonalInfo(data: UserDataString, currentName: string) {
     this.client.patch(`/${currentName}`, {
       id: data.id,
       username: data.username,
@@ -40,7 +37,7 @@ class UserRequestHandler {
     })
   }
 
-  public async updatePassword(username: string, currentPassword: string, newPassword: string) {
+  public static async updatePassword(username: string, currentPassword: string, newPassword: string) {
     try {
       const response = await this.client.get(`/${username}`);
       if (response.data.password !== currentPassword) {
@@ -54,7 +51,7 @@ class UserRequestHandler {
     }
   }
 
-  public async deleteUser(username: string) {
+  public static async deleteUser(username: string) {
     try {
       await this.client.delete(`/${username}`);
     } catch (e) {

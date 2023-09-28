@@ -73,7 +73,7 @@ const UserPersonalInfo = ({ user }: { user: UserDataString }) => {
       email: email
     }
 
-    userRequestHandler.updatePersonalInfo(newData, currentName).then(() => {
+    UserRequestHandler.updatePersonalInfo(newData, currentName).then(() => {
       LocalStorageHandler.storeUserData(newData);
       setCurrentName(name);
       resetFields();
