@@ -20,11 +20,11 @@ export const getAllUsers = async (req: express.Request, res: express.Response) =
     }
 };
 
-export const getUserByID = async (req: express.Request, res: express.Response) => {
+export const getUserByName = async (req: express.Request, res: express.Response) => {
     try {
-        const user = await User.findOne( { where: { id: req.params.id } } );
+        const user = await User.findOne({ where: { username: req.params.username } });
         if (!user) {
-            return res.status(404).send('No user with that ID found.');
+            return res.status(404).send('No user with that Username found.');
         }
         return res.status(200).json(user);
     } catch (error) {
@@ -45,7 +45,7 @@ export const addUser = async (req: express.Request, res: express.Response) => {
 
 export const updateUser = async (req: express.Request, res: express.Response) => {
     try {
-        const userToUpdate = await User.findOne( { where: { id: req.params.id } } );
+        const userToUpdate = await User.findOne({ where: { username: req.params.username } });
         if (!userToUpdate) {
             return res.status(404).send('User not found');
         }
@@ -66,7 +66,7 @@ export const updateUser = async (req: express.Request, res: express.Response) =>
 
 export const deleteUser = async (req: express.Request, res: express.Response) => {
     try {
-        const userToDelete = await User.findOne( { where: { id: req.params.id } } );
+        const userToDelete = await User.findOne({ where: { username: req.params.username } });
         if (!userToDelete) {
             return res.status(404).send('User not found');
         }

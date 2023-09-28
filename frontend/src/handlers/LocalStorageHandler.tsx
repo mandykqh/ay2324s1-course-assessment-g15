@@ -1,4 +1,4 @@
-import { QuestionString } from "../Commons";
+import { QuestionString, UserDataString } from "../commons";
 
 class LocalStorageHandler {
 
@@ -26,6 +26,22 @@ class LocalStorageHandler {
     localStorage.setItem("nextId", (parseInt(nextId) + 1).toString());
   }
   //--------------------------------------------------------------------------------------
+
+  static storeUserData(userData: UserDataString) {
+    localStorage.setItem("userData", JSON.stringify(userData));
+  }
+
+  static getUserData(): UserDataString | null {
+    if (localStorage.getItem("userData") === null) {
+      return null;
+    }
+    const data = localStorage.getItem("userData")!;
+    return JSON.parse(data);
+  }
+
+  static clear() {
+    localStorage.removeItem('userData');
+  }
 }
 
 export default LocalStorageHandler;

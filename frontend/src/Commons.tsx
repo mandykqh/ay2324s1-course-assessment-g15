@@ -1,6 +1,4 @@
-
-
-interface QuestionString {
+export interface QuestionString {
   id: string,
   title: string,
   complexity: string,
@@ -8,16 +6,6 @@ interface QuestionString {
   description: string,
   link: string
 }
-
-const questionStringTemplate: QuestionString = {
-  id: '',
-  title: '',
-  categories: [],
-  complexity: '',
-  description: '',
-  link: ''
-}
-
 
 export const emptyQuestionString: QuestionString = {
   id: '',
@@ -28,10 +16,13 @@ export const emptyQuestionString: QuestionString = {
   link: ''
 }
 
-interface NotificationOptions {
+export interface UserDataString {
+  id: string;
+  username: string;
+  email: string;
+}
+
+export interface NotificationOptions {
   message: string;
   type: 'success' | 'error'
 }
-
-export { questionStringTemplate };
-export type { QuestionString, NotificationOptions };
