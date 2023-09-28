@@ -1,7 +1,7 @@
 import { UseToastOptions } from "@chakra-ui/toast";
 import Category from "./models/enums/Category";
 import Complexity from "./models/enums/Complexity";
-import { NotificationOptions } from "./Commons";
+import { NotificationOptions } from "./commons";
 
 function enumToString(e: unknown[]) {
   return e.slice(0, e.length / 2);

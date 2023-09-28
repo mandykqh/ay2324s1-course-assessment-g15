@@ -1,9 +1,9 @@
 import React, { useEffect, useContext, useState } from "react";
-import { PRIMARY_COLOR } from '../../../CommonStyles';
+import { PRIMARY_COLOR } from '../../../commonStyles';
 import ModalPage1 from './modalPages/ModalPage1';
 import ModalPage2 from './modalPages/ModalPage2';
 import { QuestionCacheContext } from '../../../contexts/QuestionCacheContext';
-import { QuestionString } from '../../../Commons';
+import { QuestionString } from '../../../commons';
 import {
   Modal,
   ModalOverlay,

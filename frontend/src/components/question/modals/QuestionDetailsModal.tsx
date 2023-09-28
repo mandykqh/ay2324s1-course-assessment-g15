@@ -13,8 +13,8 @@ import {
   Grid
 } from '@chakra-ui/react'
 import { Button } from '@chakra-ui/button';
-import { PRIMARY_COLOR } from '../../../CommonStyles';
-import { QuestionString } from '../../../Commons';
+import { PRIMARY_COLOR } from '../../../commonStyles';
+import { QuestionString } from '../../../commons';
 
 interface Props {
   isVisible: boolean;

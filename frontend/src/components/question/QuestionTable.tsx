@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Question from '../../models/question/Question';
-import { QuestionString } from '../../Commons';
+import { QuestionString } from '../../commons';
 import { TableContainer, Table, Thead, Tr, Th, Tbody, Td, Button, Box } from '@chakra-ui/react';
 
 const QuestionTd = ({ value }: { value: string }) => {

@@ -1,4 +1,4 @@
-import { QuestionString, UserDataString } from "../Commons";
+import { QuestionString, UserDataString } from "../commons";
 
 class LocalStorageHandler {
 

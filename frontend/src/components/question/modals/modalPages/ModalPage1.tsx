@@ -1,5 +1,5 @@
 import { Grid, Input, Text } from "@chakra-ui/react";
-import { SECONDARY_COLOR } from "../../../../CommonStyles";
+import { SECONDARY_COLOR } from "../../../../commonStyles";
 import SelectCategoriesInput from "./selectors/SelectCategoriesInput";
 import SelectComplexityInput from "./selectors/SelectComplexityInput";
 import React, { useEffect, useState } from "react";

@@ -1,6 +1,6 @@
 import { Input, Box, Text, Center, Button, useToast } from "@chakra-ui/react";
 import { useState } from "react";
-import { SECONDARY_COLOR } from "../CommonStyles";
+import { SECONDARY_COLOR } from "../commonStyles";
 import { useNavigate } from "react-router-dom";
 import UserRequestHandler from "../handlers/UserRequestHandler";
 import { showError } from "../Util";

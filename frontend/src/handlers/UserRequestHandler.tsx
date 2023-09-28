@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
-import { UserDataString } from '../Commons';
+import { UserDataString } from '../commons';
 import { USERS_SERVICE_URL } from '../configs';
 
 interface UserData {

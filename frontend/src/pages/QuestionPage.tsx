@@ -1,5 +1,5 @@
 import QuestionRequestHandler from '../handlers/QuestionRequestHandler';
-import { QuestionString, emptyQuestionString, questionStringTemplate } from '../Commons';
+import { QuestionString, emptyQuestionString } from '../commons';
 import { useEffect, useState } from 'react';
 import { Center } from '@chakra-ui/react';
 import { QuestionCacheContext } from '../contexts/QuestionCacheContext';
@@ -68,7 +68,6 @@ const QuestionPage = () => {
     const selectedQuestion = questions.filter(i => i.id.toString() === id)[0];
     if (selectedQuestion !== undefined) {
       setQuestionCache(selectedQuestion);
-      console.log(selectedQuestion);
     }
     setViewModalIsVisible(true);
   }

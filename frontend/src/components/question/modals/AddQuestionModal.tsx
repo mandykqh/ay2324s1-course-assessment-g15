@@ -1,8 +1,8 @@
 import React, { useContext, useState } from "react";
-import { questionStringTemplate } from '../../../Commons';
+import { emptyQuestionString } from '../../../commons';
 import ModalPage1 from './modalPages/ModalPage1';
 import ModalPage2 from './modalPages/ModalPage2';
-import { PRIMARY_COLOR } from '../../../CommonStyles';
+import { PRIMARY_COLOR } from '../../../commonStyles';
 import { QuestionCacheContext } from '../../../contexts/QuestionCacheContext';
 import {
   Modal,
@@ -35,7 +35,7 @@ const AddQuestionModal: React.FC<Props> = ({ isVisible, closeHandler, submitHand
 
   function close() {
     closeHandler();
-    setQuestionCache(questionStringTemplate);
+    setQuestionCache(emptyQuestionString);
     setPage(1);
   }
 
