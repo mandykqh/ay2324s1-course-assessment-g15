@@ -2,28 +2,8 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import theme from './theme.js';
 import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
-import DummyLoginPage from './pages/DummyLoginPage.js';
-import QuestionPage from './pages/QuestionPage.js';
-import UserProfilePage from './pages/UserProfilePage.js';
-
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <DummyLoginPage />
-  },
-  {
-    path: "home",
-    element: <QuestionPage />
-  },
-  {
-    path: "profile",
-    element: <UserProfilePage />
-  }
-]);
+import router from './router.js';
+import { RouterProvider } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
