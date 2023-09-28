@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
-import { UserDataString } from '../commons';
+import { QuestionString, UserDataString } from '../commons';
 import { USERS_SERVICE_URL } from '../configs';
 
 interface UserData {
@@ -16,14 +16,14 @@ class UserRequestHandler {
 
 
   public static async login(userName: string, password: string) {
-    var data: UserData[];
     try {
-      const response = await this.client.get('/');
-      data = response.data;
-      if (data.length === 0 || data[0].password !== password) {
+      const response = await this.client.get(`/${userName}`);
+      let data = response.data;
+      if (data.password !== password) {
         throw Error('Invalid Credentials');
       }
-      return data[0];
+      console.log(data);
+      return data;
     } catch (e) {
       throw e;
     }
