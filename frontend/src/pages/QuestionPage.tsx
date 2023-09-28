@@ -19,6 +19,10 @@ const QuestionPage = () => {
   const [questionCache, setQuestionCache] = useState<QuestionString>(emptyQuestionString);
   const ctxValue = { questionCache: questionCache, setQuestionCache: setQuestionCache };
 
+  function clearQuestionCache() {
+    setQuestionCache(emptyQuestionString);
+  }
+
   async function submitHandler() {
     try {
       let validator = new QuestionValidator();
@@ -80,7 +84,7 @@ const QuestionPage = () => {
           isVisible={viewModalIsVisible}
           data={questionCache}
           closeHandler={() => { setViewModalIsVisible(false); }}
-          editModalHandler={(id: string) => {
+          editModalHandler={() => {
             setViewModalIsVisible(false);
             setEditModalIsVisible(true);
           }}
@@ -104,7 +108,10 @@ const QuestionPage = () => {
         <QuestionTable
           data={questions}
           viewDescriptionHandler={viewDescriptionHandler}
-          addBtnOnClick={() => setAddModalIsVisible(true)}
+          addBtnOnClick={() => {
+            clearQuestionCache();
+            setAddModalIsVisible(true)
+          }}
         />
       </Center>
     </QuestionCacheContext.Provider>

@@ -20,7 +20,7 @@ interface Props {
   isVisible: boolean;
   data: QuestionString;
   closeHandler: () => void;
-  editModalHandler: (id: string) => void;
+  editModalHandler: () => void;
   deleteHandler: (id: string) => void;
 }
 
@@ -69,8 +69,8 @@ const QuestionDetailsModal: React.FC<Props> =
                 Delete
               </Button>
               <Button colorScheme='cyan' mr={3} onClick={() => {
-                closeHandler() 
-                editHandler(data.id);
+                closeHandler()
+                editHandler();
               }}>
                 Edit
               </Button>
