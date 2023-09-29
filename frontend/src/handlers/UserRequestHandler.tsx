@@ -33,11 +33,16 @@ class UserRequestHandler {
   }
 
   public static async updatePersonalInfo(data: UserDataString, currentName: string) {
-    this.client.patch(`/${currentName}`, {
-      id: data.id,
-      username: data.username,
-      email: data.email
-    })
+    try {
+      await this.client.patch(`/${currentName}`, {
+        id: data.id,
+        username: data.username,
+        email: data.email
+      });
+    } catch (e) {
+      throw e;
+    }
+
   }
 
   public static async updatePassword(username: string, currentPassword: string, newPassword: string) {
