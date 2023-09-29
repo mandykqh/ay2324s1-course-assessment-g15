@@ -19,13 +19,23 @@ User.init(
     },
     username: {
       type: DataTypes.STRING,
-      unique: true,
+      unique: {
+        name: 'username',
+        msg: 'Username already exists',
+      },
       allowNull: false,
     },
     email: {
       type: DataTypes.STRING,
-      unique: true,
-      allowNull: false,
+      unique: {
+        name: 'email',
+        msg: 'Email already exists',
+      },
+      validate: {
+        isEmail: {
+          msg: 'Please enter a valid email address',
+        }
+      }
     },
     password: {
       type: DataTypes.STRING,
@@ -34,6 +44,12 @@ User.init(
     role: {
       type: DataTypes.ENUM('ADMIN', 'USER'),
       allowNull: false,
+      validate: {
+        isIn: {
+          args: [['ADMIN', 'USER']],
+          msg: 'Role must be either ADMIN or USER.',
+        },
+      }
     },
   },
   {

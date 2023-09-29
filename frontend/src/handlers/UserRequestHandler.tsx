@@ -70,8 +70,9 @@ class UserRequestHandler {
       role: 'USER'
     };
     try {
-      this.client.post('/', body);
+      await this.client.post('/', body);
     } catch (e) {
+      console.log(e);
       throw e;
     }
   }
