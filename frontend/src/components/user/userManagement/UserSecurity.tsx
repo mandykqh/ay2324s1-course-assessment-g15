@@ -1,44 +1,11 @@
 import { Input, Box, Text, Flex, Spacer, Image, Center, Button, InputRightElement, InputGroup, background, useToast } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import UserRequestHandler from "../../handlers/UserRequestHandler";
-import LocalStorageHandler from "../../handlers/LocalStorageHandler";
-import { showError, showSuccess } from "../../Util";
+import { useState } from "react";
+import UserRequestHandler from "../../../handlers/UserRequestHandler";
+import LocalStorageHandler from "../../../handlers/LocalStorageHandler";
+import { showError, showSuccess } from "../../../Util";
 import { useNavigate } from "react-router-dom";
-import { PRIMARY_COLOR, SECONDARY_COLOR } from "../../commonStyles";
-
-interface PasswordInputProps {
-  label: string;
-  passwordShowing: boolean;
-  hiddenSetter: React.Dispatch<React.SetStateAction<boolean>>;
-  valueSetter: React.Dispatch<React.SetStateAction<string>>;
-  value: string;
-}
-
-const PasswordInput: React.FC<PasswordInputProps> =
-  ({ label, passwordShowing, hiddenSetter, valueSetter, value }) => {
-    return (
-      <Box mb={5}>
-        <Text as='b'>
-          {label}
-        </Text>
-        <InputGroup size='md' mt={3}>
-          <Input
-            pr='4.5rem'
-            type={passwordShowing ? 'text' : 'password'}
-            placeholder={`Enter ${label.toLowerCase()}`}
-            backgroundColor={PRIMARY_COLOR}
-            onChange={(e) => valueSetter(e.target.value)}
-            value={value}
-          />
-          <InputRightElement width='4.5rem'>
-            <Button h='1.75rem' size='sm' onClick={() => { hiddenSetter(!passwordShowing) }} >
-              {passwordShowing ? 'Hide' : 'Show'}
-            </Button>
-          </InputRightElement>
-        </InputGroup>
-      </Box>
-    );
-  }
+import { PRIMARY_COLOR, SECONDARY_COLOR } from "../../../commonStyles";
+import PasswordInput from "../../common/PasswordInput";
 
 const UserSecurity = () => {
   const [currentPasswordVisible, setCurrentPasswordVisible] = useState(false);

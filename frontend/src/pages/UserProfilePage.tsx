@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Box, Center, Flex } from '@chakra-ui/react';
-import UserProfileMenu from '../components/user/UserProfileMenu';
-import UserPersonalInfo from '../components/user/UserPersonalInfo';
-import UserSecurity from '../components/user/UserSecurity';
+import UserProfileMenu from "../components/user/userManagement/UserProfileMenu";
+import UserPersonalInfo from "../components/user/userManagement/UserPersonalInfo";
+import UserSecurity from "../components/user/userManagement/UserSecurity";
 import NavigationBar from '../components/NavigationBar';
 import LocalStorageHandler from '../handlers/LocalStorageHandler';
-import UserHomePage from "../components/user/UserHomePage";
+import UserHomePage from "../components/user/userManagement/UserHomePage";
 
 const UserProfilePage = () => {
   const [currentMenuIndex, setCurrentMenuIndex] = useState(0);

@@ -1,150 +1,123 @@
-import { Box, Button, Card, CardBody, CardHeader, Center, Container, Flex, FormControl, FormLabel, HStack, Heading, Input, InputGroup, InputRightElement, VStack } from "@chakra-ui/react";
+import { Box, Flex, Tab, TabList, Tabs, useToast } from "@chakra-ui/react";
 import React, { useState } from "react";
 
-import './UserAuthentication.css'
+import WelcomeLogo from "../components/user/userAuthentication/WelcomeLogo";
+import LoginCard from "../components/user/userAuthentication/LoginCard";
+import SignUpCard from "../components/user/userAuthentication/SignUpCard";
+import UserRequestHandler from "../handlers/UserRequestHandler";
+import LocalStorageHandler from "../handlers/LocalStorageHandler";
+import { useNavigate } from "react-router-dom";
+import { showError, showSuccess } from "../Util";
 
 function LoginPage() {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
-    const [name, setName,] = useState("");
+  const [loginUserName, setLoginUsername] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [signUpUsername, setSignUpUsername] = useState("");
+  const [signUpPassword, setSignUpPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [displayLoginForm, setDisplayLoginForm] = useState(true);
+  const [displaySignupForm, setDisplaySignupForm] = useState(false);
+  const toast = useToast();
+  const navigate = useNavigate();
 
-    const [displayLoginForm, setDisplayLoginForm] = useState(true);
-    const [displaySignupForm, setDisplaySignupForm] = useState(false);
+  function loginHandler() {
+    UserRequestHandler.login(loginUserName, loginPassword).then(result => {
+      LocalStorageHandler.storeUserData({
+        id: result.id,
+        username: result.username,
+        email: result.email,
+      });
+      navigate('home');
+    }).catch(e => showError('Invalid Credentials', toast));
+  }
 
-    const handleLogin = () => {
-        setEmail()
-    };
-
-    const handleSignup = () => {
-    };
-
-    const toggleForm = (isSignUp: boolean) => {
-        if (isSignUp) {
-            setDisplaySignupForm(true)
-            setDisplayLoginForm(false)
-        } else {
-            setDisplayLoginForm(true)
-            setDisplaySignupForm(false)
-        }
+  function signUpHandler() {
+    if (!email) {
+      showError('Email cannot be empty', toast);
+      return;
     }
 
-    function PasswordInput() {
-        const [show, setShow] = React.useState(false)
-        const handleClick = () => setShow(!show)
-
-        return (
-            <InputGroup size='md'>
-                <Input
-                    pr='4.5rem'
-                    type={show ? 'text' : 'password'}
-                    placeholder='Cannot be less than 8 characters'
-                />
-                <InputRightElement width='4.5rem'>
-                    <Button h='1.75rem' size='sm' onClick={handleClick}>
-                        {show ? 'Hide' : 'Show'}
-                    </Button>
-                </InputRightElement>
-            </InputGroup>
-        )
+    if (!signUpUsername) {
+      showError('Username cannot be empty', toast);
+      return;
     }
-    return (
-        <div>
 
-            <Flex justify="center" align="center" minHeight="100vh">
-                <Box w='100%' className="welcome">
-                    <Center>
-                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-                            <Heading className='welcome-text'>
-                                <span id='bracket'>{'{ '}</span>
-                                <span id='welcome-to'>Welcome to</span>
-                                <br />
-                                <span id='peerprep' >PeerPrep</span>
-                                <span id='bracket' >{' }'}</span>
-                            </Heading>
-                            <br />
-                            <img src="../src/assets/peerprep-keycaps.svg" alt="PeerPrep keycaps icon" id='peerprep-keycaps' />
-                        </div>
-                    </Center>
-                </Box>
-                {/* <img src="../src/assets/login-vector.svg" alt="PeerPrep keycaps icon" id='peerprep-keycaps' /> */}
+    if (!signUpPassword) {
+      showError('Password cannot be empty', toast);
+      return;
+    }
 
-                <Box w='100%' className="userAuthentication">
-                    <Button id='logintab' onClick={() => toggleForm(false)}>Log in</Button>
-                    <Button id='signuptab' onClick={() => toggleForm(true)}>Sign up</Button>
+    if (signUpPassword !== confirmPassword) {
+      showError('Passwords do not match', toast);
+      return;
+    }
 
-                    {displayLoginForm && (
-                        <Card maxW='600px'>
-                            <CardBody>
-                                <FormControl>
-                                    <FormLabel htmlFor="email">Enter your email address:</FormLabel>
-                                    <Input
-                                        type="email"
-                                        id="email"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        required
-                                        placeholder='name@example.com'
-                                    />
-                                    <FormLabel htmlFor="password">Password:</FormLabel>
-                                    <PasswordInput />
-                                    <Center>
-                                        <Button className='submit-btn' type="submit" onClick={handleLogin} bg='#9967FF' mt='4'>
-                                            Login
-                                        </Button>
-                                    </Center>
-                                </FormControl>
-                            </CardBody>
-                        </Card>)
-                    }
+    UserRequestHandler.createUser(signUpUsername, email, signUpPassword)
+      .then(() => {
+        showSuccess('You are now registered! proceed to login', toast);
+        setDisplayLoginForm(true)
+        setDisplaySignupForm(false)
+      });
+  }
 
+  const tabs = [
+    {
+      label: 'Login',
+      onClick: () => {
+        setDisplayLoginForm(true)
+        setDisplaySignupForm(false)
+      }
+    },
+    {
+      label: 'Sign Up',
+      onClick: () => {
+        setDisplayLoginForm(false)
+        setDisplaySignupForm(true)
+      }
+    },
+  ]
 
-                    {displaySignupForm && (
-                        <Card maxW='600px'>
-                            <CardHeader>
-                                <Heading size='24px' >Let's get started!</Heading>
-                            </CardHeader>
-                            <CardBody>
-                                <FormControl className='signup' >
-                                    <FormLabel htmlFor="email">Enter your email address:</FormLabel>
-                                    <Input
-                                        type="email"
-                                        id="email"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        required
-                                        placeholder='name@example.com'
-                                    />
-                                    <FormLabel htmlFor="name">Full name</FormLabel>
-                                    <Input
-                                        type="name"
-                                        id="name"
-                                        value={name}
-                                        onChange={(e) => setName(e.target.value)}
-                                        required
-                                        placeholder='Enter your full name'
-                                    />
-                                    <FormLabel htmlFor="password">Password</FormLabel>
-                                    <PasswordInput />
-                                    <FormLabel htmlFor="confirmPassword">Confirm password</FormLabel>
-                                    <PasswordInput />
-                                    <Center>
-                                        <Button className='submit-btn' type="submit" onClick={handleSignup} bg='#9967FF' mt='4'>
-                                            Sign up
-                                        </Button>
-                                    </Center>
-                                </FormControl >
-                            </CardBody>
-                        </Card>
-
-                    )}
-                </Box>
-
-            </Flex>
-
-        </div >
-
-    );
+  return (
+    <>
+      <Flex justify="center" align="center" minHeight="100vh">
+        <WelcomeLogo />
+        <Box w='100%'>
+          <Tabs w={'200px'} bg={'rgb(45, 55, 72)'} variant={'line'} borderRadius={5}>
+            <TabList>
+              {tabs.map((tab) =>
+                <Tab w={'100px'} onClick={tab.onClick} key={tab.label}>
+                  {tab.label}
+                </Tab>
+              )}
+            </TabList>
+          </Tabs>
+          {displayLoginForm &&
+            <LoginCard
+              username={loginUserName}
+              usernameSetter={setLoginUsername}
+              password={loginPassword}
+              passwordSetter={setLoginPassword}
+              loginHandler={loginHandler}
+            />
+          }
+          {displaySignupForm &&
+            <SignUpCard
+              username={signUpUsername}
+              usernameSetter={setSignUpUsername}
+              password={signUpPassword}
+              passwordSetter={setSignUpPassword}
+              confirmPassword={confirmPassword}
+              confirmPasswordSetter={setConfirmPassword}
+              email={email}
+              emailSetter={setEmail}
+              signUpHandler={signUpHandler}
+            />
+          }
+        </Box>
+      </Flex>
+    </>
+  );
 }
 
 export default LoginPage;

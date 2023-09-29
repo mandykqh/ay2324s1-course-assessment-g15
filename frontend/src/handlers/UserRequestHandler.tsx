@@ -1,5 +1,5 @@
-import axios, { AxiosInstance } from 'axios';
-import { QuestionString, UserDataString } from '../commons';
+import axios, { AxiosError, AxiosInstance } from 'axios';
+import { UserDataString } from '../Commons';
 import { USERS_SERVICE_URL } from '../configs';
 
 interface UserData {
@@ -25,6 +25,9 @@ class UserRequestHandler {
       console.log(data);
       return data;
     } catch (e) {
+      if ((e as AxiosError).response?.status === 404) {
+        throw Error('Invalid Credentials');
+      }
       throw e;
     }
   }
@@ -54,6 +57,20 @@ class UserRequestHandler {
   public static async deleteUser(username: string) {
     try {
       await this.client.delete(`/${username}`);
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  public static async createUser(username: string, email: string, password: string) {
+    const body = {
+      username: username,
+      email: email,
+      password: password,
+      role: 'USER'
+    };
+    try {
+      this.client.post('/', body);
     } catch (e) {
       throw e;
     }

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Input, Box, Text, Flex, Spacer, Image, Center, Button, Circle, useToast } from "@chakra-ui/react";
-import { PRIMARY_COLOR, SECONDARY_COLOR } from "../../commonStyles";
-import { UserDataString } from "../../commons";
-import UserRequestHandler from "../../handlers/UserRequestHandler";
-import LocalStorageHandler from "../../handlers/LocalStorageHandler";
-import { showSuccess, showError } from "../../Util";
+import { PRIMARY_COLOR, SECONDARY_COLOR } from "../../../commonStyles";
+import { UserDataString } from "../../../Commons";
+import UserRequestHandler from "../../../handlers/UserRequestHandler";
+import LocalStorageHandler from "../../../handlers/LocalStorageHandler";
+import { showSuccess, showError } from "../../../Util";
 
 const ValueLabel = ({ value }: { value: string }) => {
   return (
