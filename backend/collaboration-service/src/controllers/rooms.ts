@@ -8,12 +8,11 @@ export const getNewRoomID = async (req: express.Request, res: express.Response) 
   try {
     let newRoomNumber = roomManager.getNewRoomID();
     if (newRoomNumber === -1) {
-      res.status(404).json({ error: 'No available rooms' });
-      return;
+      return res.status(404).json({ error: 'No available rooms' });
     }
-    res.json({ roomNumber: newRoomNumber });
+    return res.status(200).json({ roomNumber: newRoomNumber });
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -21,8 +20,8 @@ export const deleteRoomFromID = async (req: express.Request, res: express.Respon
   try {
     let roomNumber = Number(req.params.roomID);
     roomManager.removeRoom(roomNumber);
-    return res.json({ message: `Room ${roomNumber} deleted` });
+    return res.status(200).json({ message: `Room ${roomNumber} deleted` });
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ error: 'Internal server error' });
   }
 }
