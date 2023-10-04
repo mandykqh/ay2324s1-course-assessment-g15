@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --exec ts-node -T"
+    "dev": "nodemon --exec ts-node -T src/index.ts"
   },
   "keywords": [],
   "author": "",
