@@ -10,7 +10,7 @@ class AuthRequestHandler {
 
     public static async createSession(data: UserData) {
         try {
-            const response = await this.client.post(`/create-session`, { userId: data.id });
+            const response = await this.client.post(`/create-session`);
             let res = response.data;
             console.log(res);
             return data;

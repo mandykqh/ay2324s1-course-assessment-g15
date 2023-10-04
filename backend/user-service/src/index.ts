@@ -7,6 +7,20 @@ import cors from 'cors';
 import session from 'express-session';
 import { sequelize } from './db/dbConfig';
 import router from './router';
+import mongoose from 'mongoose';
+
+const MongoDBStore = require('connect-mongodb-session')(session);
+
+mongoose
+    .connect(process.env.MONGOURL)
+    .then((res) => {
+        console.log(`MongoDB connected`)
+    });
+
+const store = new MongoDBStore({
+    uri: process.env.MONGOURL,
+    collection: 'sessions'
+});
 
 const app = express();
 
@@ -21,9 +35,7 @@ app.use(session({
     secret: 'secret',
     resave: false,
     saveUninitialized: false,
-    cookie: {
-        maxAge: 86400000, //1 day
-    },
+    store: store,
 }));
 
 const server = http.createServer(app);
