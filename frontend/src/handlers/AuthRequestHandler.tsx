@@ -19,6 +19,15 @@ class AuthRequestHandler {
         }
     }
 
+    public static async signout() {
+        try {
+            const response = await this.client.get(`/signout`, { withCredentials: true });
+            return response.data;
+        } catch (e) {
+            throw e;
+        }
+    }
+
     public static async isAuth() {
         try {
             const response = await this.client.get(`/check`, { withCredentials: true });

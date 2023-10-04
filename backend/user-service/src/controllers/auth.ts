@@ -21,6 +21,17 @@ export const login = async (req: express.Request, res: express.Response) => {
     }
 };
 
+export const signout = async (req: express.Request, res: express.Response) => {
+    req.session.destroy((err) => {
+        if (err) {
+            console.error('Error destroying session:', err);
+            return res.status(500).send('Internal server error');
+        } else {
+            return res.status(200);
+        }
+    })
+};
+
 export const check = async (req: express.Request, res: express.Response) => {
     if (req.session.isAuth) {
         return res.status(200).json({ isAuth: true, user: req.session.user });
