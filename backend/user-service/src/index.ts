@@ -9,11 +9,18 @@ import { sequelize } from './db/dbConfig';
 import router from './router';
 import cookieParser from 'cookie-parser';
 
+const MongoDBStore = require('connect-mongodb-session')(session);
+
 const app = express();
 
+const store = new MongoDBStore({
+    uri: process.env.MONGOURL,
+    collection: 'sessions',
+});
+
 app.use(cors({
-    origin: "*",
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
     credentials: true,
 }));
 
@@ -29,6 +36,7 @@ app.use(session({
         secure: false,
         maxAge: 1000 * 60 * 60 * 24
     },
+    store: store,
 }));
 
 const server = http.createServer(app);
