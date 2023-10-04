@@ -9,7 +9,7 @@ class AuthRequestHandler {
     public static async login(username: string, password: string) {
         try {
             const reqBody = { username: username, password: password }
-            const response = await this.client.post(`/login`, reqBody);
+            const response = await this.client.post(`/login`, reqBody, { withCredentials: true });
             return response.data;
         } catch (e) {
             if ((e as AxiosError).response?.status === 404) {
@@ -21,7 +21,7 @@ class AuthRequestHandler {
 
     public static async isAuth() {
         try {
-            const response = await this.client.get(`/check`);
+            const response = await this.client.get(`/check`, { withCredentials: true });
             return response.data;
         } catch (e) {
             throw e;
