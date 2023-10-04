@@ -8,6 +8,7 @@ import UserRequestHandler from "../handlers/UserRequestHandler";
 import AuthRequestHandler from "../handlers/AuthRequestHandler";
 import { useNavigate } from "react-router-dom";
 import { showError, showSuccess } from "../Util";
+import LocalStorageHandler from "../handlers/LocalStorageHandler";
 
 function LoginPage() {
   const [loginUserName, setLoginUsername] = useState("");
@@ -34,9 +35,16 @@ function LoginPage() {
   function loginHandler() {
     AuthRequestHandler.login(loginUserName, loginPassword)
       .then((result) => {
-        console.log(result);
+        LocalStorageHandler.storeUserData({
+          id: result.id,
+          username: result.username,
+          email: result.email,
+        });
         navigate('home');
-      }).catch(e => showError('Invalid Credentials', toast));
+      }).catch(e => {
+        console.log(e)
+        showError('Invalid Credentials', toast)
+      });
   }
 
   function signUpHandler() {

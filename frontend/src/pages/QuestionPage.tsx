@@ -24,13 +24,10 @@ const QuestionPage = () => {
   const ctxValue = { questionCache: questionCache, setQuestionCache: setQuestionCache };
   const toast = useToast();
   const navigate = useNavigate();
-  const [username, setUsername] = useState("TEST");
 
   useEffect(() => {
     AuthRequestHandler.isAuth().then(res => {
-      if (res.isAuth) {
-        setUsername(res.user.username);
-      } else {
+      if (!res.isAuth) {
         navigate('/');
       }
     }).catch(e => {
@@ -91,7 +88,6 @@ const QuestionPage = () => {
 
   return (
     <QuestionCacheContext.Provider value={ctxValue}>
-      <div>{username}</div>
       <NavigationBar index={0} />
       <Center pt={50}>
         <AddQuestionModal
