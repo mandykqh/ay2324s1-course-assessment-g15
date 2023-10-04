@@ -1,6 +1,5 @@
 import axios, { AxiosError } from 'axios';
 import { AUTH_SERVICE_URL } from '../configs';
-import { UserData } from './UserRequestHandler';
 
 class AuthRequestHandler {
     static client = axios.create({

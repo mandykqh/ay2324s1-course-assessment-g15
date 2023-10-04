@@ -1,15 +1,13 @@
 import { Box, Flex, Tab, TabList, Tabs, useToast } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import WelcomeLogo from "../components/user/userAuthentication/WelcomeLogo";
 import LoginCard from "../components/user/userAuthentication/LoginCard";
 import SignUpCard from "../components/user/userAuthentication/SignUpCard";
 import UserRequestHandler from "../handlers/UserRequestHandler";
 import AuthRequestHandler from "../handlers/AuthRequestHandler";
-import LocalStorageHandler from "../handlers/LocalStorageHandler";
 import { useNavigate } from "react-router-dom";
 import { showError, showSuccess } from "../Util";
-import axios from 'axios';
 
 function LoginPage() {
   const [loginUserName, setLoginUsername] = useState("");
@@ -35,7 +33,6 @@ function LoginPage() {
     });
   }, [])
 
-  axios.defaults.withCredentials = true;
   function loginHandler() {
     AuthRequestHandler.login(loginUserName, loginPassword)
       .then((result) => {
