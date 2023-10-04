@@ -4,6 +4,7 @@ import http from 'http';
 import bodyParser from 'body-parser';
 import compression from 'compression';
 import cors from 'cors';
+import session from 'express-session';
 import { sequelize } from './db/dbConfig';
 import router from './router';
 
@@ -15,6 +16,15 @@ app.use(cors({
 
 app.use(compression());
 app.use(bodyParser.json());
+
+app.use(session({
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        maxAge: 86400000, //1 day
+    },
+}));
 
 const server = http.createServer(app);
 const port = process.env.PORT || 5000;
