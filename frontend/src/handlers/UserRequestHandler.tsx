@@ -15,22 +15,22 @@ class UserRequestHandler {
   });;
 
 
-  public static async login(userName: string, password: string) {
-    try {
-      const response = await this.client.get(`/${userName}`);
-      let data = response.data;
-      if (data.password !== password) {
-        throw Error('Invalid Credentials');
-      }
-      console.log(data);
-      return data;
-    } catch (e) {
-      if ((e as AxiosError).response?.status === 404) {
-        throw Error('Invalid Credentials');
-      }
-      throw e;
-    }
-  }
+  // public static async login(userName: string, password: string) {
+  //   try {
+  //     const response = await this.client.get(`/${userName}`);
+  //     let data = response.data;
+  //     if (data.password !== password) {
+  //       throw Error('Invalid Credentials');
+  //     }
+  //     console.log(data);
+  //     return data;
+  //   } catch (e) {
+  //     if ((e as AxiosError).response?.status === 404) {
+  //       throw Error('Invalid Credentials');
+  //     }
+  //     throw e;
+  //   }
+  // }
 
   public static async updatePersonalInfo(data: UserDataString, currentName: string) {
     this.client.patch(`/${currentName}`, {
