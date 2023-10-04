@@ -1,7 +1,8 @@
 import express from 'express';
 
-import { createSession } from '../controllers/auth';
+import { login, check } from '../controllers/auth';
 
 export default (router: express.Router) => {
-    router.post('/auth/create-session', createSession);
+    router.post('/auth/login', login);
+    router.get('/auth/check', check);
 }

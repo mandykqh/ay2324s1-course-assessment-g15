@@ -7,17 +7,24 @@ class AuthRequestHandler {
         baseURL: AUTH_SERVICE_URL
     });;
 
-
-    public static async createSession(data: UserData) {
+    public static async login(username: string, password: string) {
         try {
-            const response = await this.client.post(`/create-session`);
-            let res = response.data;
-            console.log(res);
-            return data;
+            const reqBody = { username: username, password: password }
+            const response = await this.client.post(`/login`, reqBody);
+            return response.data;
         } catch (e) {
             if ((e as AxiosError).response?.status === 404) {
-                throw Error('Session Creation Failed');
+                throw Error('Invalid Credentials');
             }
+            throw e;
+        }
+    }
+
+    public static async isAuth() {
+        try {
+            const response = await this.client.get(`/check`);
+            return response.data;
+        } catch (e) {
             throw e;
         }
     }

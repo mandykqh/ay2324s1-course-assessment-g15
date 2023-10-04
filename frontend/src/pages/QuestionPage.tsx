@@ -10,6 +10,8 @@ import EditQuestionModal from '../components/question/modals/EditQuestionModal';
 import QuestionValidator from '../models/question/QuestionValidator';
 import NavigationBar from '../components/NavigationBar';
 import { showError, showSuccess } from '../Util';
+import AuthRequestHandler from '../handlers/AuthRequestHandler';
+import { useNavigate } from "react-router-dom";
 
 let currentQuestion = emptyQuestionString;
 
@@ -21,6 +23,20 @@ const QuestionPage = () => {
   const [questionCache, setQuestionCache] = useState<QuestionString>(emptyQuestionString);
   const ctxValue = { questionCache: questionCache, setQuestionCache: setQuestionCache };
   const toast = useToast();
+  const navigate = useNavigate();
+  const [username, setUsername] = useState("TEST");
+
+  useEffect(() => {
+    AuthRequestHandler.isAuth().then(res => {
+      if (res.isAuth) {
+        setUsername(res.user.username);
+      } else {
+        navigate('/');
+      }
+    }).catch(e => {
+      console.log(e);
+    });
+  }, [])
 
   function clearQuestionCache() {
     setQuestionCache(emptyQuestionString);
@@ -75,6 +91,7 @@ const QuestionPage = () => {
 
   return (
     <QuestionCacheContext.Provider value={ctxValue}>
+      <div>{username}</div>
       <NavigationBar index={0} />
       <Center pt={50}>
         <AddQuestionModal

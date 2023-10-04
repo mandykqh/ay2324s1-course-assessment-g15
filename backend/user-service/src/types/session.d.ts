@@ -1,8 +1,9 @@
 import 'express-session'
+import User from '../models/user';
 
 declare module 'express-session' {
     interface SessionData {
         isAuth: boolean;
-        userId: string;
+        user: User;
     }
 }

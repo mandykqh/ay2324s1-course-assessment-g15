@@ -1,5 +1,5 @@
 import { Box, Flex, Tab, TabList, Tabs, useToast } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import WelcomeLogo from "../components/user/userAuthentication/WelcomeLogo";
 import LoginCard from "../components/user/userAuthentication/LoginCard";
@@ -9,6 +9,7 @@ import AuthRequestHandler from "../handlers/AuthRequestHandler";
 import LocalStorageHandler from "../handlers/LocalStorageHandler";
 import { useNavigate } from "react-router-dom";
 import { showError, showSuccess } from "../Util";
+import axios from 'axios';
 
 function LoginPage() {
   const [loginUserName, setLoginUsername] = useState("");
@@ -22,17 +23,23 @@ function LoginPage() {
   const toast = useToast();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    AuthRequestHandler.isAuth().then(res => {
+      if (res.isAuth) {
+        navigate('home');
+      } else {
+        navigate('/');
+      }
+    }).catch(e => {
+      console.log(e);
+    });
+  }, [])
+
+  axios.defaults.withCredentials = true;
   function loginHandler() {
-    UserRequestHandler.login(loginUserName, loginPassword)
-      .then((result) =>
-        AuthRequestHandler.createSession(result)
-      )
+    AuthRequestHandler.login(loginUserName, loginPassword)
       .then((result) => {
-        LocalStorageHandler.storeUserData({
-          id: result.id,
-          username: result.username,
-          email: result.email,
-        });
+        console.log(result);
         navigate('home');
       }).catch(e => showError('Invalid Credentials', toast));
   }
