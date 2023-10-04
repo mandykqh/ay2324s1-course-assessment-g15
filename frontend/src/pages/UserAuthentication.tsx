@@ -39,6 +39,7 @@ function LoginPage() {
           id: result.id,
           username: result.username,
           email: result.email,
+          role: result.role
         });
         navigate('home');
       }).catch(e => {
