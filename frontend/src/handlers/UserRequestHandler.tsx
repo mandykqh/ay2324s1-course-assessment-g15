@@ -2,7 +2,7 @@ import axios, { AxiosError, AxiosInstance } from 'axios';
 import { UserDataString } from '../Commons';
 import { USERS_SERVICE_URL } from '../configs';
 
-interface UserData {
+export interface UserData {
   id: string
   username: string;
   email: string;

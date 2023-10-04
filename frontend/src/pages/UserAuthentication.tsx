@@ -5,6 +5,7 @@ import WelcomeLogo from "../components/user/userAuthentication/WelcomeLogo";
 import LoginCard from "../components/user/userAuthentication/LoginCard";
 import SignUpCard from "../components/user/userAuthentication/SignUpCard";
 import UserRequestHandler from "../handlers/UserRequestHandler";
+import AuthRequestHandler from "../handlers/AuthRequestHandler";
 import LocalStorageHandler from "../handlers/LocalStorageHandler";
 import { useNavigate } from "react-router-dom";
 import { showError, showSuccess } from "../Util";
@@ -22,14 +23,18 @@ function LoginPage() {
   const navigate = useNavigate();
 
   function loginHandler() {
-    UserRequestHandler.login(loginUserName, loginPassword).then(result => {
-      LocalStorageHandler.storeUserData({
-        id: result.id,
-        username: result.username,
-        email: result.email,
-      });
-      navigate('home');
-    }).catch(e => showError('Invalid Credentials', toast));
+    UserRequestHandler.login(loginUserName, loginPassword)
+      .then((result) =>
+        AuthRequestHandler.createSession(result)
+      )
+      .then((result) => {
+        LocalStorageHandler.storeUserData({
+          id: result.id,
+          username: result.username,
+          email: result.email,
+        });
+        navigate('home');
+      }).catch(e => showError('Invalid Credentials', toast));
   }
 
   function signUpHandler() {
