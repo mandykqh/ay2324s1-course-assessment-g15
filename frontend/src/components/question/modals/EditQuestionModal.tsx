@@ -89,7 +89,10 @@ const EditQuestionModal: React.FC<Props> = ({ isVisible, questionToEdit, closeHa
             <>
               <ModalButton label='Previous' color='blue' onClick={() => { setPage(1) }} />
               <ModalButton label='Submit update' color='cyan'
-                onClick={() => submitUpdateHandler(questionCache)} />
+                onClick={() => {
+                  submitUpdateHandler(questionCache);
+                  close();
+                }} />
             </>
           }
         </ModalFooter>
