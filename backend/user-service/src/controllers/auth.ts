@@ -25,6 +25,6 @@ export const check = async (req: express.Request, res: express.Response) => {
     if (req.session.isAuth) {
         return res.status(200).json({ isAuth: true, user: req.session.user });
     } else {
-        return res.status(404).json({ isAuth: false });
+        return res.status(200).json({ isAuth: false });
     }
 };

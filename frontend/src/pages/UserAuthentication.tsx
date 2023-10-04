@@ -24,9 +24,7 @@ function LoginPage() {
   useEffect(() => {
     AuthRequestHandler.isAuth().then(res => {
       if (res.isAuth) {
-        navigate('home');
-      } else {
-        navigate('/');
+        navigate('../home');
       }
     }).catch(e => {
       console.log(e);
