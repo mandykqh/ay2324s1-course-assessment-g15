@@ -9,6 +9,7 @@ import AuthRequestHandler from "../handlers/AuthRequestHandler";
 import { useNavigate } from "react-router-dom";
 import { showError, showSuccess } from "../Util";
 import LocalStorageHandler from "../handlers/LocalStorageHandler";
+import LoadingPage from "./LoadingPage";
 
 function LoginPage() {
   const [loginUserName, setLoginUsername] = useState("");
@@ -21,16 +22,17 @@ function LoginPage() {
   const [displaySignupForm, setDisplaySignupForm] = useState(false);
   const toast = useToast();
   const navigate = useNavigate();
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
 
   useEffect(() => {
-    AuthRequestHandler.isAuth().then(res => {
-      if (res.isAuth) {
-        navigate('../home');
-      }
-    }).catch(e => {
-      console.log(e);
-    });
-  }, [])
+    AuthRequestHandler.isAuth()
+      .then(res => {
+        setIsAuthenticated(res.isAuth);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }, []);
 
   function loginHandler() {
     AuthRequestHandler.login(loginUserName, loginPassword)
@@ -94,46 +96,52 @@ function LoginPage() {
     },
   ]
 
-  return (
-    <>
-      <Flex justify="center" align="center" minHeight="100vh">
-        <WelcomeLogo />
-        <Box w='100%'>
-          <Tabs w={'200px'} bg={'rgb(45, 55, 72)'} variant={'line'} borderRadius={5}>
-            <TabList>
-              {tabs.map((tab) =>
-                <Tab w={'100px'} onClick={tab.onClick} key={tab.label}>
-                  {tab.label}
-                </Tab>
-              )}
-            </TabList>
-          </Tabs>
-          {displayLoginForm &&
-            <LoginCard
-              username={loginUserName}
-              usernameSetter={setLoginUsername}
-              password={loginPassword}
-              passwordSetter={setLoginPassword}
-              loginHandler={loginHandler}
-            />
-          }
-          {displaySignupForm &&
-            <SignUpCard
-              username={signUpUsername}
-              usernameSetter={setSignUpUsername}
-              password={signUpPassword}
-              passwordSetter={setSignUpPassword}
-              confirmPassword={confirmPassword}
-              confirmPasswordSetter={setConfirmPassword}
-              email={email}
-              emailSetter={setEmail}
-              signUpHandler={signUpHandler}
-            />
-          }
-        </Box>
-      </Flex>
-    </>
-  );
+  if (isAuthenticated === null) {
+    return <LoadingPage />
+  } else if (isAuthenticated) {
+    navigate('../home');
+  } else {
+    return (
+      <>
+        <Flex justify="center" align="center" minHeight="100vh">
+          <WelcomeLogo />
+          <Box w='100%'>
+            <Tabs w={'200px'} bg={'rgb(45, 55, 72)'} variant={'line'} borderRadius={5}>
+              <TabList>
+                {tabs.map((tab) =>
+                  <Tab w={'100px'} onClick={tab.onClick} key={tab.label}>
+                    {tab.label}
+                  </Tab>
+                )}
+              </TabList>
+            </Tabs>
+            {displayLoginForm &&
+              <LoginCard
+                username={loginUserName}
+                usernameSetter={setLoginUsername}
+                password={loginPassword}
+                passwordSetter={setLoginPassword}
+                loginHandler={loginHandler}
+              />
+            }
+            {displaySignupForm &&
+              <SignUpCard
+                username={signUpUsername}
+                usernameSetter={setSignUpUsername}
+                password={signUpPassword}
+                passwordSetter={setSignUpPassword}
+                confirmPassword={confirmPassword}
+                confirmPasswordSetter={setConfirmPassword}
+                email={email}
+                emailSetter={setEmail}
+                signUpHandler={signUpHandler}
+              />
+            }
+          </Box>
+        </Flex>
+      </>
+    );
+  }
 }
 
 export default LoginPage;
