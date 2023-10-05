@@ -35,16 +35,19 @@ async function matchUsers(queueName : string, channel: amqp.Channel) {
     await channel.checkQueue(queueName).then(async (queue) => {
       let user1ID, user2ID;
       if(queue.messageCount >= 2){
-        const user1 = await channel.get(queueName);
-        if(user1 !== false){
-          channel.ack(user1)
-          user1ID = user1.content.toString();
-        }
-        const user2 = await channel.get(queueName);
-        if(user2 !== false){
-          channel.ack(user2)
-          user2ID = user2.content.toString();
-        }
+        await channel.get(queueName).then((user1) => {
+          if(user1 !== false){
+            channel.ack(user1);
+            user1ID = user1.content.toString();
+          }
+        });
+        
+        await channel.get(queueName).then((user2) => {
+          if(user2 !== false){
+            channel.ack(user2);
+            user2ID = user2.content.toString();
+          }
+        });
         // use user1 and 2 with collab service
         const confirmation1 = {
           user_id: user1ID,
@@ -71,6 +74,16 @@ export const processQueues = async (channel:amqp.Channel) => {
       await matchUsers(`${category}_${difficulty}`, channel);
     }
   }
+}
+
+export const deQueue = async (channel:amqp.Channel, categories:string, difficulty:string) => {
+  const queue = `${categories}_${difficulty}`;
+  await channel.get(queue).then((user) => {
+    if(user !== false){
+      console.log(`dequeued user ${user.content.toString()}`)
+      channel.ack(user);
+    }
+  });
 }
 
 

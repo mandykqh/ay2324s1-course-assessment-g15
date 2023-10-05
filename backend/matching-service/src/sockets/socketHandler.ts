@@ -1,5 +1,5 @@
 import { Server, Socket } from 'socket.io';
-import { requestMatch } from '../controllers/matching-controller';
+import { requestMatch, deQueue } from '../controllers/matching-controller';
 import ampq from 'amqplib';
 
 export function setupSockets(io: Server, channel: ampq.Channel) {
@@ -11,14 +11,15 @@ export function setupSockets(io: Server, channel: ampq.Channel) {
 function handleSocketEvents(socket: Socket, channel: ampq.Channel) {
     
     console.log(`Client connected: ${socket.id}`);
-    socket.on('find_match', (data) => {
+    socket.on('find_match', async (data) => {
         let matched = false;
         console.log(`matching ${data.user_id}`)
         requestMatch(channel, data.categories, data.difficulty, data.user_id);
         socket.emit('finding_match', {
             message: `Connected to matching service at port ${process.env.MATCHING_PORT}`
         });
-        channel.consume('matchingQueue', (msg) => {
+        
+        await channel.consume('matchingQueue', (msg) => {
             const obj = JSON.parse(msg.content.toString());
             if(obj.user_id === data.user_id) {
                 console.log(`Adding ${obj.user_id} to room`);//add room service
@@ -32,10 +33,16 @@ function handleSocketEvents(socket: Socket, channel: ampq.Channel) {
                 matched = true;
                 // for room logic using collab service api
             }
-            setTimeout(() => {
-                matched || socket.disconnect();
-            }, 30000);
-        });
+        })
+        setTimeout(() => {
+            if (matched === false){
+                deQueue(channel, data.categories, data.difficulty);
+                socket.emit('timeout', {
+                    msg: `Queue timeout, pls requeue`
+                });
+                socket.disconnect();
+            }
+        }, 30000);;
     });
         // Simulate sending a welcome message to the connected client
         // You can add more socket.io event handlers here 
