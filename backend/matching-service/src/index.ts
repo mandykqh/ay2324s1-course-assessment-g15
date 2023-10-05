@@ -3,8 +3,8 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import http from 'http';
 //import matchRoute from './router';
-import { Socket } from 'socket.io';
-import { rabbitMQSetup, processQueues } from './controllers/matching-controller';
+import { rabbitMQSetup } from './services/rabbitmq-service';
+import { processQueues } from './services/queueing-service';
 import { setupSockets } from './sockets/socketHandler';
 
 const PORT = process.env.MATCHING_PORT || 3000;
@@ -18,8 +18,7 @@ server.listen(PORT, () => {
 
 app.use(bodyParser.json());
 
-rabbitMQSetup()
-.then((channel) => {
+rabbitMQSetup().then((channel) => {
   setupSockets(io, channel);
   setInterval(async () => {
     processQueues(channel);
