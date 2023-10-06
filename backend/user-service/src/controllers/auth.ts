@@ -27,7 +27,7 @@ export const signout = async (req: express.Request, res: express.Response) => {
             console.error('Error destroying session:', err);
             return res.status(500).send('Internal server error');
         } else {
-            return res.status(200);
+            return res.status(200).send('Successfully signed out');
         }
     })
 };

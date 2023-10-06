@@ -27,6 +27,18 @@ const NavigationBar: React.FC<Props> = ({ index }) => {
       onClick: () => { navigate('../more') }
     }
   ]
+
+  function signoutHandler() {
+		AuthRequestHandler.signout()
+			.then(() => {
+				LocalStorageHandler.clear();
+				navigate('..');
+			})
+			.catch((e) => {
+				console.log(e);
+			});
+	}
+
   return (
     <Box w={'100%'} h={HEIGHT} backgroundColor={SECONDARY_COLOR} position={'absolute'}>
       <Flex>
@@ -49,7 +61,7 @@ const NavigationBar: React.FC<Props> = ({ index }) => {
           </MenuButton>
           <MenuList>
             <MenuItem onClick={() => navigate('../profile')}>Edit profile</MenuItem>
-            <MenuItem onClick={() => { navigate('..'); LocalStorageHandler.clear(); AuthRequestHandler.signout() }}>Sign out</MenuItem>
+            <MenuItem onClick={signoutHandler}>Sign out</MenuItem>
           </MenuList>
         </Menu>
       </Flex >
