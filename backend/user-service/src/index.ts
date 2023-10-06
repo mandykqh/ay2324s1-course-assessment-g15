@@ -4,17 +4,40 @@ import http from 'http';
 import bodyParser from 'body-parser';
 import compression from 'compression';
 import cors from 'cors';
+import session from 'express-session';
 import { sequelize } from './db/dbConfig';
 import router from './router';
+import cookieParser from 'cookie-parser';
+
+const MongoDBStore = require('connect-mongodb-session')(session);
 
 const app = express();
 
+const store = new MongoDBStore({
+    uri: process.env.MONGOURL,
+    collection: 'sessions',
+});
+
 app.use(cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
     credentials: true,
 }));
 
 app.use(compression());
 app.use(bodyParser.json());
+
+app.use(cookieParser());
+app.use(session({
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        secure: false,
+        maxAge: 1000 * 60 * 60 * 24
+    },
+    store: store,
+}));
 
 const server = http.createServer(app);
 const port = process.env.PORT || 5000;

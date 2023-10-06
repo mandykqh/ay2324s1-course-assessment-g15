@@ -1,5 +1,5 @@
 import QuestionRequestHandler from '../handlers/QuestionRequestHandler';
-import { QuestionString, emptyQuestionString } from '../commons';
+import { QuestionString, emptyQuestionString } from '../Commons';
 import { useEffect, useState } from 'react';
 import { Center, useToast } from '@chakra-ui/react';
 import { QuestionCacheContext } from '../contexts/QuestionCacheContext';
@@ -10,6 +10,8 @@ import EditQuestionModal from '../components/question/modals/EditQuestionModal';
 import QuestionValidator from '../models/question/QuestionValidator';
 import NavigationBar from '../components/NavigationBar';
 import { showError, showSuccess } from '../Util';
+import AuthRequestHandler from '../handlers/AuthRequestHandler';
+import LoadingPage from './LoadingPage';
 
 let currentQuestion = emptyQuestionString;
 
@@ -21,6 +23,17 @@ const QuestionPage = () => {
   const [questionCache, setQuestionCache] = useState<QuestionString>(emptyQuestionString);
   const ctxValue = { questionCache: questionCache, setQuestionCache: setQuestionCache };
   const toast = useToast();
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
+
+  useEffect(() => {
+    AuthRequestHandler.isAuth()
+      .then(res => {
+        setIsAuthenticated(res.isAuth);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }, []);
 
   function clearQuestionCache() {
     setQuestionCache(emptyQuestionString);
@@ -73,51 +86,55 @@ const QuestionPage = () => {
     setViewModalIsVisible(true);
   }
 
-  return (
-    <QuestionCacheContext.Provider value={ctxValue}>
-      <NavigationBar index={0} />
-      <Center pt={50}>
-        <AddQuestionModal
-          isVisible={addModalIsVisible}
-          closeHandler={() => setAddModalIsVisible(false)}
-          submitHandler={submitHandler}
-        />
-        <QuestionDetailsModal
-          isVisible={viewModalIsVisible}
-          data={questionCache}
-          closeHandler={() => { setViewModalIsVisible(false); }}
-          editModalHandler={() => {
-            setViewModalIsVisible(false);
-            setEditModalIsVisible(true);
-          }}
-          deleteHandler={(id: string) => {
-            try {
-              QuestionRequestHandler.deleteQuestion(id);
-              showSuccess('Question deleted!', toast)
-              setQuestions(questions.filter(i => i.id !== id));
+  if (isAuthenticated) {
+    return (
+      <QuestionCacheContext.Provider value={ctxValue}>
+        <NavigationBar index={0} />
+        <Center pt={50}>
+          <AddQuestionModal
+            isVisible={addModalIsVisible}
+            closeHandler={() => setAddModalIsVisible(false)}
+            submitHandler={submitHandler}
+          />
+          <QuestionDetailsModal
+            isVisible={viewModalIsVisible}
+            data={questionCache}
+            closeHandler={() => { setViewModalIsVisible(false); }}
+            editModalHandler={() => {
               setViewModalIsVisible(false);
-            } catch (error) {
-              showError('delete fail', toast);
-            }
-          }}
-        />
-        <EditQuestionModal
-          isVisible={editModalIsVisible}
-          questionToEdit={currentQuestion}
-          closeHandler={() => setEditModalIsVisible(false)}
-          submitUpdateHandler={submitUpdateHandler}
-        />
-        <QuestionTable
-          data={questions}
-          viewDescriptionHandler={viewDescriptionHandler}
-          addBtnOnClick={() => {
-            clearQuestionCache();
-            setAddModalIsVisible(true)
-          }}
-        />
-      </Center>
-    </QuestionCacheContext.Provider>
-  )
+              setEditModalIsVisible(true);
+            }}
+            deleteHandler={(id: string) => {
+              try {
+                QuestionRequestHandler.deleteQuestion(id);
+                showSuccess('Question deleted!', toast)
+                setQuestions(questions.filter(i => i.id !== id));
+                setViewModalIsVisible(false);
+              } catch (error) {
+                showError('delete fail', toast);
+              }
+            }}
+          />
+          <EditQuestionModal
+            isVisible={editModalIsVisible}
+            questionToEdit={currentQuestion}
+            closeHandler={() => setEditModalIsVisible(false)}
+            submitUpdateHandler={submitUpdateHandler}
+          />
+          <QuestionTable
+            data={questions}
+            viewDescriptionHandler={viewDescriptionHandler}
+            addBtnOnClick={() => {
+              clearQuestionCache();
+              setAddModalIsVisible(true)
+            }}
+          />
+        </Center>
+      </QuestionCacheContext.Provider>
+    )
+  } else {
+    return <LoadingPage />
+  }
 };
 
 export default QuestionPage;
