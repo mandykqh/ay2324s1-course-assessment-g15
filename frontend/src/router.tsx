@@ -7,11 +7,13 @@ import QuestionPage from './pages/QuestionPage.js';
 import UserProfilePage from './pages/UserProfilePage.js';
 import HistoryPage from "./pages/HistoryPage.js";
 import MorePage from "./pages/MorePage.js";
+import LoadingPage from "./pages/LoadingPage.js";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <UserAuthentication />
+    element: <UserAuthentication />,
+    errorElement: <LoadingPage />
   },
   {
     path: "home",
