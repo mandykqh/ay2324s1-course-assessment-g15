@@ -11,7 +11,7 @@ const app = express();
 const server = http.createServer(app);
 const io = require('socket.io')(server, {
   cors: {
-    origin: "http://localhost:5173", // Replace with your React app's URL
+    origin: "http://localhost:5173",
   }
 });
 
