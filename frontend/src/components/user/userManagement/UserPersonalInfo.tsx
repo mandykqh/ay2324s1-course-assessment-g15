@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Input, Box, Text, Flex, Spacer, Image, Center, Button, Circle, useToast } from "@chakra-ui/react";
-import { PRIMARY_COLOR, SECONDARY_COLOR } from "../../../commonStyles";
+import { PRIMARY_COLOR, SECONDARY_COLOR } from "../../../CommonStyles";
 import { UserDataString } from "../../../Commons";
 import UserRequestHandler from "../../../handlers/UserRequestHandler";
 import LocalStorageHandler from "../../../handlers/LocalStorageHandler";
@@ -79,7 +79,7 @@ const UserPersonalInfo = ({ user }: { user: UserDataString }) => {
       resetFields();
       showSuccess('Updated successfully', toast);
     }
-    ).catch((e) => showError((e as Error).message, toast));
+    ).catch((e) => showError(e.response.data.message, toast));
   }
 
   return (

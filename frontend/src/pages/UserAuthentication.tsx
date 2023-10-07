@@ -76,7 +76,7 @@ function LoginPage() {
         showSuccess('You are now registered! proceed to login', toast);
         setDisplayLoginForm(true)
         setDisplaySignupForm(false)
-      });
+      }).catch((e: any) => showError(e.response.data.message, toast));
   }
 
   const tabs = [
