@@ -46,8 +46,8 @@ async function matchUsers(queueName : string, channel: amqp.Channel) {
           user_id: user2ID,
           other_user: user1ID,
         };
-        channel.sendToQueue('matchingQueue', Buffer.from(JSON.stringify(confirmation1)));
-        channel.sendToQueue('matchingQueue', Buffer.from(JSON.stringify(confirmation2)));
+        channel.sendToQueue('confirmation_Queue', Buffer.from(JSON.stringify(confirmation1)));
+        channel.sendToQueue('confirmation_Queue', Buffer.from(JSON.stringify(confirmation2)));
         console.log(`matched users ${user1ID} and ${user2ID}`);
       }
     });
