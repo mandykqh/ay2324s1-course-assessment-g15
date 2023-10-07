@@ -1,6 +1,14 @@
 import { Socket } from 'socket.io';
-import { requestMatch, deQueue } from '../services/queueing-service';
+import { requestMatch, deQueue } from '../services/rabbitmq-service';
 import ampq from 'amqplib';
+
+function handleTimeout(socket: Socket, channel: ampq.Channel, data:any) {
+  deQueue(channel, data.categories, data.difficulty);
+  socket.emit('timeout', {
+    msg: 'Queue timeout, please requeue',
+  });
+  socket.disconnect();   
+}
 
 export async function findMatch(socket: Socket, channel: ampq.Channel, data:any) {
   console.log(`matching ${data.user_id}`);
@@ -12,9 +20,9 @@ export async function findMatch(socket: Socket, channel: ampq.Channel, data:any)
   setTimeout(() => {
     handleTimeout(socket, channel, data);  
   }, 30000);
-
-  while(true){
-    channel.consume('matchingQueue', (msg) => {
+  
+  channel.consume('matchingQueue', (msg) => {
+    try{
       const obj = JSON.parse(msg.content.toString());
       if (obj.user_id === data.user_id) {
         console.log(`Adding ${obj.user_id} to room`); // Add room service
@@ -26,16 +34,13 @@ export async function findMatch(socket: Socket, channel: ampq.Channel, data:any)
           // Add room logic here
         });
         socket.disconnect();
+      } else {
+        channel.reject(msg, true);
       }
-    });
-  };
+    } catch (err) {
+      console.error(err);
+    }
+  });
 } 
 
-function handleTimeout(socket: Socket, channel: ampq.Channel, data:any) {
-  deQueue(channel, data.categories, data.difficulty);
-  socket.emit('timeout', {
-    msg: 'Queue timeout, please requeue',
-  });
-  socket.disconnect();   
-}
 

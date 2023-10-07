@@ -2,9 +2,8 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import http from 'http';
-//import matchRoute from './router';
 import { rabbitMQSetup } from './services/rabbitmq-service';
-import { processQueues } from './services/queueing-service';
+import { processQueues } from './services/rabbitmq-service';
 import { setupSockets } from './sockets/socketHandler';
 
 const PORT = process.env.MATCHING_PORT || 3000;
