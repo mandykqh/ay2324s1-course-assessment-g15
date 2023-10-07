@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import AuthRequestHandler from "../handlers/AuthRequestHandler";
 import LoadingPage from "./LoadingPage";
 
-const HistoryPage = () => {
+const CollaboratePage = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
 
   useEffect(() => {
@@ -20,10 +20,10 @@ const HistoryPage = () => {
   if (isAuthenticated) {
     return (
       <Box>
-        <NavigationBar index={2} />
+        <NavigationBar index={1} />
         <Center height='100vh'>
           <Text>
-            History Page coming soon....
+            Collaborate page coming soon....
           </Text>
         </Center>
       </Box>
@@ -33,4 +33,4 @@ const HistoryPage = () => {
   }
 }
 
-export default HistoryPage;
+export default CollaboratePage;

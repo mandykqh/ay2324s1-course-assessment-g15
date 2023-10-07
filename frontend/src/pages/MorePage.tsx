@@ -20,7 +20,7 @@ const MorePage = () => {
   if (isAuthenticated) {
     return (
       <Box>
-        <NavigationBar index={2} />
+        <NavigationBar index={3} />
         <Center height='100vh'>
           <Text>
             More Page coming soon....
