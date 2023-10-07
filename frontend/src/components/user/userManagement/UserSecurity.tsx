@@ -4,7 +4,7 @@ import UserRequestHandler from "../../../handlers/UserRequestHandler";
 import LocalStorageHandler from "../../../handlers/LocalStorageHandler";
 import { showError, showSuccess } from "../../../Util";
 import { useNavigate } from "react-router-dom";
-import { PRIMARY_COLOR, SECONDARY_COLOR } from "../../../commonStyles";
+import { PRIMARY_COLOR, SECONDARY_COLOR } from "../../../CommonStyles";
 import PasswordInput from "../../common/PasswordInput";
 
 const UserSecurity = () => {
