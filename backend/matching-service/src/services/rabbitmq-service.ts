@@ -8,10 +8,10 @@ export const rabbitMQSetup = async () => {
     const channel = await connection.createChannel();
     await channel.assertQueue(`confirmation_Queue`, { durable: false });
     for (const category of categoryEnum) {
-      for (const difficulty of complexityEnum) {
-        const queueName = `${category}_${difficulty}`;
+      for (const complexity of complexityEnum) {
+        const queueName = `${category}_${complexity}`;
         await channel.assertQueue(queueName, { durable: false });
-        console.log(`Channel and Queue created for ${category}_${difficulty}`);
+        console.log(`Channel and Queue created for ${category}_${complexity}`);
       }
     }
     return channel;
@@ -56,9 +56,9 @@ async function matchUsers(queueName : string, channel: amqp.Channel) {
   }
 };
 
-export const requestMatch = async (channel:amqp.Channel, category: string, difficulty:string, client:string) => {
+export const requestMatch = async (channel:amqp.Channel, category: string, complexity: string, client:string) => {
   try{
-    const queue = `${category}_${difficulty}`;
+    const queue = `${category}_${complexity}`;
     channel.sendToQueue(queue, Buffer.from(client));
   } catch (err) {
     console.log(err);
@@ -68,15 +68,15 @@ export const requestMatch = async (channel:amqp.Channel, category: string, diffi
 
 export const processQueues = async (channel:amqp.Channel) => {
   for (const category of categoryEnum) {
-    for (const difficulty of complexityEnum) {
-      matchUsers(`${category}_${difficulty}`, channel);
+    for (const complexity of complexityEnum) {
+      matchUsers(`${category}_${complexity}`, channel);
     }
   }
 };
   
-export const deQueue = async (channel:amqp.Channel, categories:string, difficulty:string) => {
+export const deQueue = async (channel:amqp.Channel, categories:string, complexity:string) => {
   try{
-    const queue = `${categories}_${difficulty}`;
+    const queue = `${categories}_${complexity}`;
     await channel.get(queue).then((user) => {
       if(user !== false){
         console.log(`dequeued user ${user.content.toString()}`)
