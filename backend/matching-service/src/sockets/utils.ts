@@ -14,7 +14,7 @@ export async function findMatch(socket: Socket, channel: ampq.Channel, data:any)
   console.log(`matching ${data.user_id}`);
   requestMatch(channel, data.categories, data.difficulty, data.user_id);
   socket.emit('finding_match', {
-      message: `Connected to matching service at port:3000`
+      message: `Connected to matching service at port: 3000`
   });
 
   setTimeout(() => {
@@ -25,20 +25,22 @@ export async function findMatch(socket: Socket, channel: ampq.Channel, data:any)
     try{
       const obj = JSON.parse(msg.content.toString());
       if (obj.user_id === data.user_id) {
-        channel.ack(msg);
         socket.emit('match_found', {
           msg: `Match found: matched with ${obj.other_user}`,
           user_id: data.user_id,
           other_user: obj.other_user,
         });
+        channel.ack(msg);
+        channel.cancel(msg.fields.consumerTag);
         socket.disconnect();
       } else {
         channel.reject(msg, true);
       }
+    
     } catch (err) {
       console.error(err);
     }
-  });
+  })
 } 
 
 

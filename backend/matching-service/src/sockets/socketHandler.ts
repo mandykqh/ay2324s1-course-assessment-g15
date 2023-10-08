@@ -12,7 +12,7 @@ async function handleSocketEvents(socket: Socket, channel: ampq.Channel) {
   console.log(`Client connected: ${socket.id}`);
   socket.on('find_match', async (data) => {
     try {
-      await findMatch(socket, channel, data);  
+      findMatch(socket, channel, data);  
     } catch (error) {
       console.error('Error handling socket event:', error);
     }
