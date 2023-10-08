@@ -1,13 +1,27 @@
+// TimerModal.js
 import React, { useState, useEffect } from 'react';
-import { Center, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, Spinner, Grid, Text } from '@chakra-ui/react';
+import {
+  Center,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  Spinner,
+  Text,
+} from '@chakra-ui/react';
 
 interface TimerModalProps {
   isOpen: boolean;
   onClose: () => void;
   initialTime: number; // Initial time in seconds
+  status: string;
+  isTimeout: boolean;
+  isMatchFound: boolean;
 }
 
-const TimerModal: React.FC<TimerModalProps> = ({ isOpen, onClose, initialTime }) => {
+const TimerModal: React.FC<TimerModalProps> = ({ isOpen, onClose, initialTime, status, isTimeout, isMatchFound }) => {
   const [time, setTime] = useState(initialTime);
 
   useEffect(() => {
@@ -26,7 +40,7 @@ const TimerModal: React.FC<TimerModalProps> = ({ isOpen, onClose, initialTime })
     return () => {
       clearInterval(timer);
     };
-  }, [isOpen, time, initialTime]); // Include initialTime in the dependency array
+  }, [isOpen, time, initialTime]);
 
   useEffect(() => {
     // Reset the timer when the modal is opened
@@ -34,6 +48,20 @@ const TimerModal: React.FC<TimerModalProps> = ({ isOpen, onClose, initialTime })
       setTime(initialTime);
     }
   }, [isOpen, initialTime]);
+
+  useEffect(() => {
+    // Close the modal after 3 seconds if either isMatchFound or isTimeout is true
+    if (isMatchFound || isTimeout) {
+      const closeTimer = setTimeout(() => {
+        onClose();
+      }, 3000);
+
+      // Cleanup the timer when the component unmounts or when isOpen becomes false
+      return () => {
+        clearTimeout(closeTimer);
+      };
+    }
+  }, [isOpen, isMatchFound, isTimeout, onClose]);
 
   return (
     <Modal isOpen={isOpen} onClose={() => { onClose(); setTime(initialTime); }}>
@@ -47,14 +75,22 @@ const TimerModal: React.FC<TimerModalProps> = ({ isOpen, onClose, initialTime })
         <ModalCloseButton />
         <ModalBody>
           <Center flexDirection="column">
-            {time > 0 ? (
+            {isTimeout ? (
+              <>
+                <Text>Sorry, no match found!</Text>
+                <Text>Please try again later.</Text>
+              </>
+            ) : (isMatchFound ? (
+              <>
+                <Text mt={2}>{status}</Text>
+              </>
+            ) : ( 
               <>
                 <Spinner thickness='12px' speed='0.85s' color='blue.500' size="xl" />
+                <Text mt={2}>{status}</Text>
                 <Text mt={2}>Time Remaining: {time} seconds</Text>
               </>
-            ) : (
-              <Text>No match found!</Text>
-            )}
+            ))}
           </Center>
         </ModalBody>
       </ModalContent>
