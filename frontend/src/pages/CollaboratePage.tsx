@@ -8,9 +8,11 @@ import LoadingPage from "./LoadingPage";
 import { showError, showSuccess } from "../Util";
 import MatchingForm from "../components/matching/MatchingForm";
 import { MatchingString, emptyMatchingString } from "../Commons";
+import TimerModal from "../components/matching/modals/TimerModal";
 
 const CollaboratePage = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const toast = useToast();
   const [matchingCache, setMatchingCache] = useState<MatchingString>(emptyMatchingString);
   const ctxValue = { matchingCache: matchingCache, setMatchingCache: setMatchingCache };
@@ -25,6 +27,14 @@ const CollaboratePage = () => {
       });
   }, []);
 
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   async function findMatch(matchingCache: MatchingString) {
     if (matchingCache.categories.length === 0) {
       showError('Please select at least one category', toast);
@@ -34,7 +44,7 @@ const CollaboratePage = () => {
       showError('Please select a complexity level', toast);
       return;
     }
-    console.log(matchingCache);
+    handleOpenModal();
   }
 
   if (isAuthenticated) {
@@ -52,6 +62,7 @@ const CollaboratePage = () => {
                 Find Match 
               </Button>
             </Grid>
+            <TimerModal isOpen={isModalOpen} onClose={handleCloseModal} initialTime={30}/>
           </Center>
         </Box>
       </MatchingCacheContext.Provider>
