@@ -23,6 +23,17 @@ export interface UserDataString {
   role: string;
 }
 
+export interface MatchingString {
+  complexity: string;
+  categories: string; // To be changed into [] after assignment 5
+}
+
+export const emptyMatchingString: MatchingString = {
+  complexity: '',
+  categories: '', // To be changed into [] after assignment 5
+}
+
+
 export interface NotificationOptions {
   message: string;
   type: 'success' | 'error'

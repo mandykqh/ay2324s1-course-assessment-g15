@@ -8,6 +8,7 @@ import UserProfilePage from './pages/UserProfilePage.js';
 import HistoryPage from "./pages/HistoryPage.js";
 import MorePage from "./pages/MorePage.js";
 import LoadingPage from "./pages/LoadingPage.js";
+import CollaboratePage from "./pages/CollaboratePage.js";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
   {
     path: "history",
     element: <HistoryPage />
+  },
+  {
+    path: "collaborate",
+    element: <CollaboratePage />
   },
   {
     path: "more",
