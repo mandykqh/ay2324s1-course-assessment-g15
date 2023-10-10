@@ -1,5 +1,5 @@
 import { Box, Flex, Text, Center, Tab, TabList, TabPanel, TabPanels, Tabs, Spacer, Image, Button, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
-import { SECONDARY_COLOR } from "../commonStyles";
+import { SECONDARY_COLOR } from "../CommonStyles";
 import { useNavigate } from "react-router-dom";
 import LocalStorageHandler from "../handlers/LocalStorageHandler";
 import { useEffect, useState } from "react";
@@ -19,6 +19,9 @@ const NavigationBar: React.FC<Props> = ({ index }) => {
     {
       label: 'Questions',
       onClick: () => { navigate('../home') }
+    }, {
+      label: 'Collaborate',
+      onClick: () => { navigate('../collaborate') }
     }, {
       label: 'History',
       onClick: () => { navigate('../history') }

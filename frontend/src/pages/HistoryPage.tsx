@@ -20,7 +20,7 @@ const HistoryPage = () => {
   if (isAuthenticated) {
     return (
       <Box>
-        <NavigationBar index={1} />
+        <NavigationBar index={2} />
         <Center height='100vh'>
           <Text>
             History Page coming soon....
