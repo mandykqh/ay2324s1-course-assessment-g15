@@ -4,8 +4,8 @@
 ## How to setup locally
 ### Backend
 1. Edit docker-compose to add a connection string to `MONGOURL`
-2. Start Docker and run `docker-compose up --build` (the `--build` tag creates new images with code changes reflected). This should start the `user-service` and `question-service`.
-3. Follow instructions in `/backend/matching-service` to set it up.
-
+2. Start Docker and run `docker-compose up --build` (If developing, always run with `--build`. the `--build` tag creates new images with code changes reflected). This should start the `user-service` and `question-service`.
+3. Follow instructions in `/backend/matching-service/readme.md` to set up the matching service
+4. Follow instructions in `/backend/collaboration-service/readme.md` to setup the collaboration service
 ### Frontend
-1. Follow instructions in readme under `/frontend/`
+1. Follow instructions in `/frontend/readme.md`
