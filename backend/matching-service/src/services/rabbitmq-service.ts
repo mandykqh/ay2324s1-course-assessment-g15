@@ -1,6 +1,7 @@
 import amqp from 'amqplib';
 import { categoryEnum, complexityEnum } from '../types/enums';
 import { getQuestions } from '../api/QuestionsAPI';
+import { getRoomID } from '../api/CollaborationAPI';
 const RABBITMQ_URL = 'amqp://localhost:5672';
 
 export const rabbitMQSetup = async () => {
@@ -41,15 +42,18 @@ async function matchUsers(queueName : string, channel: amqp.Channel) {
         });
         const { categories, complexity } = parseQueueString(queueName);
         const question = await getQuestions(categories, complexity);
+        const roomID = await getRoomID();
         
         const confirmation1 = {
           user_id: user1ID,
           other_user: user2ID,
+          room_id: roomID.roomNumber,
           question
         };
         const confirmation2 = {
           user_id: user2ID,
           other_user: user1ID,
+          room_id: roomID.roomNumber,
           question
         };
         channel.sendToQueue('confirmation_Queue', Buffer.from(JSON.stringify(confirmation1)));
