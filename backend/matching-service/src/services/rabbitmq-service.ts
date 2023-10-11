@@ -1,5 +1,6 @@
 import amqp from 'amqplib';
-import { categoryEnum, complexityEnum } from './enums';
+import { categoryEnum, complexityEnum } from '../types/enums';
+import { getQuestions } from '../api/QuestionsAPI';
 const RABBITMQ_URL = 'amqp://localhost:5672';
 
 export const rabbitMQSetup = async () => {
@@ -38,13 +39,18 @@ async function matchUsers(queueName : string, channel: amqp.Channel) {
             user2ID = user2.content.toString();
           }
         });
+        const { categories, complexity } = parseQueueString(queueName);
+        const question = await getQuestions(categories, complexity);
+        
         const confirmation1 = {
           user_id: user1ID,
           other_user: user2ID,
+          question
         };
         const confirmation2 = {
           user_id: user2ID,
           other_user: user1ID,
+          question
         };
         channel.sendToQueue('confirmation_Queue', Buffer.from(JSON.stringify(confirmation1)));
         channel.sendToQueue('confirmation_Queue', Buffer.from(JSON.stringify(confirmation2)));
@@ -87,3 +93,18 @@ export const deQueue = async (channel:amqp.Channel, categories:string, complexit
     console.error(err);
   }
 };
+
+function parseQueueString(input: string): { categories: string[], complexity: string } {
+  // Extracts categories and complexity from a queue name
+  // input is in the form of "category1_categoryn_complexity"
+
+  const parts = input.split('_');
+
+  const categories = parts.slice(0, -1);
+  const complexity = parts[parts.length - 1];
+
+  return {
+    categories,
+    complexity,
+  };
+}
