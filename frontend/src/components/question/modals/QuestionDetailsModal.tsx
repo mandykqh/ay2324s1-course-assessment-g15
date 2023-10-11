@@ -15,6 +15,7 @@ import {
 import { Button } from '@chakra-ui/button';
 import { PRIMARY_COLOR } from '../../../commonStyles';
 import { QuestionString } from '../../../commons';
+import LocalStorageHandler from '../../../handlers/LocalStorageHandler';
 
 interface Props {
   isVisible: boolean;
@@ -26,6 +27,9 @@ interface Props {
 
 const QuestionDetailsModal: React.FC<Props> =
   ({ isVisible, data, closeHandler, editModalHandler: editHandler, deleteHandler }) => {
+    const userData = LocalStorageHandler.getUserData();
+    const userRole = userData ? userData.role : null;
+
     return (
       <>
         <Modal
@@ -65,13 +69,13 @@ const QuestionDetailsModal: React.FC<Props> =
               </Grid>
             </ModalBody>
             <ModalFooter>
-              <Button colorScheme='red' mr={3} onClick={() => deleteHandler(data.id)}>
+              <Button colorScheme='red' mr={3} onClick={() => deleteHandler(data.id)} isDisabled={userRole === 'ADMIN' ? false : true}>
                 Delete
               </Button>
               <Button colorScheme='cyan' mr={3} onClick={() => {
                 closeHandler()
                 editHandler();
-              }}>
+              }} isDisabled={userRole === 'ADMIN' ? false : true}>
                 Edit
               </Button>
               <Button colorScheme='blue' mr={3} onClick={closeHandler}>

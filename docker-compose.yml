@@ -1,0 +1,42 @@
+version: '3'
+services:
+  ques-service:
+    build:
+      context: . 
+      dockerfile: ./dockerfiles/dockerfile.ques-service
+    ports:
+      - "8080:8080" # map host port:8080 to container's port:8080
+    environment:
+      MONGOURL:  #MongoDB connection URL
+    
+
+  user-db:
+    image: "postgres:13"
+    ports:
+      - "5432:5432"
+    restart: always
+    environment:
+      POSTGRES_USER: localuser
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_DB: peerprep
+    volumes:
+      - user-data:/var/lib/postgresql/data
+
+  user-service:
+    build:
+      context: .
+      dockerfile: ./dockerfiles/dockerfile.user-service
+    ports:
+      - "5000:5000" # map host port:5000 to container's port:5000
+    environment:
+      MONGOURL: #MongoDB connection URL
+      PG_USER: localuser
+      PG_PASSWORD: 12345
+      PG_DB: peerprep
+      PG_HOST: user-db
+
+    depends_on: 
+      - user-db
+
+volumes:
+  user-data:

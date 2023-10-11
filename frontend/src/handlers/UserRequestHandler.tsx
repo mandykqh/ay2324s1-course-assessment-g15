@@ -1,8 +1,8 @@
 import axios, { AxiosError, AxiosInstance } from 'axios';
-import { UserDataString } from '../Commons';
+import { UserDataString } from '../commons';
 import { USERS_SERVICE_URL } from '../configs';
 
-interface UserData {
+export interface UserData {
   id: string
   username: string;
   email: string;
@@ -15,29 +15,34 @@ class UserRequestHandler {
   });;
 
 
-  public static async login(userName: string, password: string) {
-    try {
-      const response = await this.client.get(`/${userName}`);
-      let data = response.data;
-      if (data.password !== password) {
-        throw Error('Invalid Credentials');
-      }
-      console.log(data);
-      return data;
-    } catch (e) {
-      if ((e as AxiosError).response?.status === 404) {
-        throw Error('Invalid Credentials');
-      }
-      throw e;
-    }
-  }
+  // public static async login(userName: string, password: string) {
+  //   try {
+  //     const response = await this.client.get(`/${userName}`);
+  //     let data = response.data;
+  //     if (data.password !== password) {
+  //       throw Error('Invalid Credentials');
+  //     }
+  //     console.log(data);
+  //     return data;
+  //   } catch (e) {
+  //     if ((e as AxiosError).response?.status === 404) {
+  //       throw Error('Invalid Credentials');
+  //     }
+  //     throw e;
+  //   }
+  // }
 
   public static async updatePersonalInfo(data: UserDataString, currentName: string) {
-    this.client.patch(`/${currentName}`, {
-      id: data.id,
-      username: data.username,
-      email: data.email
-    })
+    try {
+      await this.client.patch(`/${currentName}`, {
+        id: data.id,
+        username: data.username,
+        email: data.email
+      });
+    } catch (e) {
+      throw e;
+    }
+
   }
 
   public static async updatePassword(username: string, currentPassword: string, newPassword: string) {
@@ -70,8 +75,9 @@ class UserRequestHandler {
       role: 'USER'
     };
     try {
-      this.client.post('/', body);
+      await this.client.post('/', body);
     } catch (e) {
+      console.log(e);
       throw e;
     }
   }
