@@ -11,16 +11,17 @@ import { setupSockets } from './sockets/socketHandler';
 dotenv.config();
 const app = express();
 
-app.use(cors({
-    credentials: true,
-}));
-
 app.use(compression());
 app.use(bodyParser.json());
 
 const server = http.createServer(app);
-const io = new Server(server);
 const port = process.env.PORT || 4000;
+
+const io = require('socket.io')(server, {
+  cors: {
+    origin: "http://localhost:5173",
+  }
+});
 
 server.listen(port, () => {
     console.log(`Server listening on port ${port}`);

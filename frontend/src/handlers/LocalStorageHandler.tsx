@@ -39,6 +39,10 @@ class LocalStorageHandler {
     }
     return true;
   }
+
+  static deleteMatchData() {
+    localStorage.removeItem('matchData');
+  }
 }
 
 export default LocalStorageHandler;
