@@ -19,7 +19,7 @@ export async function findMatch(socket: Socket, channel: ampq.Channel, data:any)
 
   setTimeout(() => {
     handleTimeout(socket, channel, data);  
-  }, 30000);
+  }, 31000);
   
   channel.consume('confirmation_Queue', (msg) => {
     try{

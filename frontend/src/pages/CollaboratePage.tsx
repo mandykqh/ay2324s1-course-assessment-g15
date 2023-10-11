@@ -49,6 +49,8 @@ const CollaboratePage = () => {
   };
 
   async function findMatch(matchingCache: MatchingString) {
+    setIsTimeout(false);
+    setMatchMessage('');
     if (matchingCache.categories.length === 0) {
       showError('Please select at least one category', toast);
       return;
