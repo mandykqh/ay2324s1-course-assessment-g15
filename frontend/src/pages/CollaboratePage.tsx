@@ -31,6 +31,7 @@ const CollaboratePage = () => {
       .catch(e => {
         console.log(e);
       });
+      // TODO: Check if matched. If already matched, redirect to collaboration page using room number
   }, []);
 
   const handleOpenModal = () => {
