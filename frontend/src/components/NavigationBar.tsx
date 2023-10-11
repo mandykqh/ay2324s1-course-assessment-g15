@@ -34,7 +34,7 @@ const NavigationBar: React.FC<Props> = ({ index }) => {
   function signoutHandler() {
 		AuthRequestHandler.signout()
 			.then(() => {
-				LocalStorageHandler.clear();
+				LocalStorageHandler.clearUserData();
 				navigate('..');
 			})
 			.catch((e) => {

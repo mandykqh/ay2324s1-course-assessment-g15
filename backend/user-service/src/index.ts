@@ -18,12 +18,6 @@ const store = new MongoDBStore({
     collection: 'sessions',
 });
 
-app.use(cors({
-    origin: "http://localhost:5173",
-    methods: ["GET", "POST"],
-    credentials: true,
-}));
-
 app.use(compression());
 app.use(bodyParser.json());
 
@@ -37,6 +31,12 @@ app.use(session({
         maxAge: 1000 * 60 * 60 * 24
     },
     store: store,
+}));
+
+app.use(cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    credentials: true
 }));
 
 const server = http.createServer(app);

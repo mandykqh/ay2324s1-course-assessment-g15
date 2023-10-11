@@ -7,7 +7,7 @@ services:
     ports:
       - "8080:8080" # map host port:8080 to container's port:8080
     environment:
-      MONGOURL:  #MongoDB connection URL
+      MONGOURL: "mongodb+srv://peerprep15:CRFVdZNswqisruzv@peerprep.vmiy632.mongodb.net/?retryWrites=true&w=majority" #MongoDB connection URL
     
 
   user-db:
@@ -29,7 +29,7 @@ services:
     ports:
       - "5000:5000" # map host port:5000 to container's port:5000
     environment:
-      MONGOURL: #MongoDB connection URL
+      MONGOURL: "mongodb+srv://peerprep15:CRFVdZNswqisruzv@peerprep.vmiy632.mongodb.net/?retryWrites=true&w=majority" #MongoDB connection URL
       PG_USER: localuser
       PG_PASSWORD: 12345
       PG_DB: peerprep
