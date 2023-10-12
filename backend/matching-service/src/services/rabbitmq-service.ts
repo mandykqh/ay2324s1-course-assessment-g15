@@ -1,12 +1,16 @@
 import amqp from 'amqplib';
+<<<<<<< HEAD
 import { categoryEnum, complexityEnum } from '../types/enums';
 import { getQuestions } from '../api/QuestionsAPI';
 import { getRoomID } from '../api/CollaborationAPI';
 const RABBITMQ_URL = 'amqp://localhost:5672';
+=======
+import { categoryEnum, complexityEnum } from './enums';
+>>>>>>> master
 
 export const rabbitMQSetup = async () => {
   try{
-    const connection = await amqp.connect(RABBITMQ_URL);
+    const connection = await amqp.connect(process.env.RABBITMQ_URL);
     const channel = await connection.createChannel();
     await channel.assertQueue(`confirmation_Queue`, { durable: false });
     for (const category of categoryEnum) {
