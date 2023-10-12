@@ -7,11 +7,12 @@ services:
     ports:
       - "8080:8080" # map host port:8080 to container's port:8080
     environment:
-      MONGOURL:  #MongoDB connection URL
+      MONGOURL:  mongodb+srv://peerprep15:CRFVdZNswqisruzv@peerprep.vmiy632.mongodb.net/?retryWrites=true&w=majority
     
 
   user-db:
     image: "postgres:13"
+    container_name: user-db
     ports:
       - "5432:5432"
     restart: always
@@ -29,7 +30,7 @@ services:
     ports:
       - "5000:5000" # map host port:5000 to container's port:5000
     environment:
-      MONGOURL: #MongoDB connection URL
+      MONGOURL: mongodb+srv://peerprep15:CRFVdZNswqisruzv@peerprep.vmiy632.mongodb.net/?retryWrites=true&w=majority
       PG_USER: localuser
       PG_PASSWORD: 12345
       PG_DB: peerprep
@@ -37,6 +38,31 @@ services:
 
     depends_on: 
       - user-db
+
+  rabbitmq:
+    image: "rabbitmq:3-management-alpine"
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "rabbitmq", "5672" ]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+
+  matching-service:
+    build:
+      context: .
+      dockerfile: ./dockerfiles/dockerfile.matching-service
+    ports:
+      - "3000:3000"
+    environment:
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672/
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    restart: on-failure
 
 volumes:
   user-data:
