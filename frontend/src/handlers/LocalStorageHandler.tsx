@@ -21,8 +21,13 @@ class LocalStorageHandler {
 
   /*--- Match Data ---*/
 
-  static storeMatchData(matchData: MatchDataString) {
-    localStorage.setItem("matchData", JSON.stringify(matchData));
+  static storeMatchData(matchData: any) {
+    const obj: {[key: string]: any} = {}; // define obj as a dictionary with string keys and any values
+    obj["user_id"] = matchData.user_id;
+    obj["other_user"] = matchData.other_user;
+    obj["room_id"] = matchData.room_id;
+    obj["question"] = matchData.question;
+    localStorage.setItem("matchData", JSON.stringify(obj));
   }
 
   static getMatchData(): MatchDataString | null {

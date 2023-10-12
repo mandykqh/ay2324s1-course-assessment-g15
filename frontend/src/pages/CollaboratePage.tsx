@@ -76,7 +76,7 @@ const CollaboratePage = () => {
         console.log(data);
         setIsMatchFound(true);
         setMatchMessage(data.msg);
-        LocalStorageHandler.storeMatchData(data.matchData);
+        LocalStorageHandler.storeMatchData(data);
         matchingSocket.disconnect();
         navigate('/collaborate/code');
       });

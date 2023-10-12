@@ -27,10 +27,6 @@ server.listen(port, () => {
     console.log(`Server listening on port ${port}`);
 });
 
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
-});
-
 setupSockets(io);
 
 app.use('/', router());
