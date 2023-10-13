@@ -7,7 +7,7 @@ services:
     ports:
       - "8080:8080" # map host port:8080 to container's port:8080
     environment:
-      MONGOURL: #MongoDB connection URL
+      MONGOURL: # Add MongoDB connection URL
 
   collaboration-service:
     build:
@@ -38,7 +38,7 @@ services:
     ports:
       - "5000:5000" # map host port:5000 to container's port:5000
     environment:
-      MONGOURL:
+      MONGOURL: # Add MongoDB connection URL
       PG_USER: localuser
       PG_PASSWORD: 12345
       PG_DB: peerprep
