@@ -8,6 +8,15 @@ services:
       - "8080:8080" # map host port:8080 to container's port:8080
     environment:
       MONGOURL: #MongoDB connection URL
+
+  collaboration-service:
+    build:
+      context: .
+      dockerfile: ./dockerfiles/dockerfile.collaboration-service
+    ports:
+      - "4000:4000"
+    # environment: Might be used in history service
+    #   MONGOURL: 
     
   user-db:
     image: "postgres:13"
@@ -29,7 +38,7 @@ services:
     ports:
       - "5000:5000" # map host port:5000 to container's port:5000
     environment:
-      MONGOURL: 
+      MONGOURL:
       PG_USER: localuser
       PG_PASSWORD: 12345
       PG_DB: peerprep
@@ -58,6 +67,8 @@ services:
       - "3000:3000"
     environment:
       RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672/
+      QUESTIONS_SERVICE_URL: "http://ques-service:8080/questions"
+      COLLABORATION_SERVICE_URL: "http://collaboration-service:4000/rooms"
     depends_on:
       rabbitmq:
         condition: service_healthy

@@ -1,12 +1,7 @@
 import amqp from 'amqplib';
-<<<<<<< HEAD
 import { categoryEnum, complexityEnum } from '../types/enums';
 import { getQuestions } from '../api/QuestionsAPI';
 import { getRoomID } from '../api/CollaborationAPI';
-const RABBITMQ_URL = 'amqp://localhost:5672';
-=======
-import { categoryEnum, complexityEnum } from './enums';
->>>>>>> master
 
 export const rabbitMQSetup = async () => {
   try{
