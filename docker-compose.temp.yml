@@ -56,7 +56,7 @@ services:
     healthcheck:
       test: [ "CMD", "nc", "-z", "rabbitmq", "5672" ]
       interval: 5s
-      timeout: 10s
+      timeout: 30s
       retries: 5
 
   matching-service:
