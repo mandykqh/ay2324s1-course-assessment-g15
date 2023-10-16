@@ -19,7 +19,7 @@ export async function findMatch(socket: Socket, channel: ampq.Channel, data:any)
 
   setTimeout(() => {
     handleTimeout(socket, channel, data);  
-  }, 30000);
+  }, 31000);
   
   channel.consume('confirmation_Queue', (msg) => {
     try{
@@ -29,6 +29,8 @@ export async function findMatch(socket: Socket, channel: ampq.Channel, data:any)
           msg: `Match found! You have been matched with user ${obj.other_user}`,
           user_id: data.user_id,
           other_user: obj.other_user,
+          room_id: obj.room_id,
+          question: obj.question,
         });
         channel.ack(msg);
         channel.cancel(msg.fields.consumerTag);

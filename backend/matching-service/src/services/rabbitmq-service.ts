@@ -1,5 +1,7 @@
 import amqp from 'amqplib';
-import { categoryEnum, complexityEnum } from './enums';
+import { categoryEnum, complexityEnum } from '../types/enums';
+import { getQuestions } from '../api/QuestionsAPI';
+import { getRoomID } from '../api/CollaborationAPI';
 
 export const rabbitMQSetup = async () => {
   try{
@@ -37,13 +39,21 @@ async function matchUsers(queueName : string, channel: amqp.Channel) {
             user2ID = user2.content.toString();
           }
         });
+        const { categories, complexity } = parseQueueString(queueName);
+        const question = await getQuestions(categories, complexity);
+        const roomID = await getRoomID();
+        
         const confirmation1 = {
           user_id: user1ID,
           other_user: user2ID,
+          room_id: roomID.roomNumber,
+          question
         };
         const confirmation2 = {
           user_id: user2ID,
           other_user: user1ID,
+          room_id: roomID.roomNumber,
+          question
         };
         channel.sendToQueue('confirmation_Queue', Buffer.from(JSON.stringify(confirmation1)));
         channel.sendToQueue('confirmation_Queue', Buffer.from(JSON.stringify(confirmation2)));
@@ -86,3 +96,18 @@ export const deQueue = async (channel:amqp.Channel, categories:string, complexit
     console.error(err);
   }
 };
+
+function parseQueueString(input: string): { categories: string[], complexity: string } {
+  // Extracts categories and complexity from a queue name
+  // input is in the form of "category1_categoryn_complexity"
+
+  const parts = input.split('_');
+
+  const categories = parts.slice(0, -1);
+  const complexity = parts[parts.length - 1];
+
+  return {
+    categories,
+    complexity,
+  };
+}

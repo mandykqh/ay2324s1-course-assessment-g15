@@ -11,6 +11,7 @@ import TimerModal from "../components/matching/modals/TimerModal";
 import LocalStorageHandler from "../handlers/LocalStorageHandler";
 import MatchingSocketHandler from "../handlers/MatchingSocketHandler";
 import Match from "../models/match/Match";
+import { useNavigate } from "react-router-dom";
 
 const CollaboratePage = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -22,6 +23,7 @@ const CollaboratePage = () => {
   const [matchMessage, setMatchMessage] = useState<string>('');
   const [isMatchFound, setIsMatchFound] = useState<boolean>(false);
   const [isTimeout, setIsTimeout] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     AuthRequestHandler.isAuth()
@@ -31,6 +33,11 @@ const CollaboratePage = () => {
       .catch(e => {
         console.log(e);
       });
+
+      // Redirect to collaboration room if matched
+      if (LocalStorageHandler.isMatched()) {
+        navigate('/collaborate/code');
+      }
   }, []);
 
   const handleOpenModal = () => {
@@ -42,6 +49,8 @@ const CollaboratePage = () => {
   };
 
   async function findMatch(matchingCache: MatchingString) {
+    setIsTimeout(false);
+    setMatchMessage('');
     if (matchingCache.categories.length === 0) {
       showError('Please select at least one category', toast);
       return;
@@ -67,7 +76,9 @@ const CollaboratePage = () => {
         console.log(data);
         setIsMatchFound(true);
         setMatchMessage(data.msg);
+        LocalStorageHandler.storeMatchData(data);
         matchingSocket.disconnect();
+        navigate('/collaborate/code');
       });
   
       matchingSocket.on('timeout', (data) => {

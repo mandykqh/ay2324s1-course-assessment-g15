@@ -9,6 +9,7 @@ import HistoryPage from "./pages/HistoryPage.js";
 import MorePage from "./pages/MorePage.js";
 import LoadingPage from "./pages/LoadingPage.js";
 import CollaboratePage from "./pages/CollaboratePage.js";
+import CodingPage from "./pages/CodingPage.js";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
   {
     path: "collaborate",
     element: <CollaboratePage />
+  },
+  {
+    path: "collaborate/code",
+    element: <CodingPage />
   },
   {
     path: "more",

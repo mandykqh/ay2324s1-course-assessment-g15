@@ -1,32 +1,8 @@
-import { QuestionString, UserDataString } from "../commons";
+import { MatchDataString, QuestionString, UserDataString } from "../Commons";
 
 class LocalStorageHandler {
 
-  static saveQuestion(qnArr: QuestionString[]) {
-    window.localStorage.setItem("Questions", JSON.stringify(qnArr));
-  }
-
-  static loadQuestion() {
-    return JSON.parse(window.localStorage.getItem("Questions") || '{}');
-  }
-
-  //Temp methods for QuestionID --------------------------------------------------
-  static getNextQuestionId() {
-    if (localStorage.getItem("nextId") === null) {
-      localStorage.setItem("nextId", '100')
-      return '100';
-    }
-    const nextId = (localStorage.getItem("nextId")!); //USING NON NULL OPERATOR
-    return nextId;
-  }
-
-
-  static advanceQuestionId() {
-    const nextId = (localStorage.getItem("nextId")!); //USING NON NULL OPERATOR
-    localStorage.setItem("nextId", (parseInt(nextId) + 1).toString());
-  }
-  //--------------------------------------------------------------------------------------
-
+  /*--- User Data ---*/
   static storeUserData(userData: UserDataString) {
     localStorage.setItem("userData", JSON.stringify(userData));
   }
@@ -39,8 +15,38 @@ class LocalStorageHandler {
     return JSON.parse(data);
   }
 
-  static clear() {
+  static clearUserData() {
     localStorage.removeItem('userData');
+  }
+
+  /*--- Match Data ---*/
+
+  static storeMatchData(matchData: any) {
+    const obj: {[key: string]: any} = {}; // define obj as a dictionary with string keys and any values
+    obj["user_id"] = matchData.user_id;
+    obj["other_user"] = matchData.other_user;
+    obj["room_id"] = matchData.room_id;
+    obj["question"] = matchData.question;
+    localStorage.setItem("matchData", JSON.stringify(obj));
+  }
+
+  static getMatchData(): MatchDataString | null {
+    if (localStorage.getItem("matchData") === null) {
+      return null;
+    }
+    const data = localStorage.getItem("matchData")!;
+    return JSON.parse(data);
+  }
+  
+  static isMatched(): boolean {
+    if (localStorage.getItem("matchData") === null) {
+      return false; 
+    }
+    return true;
+  }
+
+  static deleteMatchData() {
+    localStorage.removeItem('matchData');
   }
 }
 

@@ -6,6 +6,7 @@ import { showError, showSuccess } from "../../../Util";
 import { useNavigate } from "react-router-dom";
 import { PRIMARY_COLOR, SECONDARY_COLOR } from "../../../CommonStyles";
 import PasswordInput from "../../common/PasswordInput";
+import AuthRequestHandler from "../../../handlers/AuthRequestHandler";
 
 const UserSecurity = () => {
   const [currentPasswordVisible, setCurrentPasswordVisible] = useState(false);
@@ -56,7 +57,9 @@ const UserSecurity = () => {
     UserRequestHandler.deleteUser(LocalStorageHandler.getUserData()!.username)
       .then(() => {
         showSuccess('Account deleted!', toast); // TO DEDICATE A PAGE FOR ACCOUN DELETION
-        navigate('..');
+        AuthRequestHandler.signout();
+        LocalStorageHandler.clearUserData();
+        navigate('/');
       }
       ).catch((e) =>
         showError((e as Error).message, toast)
