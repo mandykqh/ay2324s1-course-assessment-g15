@@ -1,4 +1,5 @@
 import {
+  Box,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -69,15 +70,20 @@ const QuestionDetailsModal: React.FC<Props> =
               </Grid>
             </ModalBody>
             <ModalFooter>
-              <Button colorScheme='red' mr={3} onClick={() => deleteHandler(data.id)} isDisabled={userRole === 'ADMIN' ? false : true}>
-                Delete
-              </Button>
-              <Button colorScheme='cyan' mr={3} onClick={() => {
-                closeHandler()
-                editHandler();
-              }} isDisabled={userRole === 'ADMIN' ? false : true}>
-                Edit
-              </Button>
+              {userRole === 'ADMIN' 
+              ? 
+                <Box>
+                  <Button colorScheme='red' mr={3} onClick={() => deleteHandler(data.id)} isDisabled={userRole === 'ADMIN' ? false : true}>
+                    Delete
+                  </Button>
+                  <Button colorScheme='cyan' mr={3} onClick={() => {
+                    closeHandler()
+                    editHandler();
+                  }} isDisabled={userRole === 'ADMIN' ? false : true}>
+                    Edit
+                  </Button>
+                </Box>
+              : null }
               <Button colorScheme='blue' mr={3} onClick={closeHandler}>
                 Close
               </Button>
