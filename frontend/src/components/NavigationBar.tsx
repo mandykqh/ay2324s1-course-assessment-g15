@@ -23,24 +23,21 @@ const NavigationBar: React.FC<Props> = ({ index }) => {
       label: 'Collaborate',
       onClick: () => { navigate('../collaborate') }
     }, {
-      label: 'History',
-      onClick: () => { navigate('../history') }
-    }, {
       label: 'More',
       onClick: () => { navigate('../more') }
     }
   ]
 
   function signoutHandler() {
-		AuthRequestHandler.signout()
-			.then(() => {
-				LocalStorageHandler.clearUserData();
-				navigate('..');
-			})
-			.catch((e) => {
-				console.log(e);
-			});
-	}
+    AuthRequestHandler.signout()
+      .then(() => {
+        LocalStorageHandler.clearUserData();
+        navigate('..');
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
 
   return (
     <Box w={'100%'} h={HEIGHT} backgroundColor={SECONDARY_COLOR} position={'absolute'}>

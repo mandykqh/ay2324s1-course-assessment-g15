@@ -63,6 +63,12 @@ const UserProfileMenu: React.FC<MenuProps> =
           label='Security'
           imageUrl='src\assets\images\security.png'
           onClick={() => { setCurrentMenuIndex(2) }} />
+        <MenuItem
+          index={3}
+          selectedIndex={currentMenuIndex}
+          label='History'
+          imageUrl='src\assets\images\history.png'
+          onClick={() => { setCurrentMenuIndex(3) }} />
       </Box>
     );
   }
