@@ -65,10 +65,12 @@ async function matchUsers(queueName : string, channel: amqp.Channel) {
   }
 };
 
-export const requestMatch = async (channel:amqp.Channel, category: string, complexity: string, client:string) => {
-  try{
-    const queue = `${category}_${complexity}`;
-    channel.sendToQueue(queue, Buffer.from(client));
+export const requestMatch = async (channel:amqp.Channel, categories: string[], complexity: string, client:string) => {
+  try{ 
+    for (const category of categories) {
+      let queue = `${category}_${complexity}`;
+      channel.sendToQueue(queue, Buffer.from(client));
+    }
   } catch (err) {
     console.log(err);
   }
@@ -83,15 +85,17 @@ export const processQueues = async (channel:amqp.Channel) => {
   }
 };
   
-export const deQueue = async (channel:amqp.Channel, categories:string, complexity:string) => {
+export const deQueue = async (channel:amqp.Channel, categories:string[], complexity:string) => {
   try{
-    const queue = `${categories}_${complexity}`;
-    await channel.get(queue).then((user) => {
-      if(user !== false){
-        console.log(`dequeued user ${user.content.toString()}`)
-        channel.ack(user);
-      }
-    });
+    for (const category of categories) {
+      let queue = `${category}_${complexity}`;
+      await channel.get(queue).then((user) => {
+        if(user !== false){
+          console.log(`dequeued user ${user.content.toString()} from ${queue}`);
+          channel.ack(user);
+        }
+      });
+    } 
   } catch (err) {
     console.error(err);
   }

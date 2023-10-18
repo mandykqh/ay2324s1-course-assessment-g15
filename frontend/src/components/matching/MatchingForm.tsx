@@ -43,24 +43,24 @@ const MatchingForm: React.FC = () => {
                 <Box backgroundColor={SECONDARY_COLOR} borderRadius="5px" width={selectWidth}>
                     <Select
                         // TODO: Change this to multi-select
-                        // onChange={(e: MultiValue<SelectOption | unknown>) => {
-                        //     const inputStringArr = e.map(
-                        //     (q) => {
-                        //         return ((q as SelectOption).value);
-                        //     }
-                        //     );
-                        //     setCategories(inputStringArr);
-                        // }}
-                        // isMulti
-                        onChange={(e) => {
-                            setCategories((e as SelectOption).value);
+                        onChange={(e: MultiValue<SelectOption | unknown>) => {
+                            const inputStringArr = e.map(
+                            (q) => {
+                                return ((q as SelectOption).value);
+                            }
+                            );
+                            setCategories(inputStringArr);
                         }}
+                        isMulti
+                        // onChange={(e) => {
+                        //     setCategories((e as SelectOption).value);
+                        // }}
                         options={categoryOptions}
                         placeholder="Select Category"
                         // closeMenuOnSelect={false}
                         value={
-                            // stringToOptionsMapper(matchingCache.categories.join(', '))
-                            stringToOptionsMapper(matchingCache.categories)
+                            stringToOptionsMapper(matchingCache.categories.join(', '))
+                            // stringToOptionsMapper(matchingCache.categories)
                         }
                     />
                 </Box>
@@ -81,3 +81,4 @@ const MatchingForm: React.FC = () => {
 };
 
 export default MatchingForm;
+
