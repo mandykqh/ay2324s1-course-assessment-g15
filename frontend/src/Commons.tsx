@@ -25,12 +25,12 @@ export interface UserDataString {
 
 export interface MatchingString {
   complexity: string;
-  categories: string; // To be changed into [] after assignment 5
+  categories: string[]; // To be changed into [] after assignment 5
 }
 
 export const emptyMatchingString: MatchingString = {
   complexity: '',
-  categories: '', // To be changed into [] after assignment 5
+  categories: [], // To be changed into [] after assignment 5
 }
 
 export interface MatchDataString {

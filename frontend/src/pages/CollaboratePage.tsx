@@ -48,6 +48,20 @@ const CollaboratePage = () => {
     setIsModalOpen(false);
   };
 
+  async function cancelMatch(matchingCache: MatchingString) {
+    try{
+      const matchData = new Match(
+        LocalStorageHandler.getUserData()!.id.toString(),
+        matchingCache.categories, 
+        matchingCache.complexity
+      );
+      await MatchingSocketHandler.cancelMatch(matchData);
+      setIsModalOpen(false);
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
   async function findMatch(matchingCache: MatchingString) {
     setIsTimeout(false);
     setMatchMessage('');
@@ -66,7 +80,7 @@ const CollaboratePage = () => {
         matchingCache.categories, 
         matchingCache.complexity
       );      
-
+      matchingSocket.connect();
       matchingSocket.on('finding_match', (data) => {
         console.log(data);
         setMatchMessage("Finding match...");
@@ -110,7 +124,7 @@ const CollaboratePage = () => {
           </Grid>
           <TimerModal 
             isOpen={isModalOpen} 
-            onClose={handleCloseModal} 
+            onClose={() => cancelMatch(matchingCache)} 
             initialTime={30} 
             status={matchMessage.toString()} 
             isTimeout={isTimeout} 
