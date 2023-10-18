@@ -1,4 +1,5 @@
 import {
+  Box,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -13,8 +14,8 @@ import {
   Grid
 } from '@chakra-ui/react'
 import { Button } from '@chakra-ui/button';
-import { PRIMARY_COLOR } from '../../../commonStyles';
-import { QuestionString } from '../../../commons';
+import { PRIMARY_COLOR } from '../../../CommonStyles';
+import { QuestionString } from '../../../Commons';
 import LocalStorageHandler from '../../../handlers/LocalStorageHandler';
 
 interface Props {
@@ -69,15 +70,19 @@ const QuestionDetailsModal: React.FC<Props> =
               </Grid>
             </ModalBody>
             <ModalFooter>
-              <Button colorScheme='red' mr={3} onClick={() => deleteHandler(data.id)} isDisabled={userRole === 'ADMIN' ? false : true}>
-                Delete
-              </Button>
-              <Button colorScheme='cyan' mr={3} onClick={() => {
-                closeHandler()
-                editHandler();
-              }} isDisabled={userRole === 'ADMIN' ? false : true}>
-                Edit
-              </Button>
+              {userRole === 'ADMIN' 
+              &&
+                <Box>
+                  <Button colorScheme='red' mr={3} onClick={() => deleteHandler(data.id)}>
+                    Delete
+                  </Button>
+                  <Button colorScheme='cyan' mr={3} onClick={() => {
+                    closeHandler()
+                    editHandler();
+                  }}>
+                    Edit
+                  </Button>
+                </Box>}
               <Button colorScheme='blue' mr={3} onClick={closeHandler}>
                 Close
               </Button>
