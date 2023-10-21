@@ -15,8 +15,6 @@ const UserHistory = () => {
   const [hard, setHard] = useState(0);
   const [attempts, setAttempts] = useState<Attempt[]>([]);
 
-
-
   useEffect(() => {
     HistoryRequestHandler.getHistory()
       .then((r) => {
