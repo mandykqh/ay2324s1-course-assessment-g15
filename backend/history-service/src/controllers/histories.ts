@@ -68,7 +68,7 @@ export const addHistory = async (req: express.Request, res: express.Response) =>
 
         await HistoryModel.findOneAndUpdate(
             { userId: req.params.userId },
-            { $hard: { hard: hardCount } },
+            { $inc: { hard: hardCount } },
             { new: true }
         );
     } catch (error) {

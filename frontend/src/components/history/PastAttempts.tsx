@@ -31,7 +31,7 @@ const PastAttempts = ({ attempts }: { attempts: Attempt[] }) => {
         </Flex>
       </ListItem>
       {attempts.map((entry, index) =>
-        <ListItem key={index}><AttemptEntry title={entry.questionId} date={entry.timestamp} /></ListItem>
+        <ListItem key={index}><AttemptEntry title={entry.questionId} date={entry.timestamp.substring(0, 10)} /></ListItem>
       )}
     </List>
   );
