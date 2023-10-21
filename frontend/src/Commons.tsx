@@ -23,6 +23,15 @@ export interface UserDataString {
   role: string;
 }
 
+export interface HistoryDataString {
+  userId: string;
+  attempt: {
+    questionId: string;
+    timestamp: string;
+  };
+  complexity: string;
+}
+
 export interface MatchingString {
   complexity: string;
   categories: string[]; // To be changed into [] after assignment 5
@@ -44,3 +53,8 @@ export interface NotificationOptions {
   message: string;
   type: 'success' | 'error'
 }
+
+export interface Attempt {
+  questionId: string;
+  timestamp: string;
+};

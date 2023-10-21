@@ -1,11 +1,8 @@
 import { Card, CardBody, List, ListItem, Text, Spacer, Flex, Box } from '@chakra-ui/react'
 import { PRIMARY_COLOR, SECONDARY_COLOR } from '../../commonStyles';
-
-const dummyData = [
-  { title: 'Question_1', date: `10/10/2023` },
-  { title: 'Question_3', date: `8/10/2023` },
-  { title: 'Question_2', date: `9/10/2023` },
-];
+import React from 'react';
+import { Attempt } from '../../Commons';
+import QuestionRequestHandler from '../../handlers/QuestionRequestHandler';
 
 const AttemptEntry = ({ title, date }: { title: string, date: string }) => {
   return (
@@ -23,8 +20,7 @@ const AttemptEntry = ({ title, date }: { title: string, date: string }) => {
   );
 }
 
-
-const PastAttempts = () => {
+const PastAttempts = ({ attempts }: { attempts: Attempt[] }) => {
   return (
     <List width={600}>
       <ListItem bg={SECONDARY_COLOR} p={3} border={"1px solid #999"}>
@@ -34,8 +30,8 @@ const PastAttempts = () => {
           <Text fontWeight={'bold'}>Date Attempted</Text>
         </Flex>
       </ListItem>
-      {dummyData.map((entry) =>
-        <ListItem key={entry.title}><AttemptEntry title={entry.title} date={entry.date} /></ListItem>
+      {attempts.map((entry, index) =>
+        <ListItem key={index}><AttemptEntry title={entry.questionId} date={entry.timestamp} /></ListItem>
       )}
     </List>
   );
