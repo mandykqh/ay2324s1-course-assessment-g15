@@ -61,9 +61,8 @@ const UserHistory = () => {
               Recent Attempts
             </Text>
           </Box>
-          <PastAttempts
-            attempts={attempts}
-          />
+          {attempted > 0 && <PastAttempts attempts={attempts} />}
+          {attempted === 0 && <Text>No Past attempts!</Text>}
         </Stack>
       </Stack>
     </Box >
