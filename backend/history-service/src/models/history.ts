@@ -5,10 +5,28 @@ const HistorySchema = new mongoose.Schema({
     type: Number,
     unique: true,
   },
-  attempt: [{
-    questionId: { type: Number },
-    timestamp: { type: Date }
-  }],
+  attempts: [
+    {
+      questionId: {
+        type: Number
+      },
+      timestamp: {
+        type: String
+      }
+    }
+  ],
+  total: {
+    type: Number,
+  },
+  easy: {
+    type: Number,
+  },
+  medium: {
+    type: Number,
+  },
+  hard: {
+    type: Number,
+  }
 });
 
 export const HistoryModel = mongoose.model('History', HistorySchema);
