@@ -40,6 +40,11 @@ class QuestionRequestHandler {
     });
     return response.data;
   }
+
+  static async getQuestionsCount(): Promise<number> {
+    const response = await this.client.get('/count').catch(e => { throw e });
+    return response.data;
+  }
 }
 
 export default QuestionRequestHandler;
