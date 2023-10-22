@@ -6,10 +6,13 @@ import ampq from 'amqplib';
 export async function findMatch(socket: Socket, channel: ampq.Channel, data:any) {
   console.log(`matching ${data.user_id}`);
   requestMatch(channel, data.categories, data.complexity, data.user_id);
+
   socket.emit('finding_match', {
       message: `Connected to matching service at port: ${process.env.RABBITMQ_PORT || 3000}`
   });  
-  const consumer = channel.consume('confirmation_Queue', (msg) => {
+
+  // Creates consumers for confirmed matches
+  const consumer = await channel.consume('confirmation_Queue', (msg) => {
     try{
       const obj = JSON.parse(msg.content.toString());
       if (obj.user_id === data.user_id) {
@@ -20,8 +23,11 @@ export async function findMatch(socket: Socket, channel: ampq.Channel, data:any)
           room_id: obj.room_id,
           question: obj.question,
         });
+
+        deQueue(channel, data.categories, data.complexity);
         channel.ack(msg);
         channel.cancel(msg.fields.consumerTag);
+
       } else {
         channel.reject(msg, true);
       }
@@ -29,14 +35,17 @@ export async function findMatch(socket: Socket, channel: ampq.Channel, data:any)
       console.error(err);
     }
   })
-
-  setTimeout(() => {
+  
+  // 30s timeout (set to 31000 to account for frontend delay)
+  const timeout = setTimeout(() => {
     handleTimeout(socket, channel, data, consumer);  
   }, 31000);
 
+  // resets timeout and clears queues on cancellation event
   socket.on('cancel_match', async (data) => {
     console.log(`cancelling match: ${socket.id}`);
     cancelMatch(channel, consumer, data); 
+    clearTimeout(timeout);
     socket.disconnect();
   });
 } 
