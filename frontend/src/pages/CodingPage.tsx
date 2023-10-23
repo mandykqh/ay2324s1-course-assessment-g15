@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Center, Text, Button, Grid, Textarea } from '@chakra-ui/react';
+import { useState, useEffect } from 'react';
+import { Box, Button, Grid, Textarea, VStack, GridItem } from '@chakra-ui/react';
 import { io, Socket } from 'socket.io-client';
 import NavigationBar from '../components/NavigationBar';
 import LocalStorageHandler from '../handlers/LocalStorageHandler';
@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { COLLABORATION_SERVICE_URL } from '../configs';
 import AuthRequestHandler from '../handlers/AuthRequestHandler';
 import LoadingPage from './LoadingPage';
+import QuestionDetails from '../components/coding/QuestionDetails';
 
 const CodingPage = () => {
   const navigate = useNavigate();
@@ -60,17 +61,30 @@ const CodingPage = () => {
   }
 
   if (isAuthenticated) {
+    const questionString = LocalStorageHandler.getMatchData()?.question;
     return (
       <Box>
         <NavigationBar index={1} />
-        <Center height='100vh'>
-          <Grid>
-            {/* // TODO: Use a real code editor
-            // TODO: Add a chat box for messaging */}
-            <Textarea value={code} onChange={(e) => handleCodeChange(e.target.value)} />
-            <Button mt={4} onClick={() => handleDisconnect()}> Disconnect </Button>
-          </Grid>
-        </Center>
+        <Grid height='100%' templateColumns='repeat(2, 1fr)' padding='10px' paddingTop='60px'>
+          <GridItem colSpan={1}>
+            <QuestionDetails
+              id={questionString?.id || ""}
+              title={questionString?.title || ""}
+              complexity={questionString?.complexity || ""}
+              categories={questionString?.categories || []}
+              description={questionString?.description || ""}
+              link={questionString?.link || ""}
+            />
+          </GridItem>
+          <GridItem colSpan={1}>
+            <VStack>
+              {/* // TODO: Use a real code editor
+              // TODO: Add a chat box for messaging */}
+              <Textarea height='80vh' resize='none' value={code} onChange={(e) => handleCodeChange(e.target.value)} />
+              <Button mt={4} onClick={() => handleDisconnect()}> Disconnect </Button>
+            </VStack>
+          </GridItem>
+        </Grid>
       </Box>
     );
   } else {
