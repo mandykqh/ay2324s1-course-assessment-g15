@@ -9,7 +9,7 @@ import {
   Center,
   CircularProgressLabel
 } from "@chakra-ui/react";
-import { PRIMARY_COLOR } from "../../commonStyles";
+import { PRIMARY_COLOR } from "../../CommonStyles";
 
 const HistoryOverview =
   ({ total, attempted, easy, medium, hard }:

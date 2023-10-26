@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosInstance } from 'axios';
-import { UserDataString } from '../commons';
+import { UserDataString } from '../Commons';
 import { USERS_SERVICE_URL } from '../configs';
 
 export interface UserData {

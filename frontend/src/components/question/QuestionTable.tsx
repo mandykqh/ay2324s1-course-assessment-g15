@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Question from '../../models/question/Question';
-import { QuestionString } from '../../commons';
+import { QuestionString } from '../../Commons';
 import { TableContainer, Table, Thead, Tr, Th, Tbody, Td, Button, Box } from '@chakra-ui/react';
 import LocalStorageHandler from "../../handlers/LocalStorageHandler";
 

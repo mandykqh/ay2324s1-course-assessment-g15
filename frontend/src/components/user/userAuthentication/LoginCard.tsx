@@ -1,7 +1,7 @@
 import { Card, CardBody, FormControl, FormLabel, Input, Center, Button } from "@chakra-ui/react";
 import PasswordInput from "../../common/PasswordInput";
 import { useState } from "react";
-import { PRIMARY_COLOR } from "../../../commonStyles";
+import { PRIMARY_COLOR } from "../../../CommonStyles";
 
 interface Props {
   username: string;

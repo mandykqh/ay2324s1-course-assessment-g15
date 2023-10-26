@@ -81,5 +81,18 @@ services:
         condition: service_healthy
     restart: on-failure
 
+  frontend:
+    build:
+      context: .
+      dockerfile: ./dockerfiles/dockerfile.frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - user-service
+      - matching-service
+      - history-service
+      - ques-service
+      - collaboration-service
+
 volumes:
   user-data:
