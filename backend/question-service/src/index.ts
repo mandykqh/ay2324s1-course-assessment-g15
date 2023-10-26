@@ -11,7 +11,9 @@ dotenv.config();
 const app = express();
 
 app.use(cors({
-    credentials: true,
+    origin: process.env.FRONTEND_URL || "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    credentials: true
 }));
 
 app.use(compression());
