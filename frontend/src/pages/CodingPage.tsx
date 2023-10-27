@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Box, Button, Grid, VStack, GridItem, Select } from '@chakra-ui/react';
+import { Box, Button, Grid, VStack, GridItem, Select, HStack } from '@chakra-ui/react';
 import { io, Socket } from 'socket.io-client';
 import NavigationBar from '../components/NavigationBar';
 import LocalStorageHandler from '../handlers/LocalStorageHandler';
@@ -84,7 +84,7 @@ const CodingPage = () => {
     return (
       <Box>
         <NavigationBar index={1} />
-        <Grid height='100%' templateColumns='repeat(2, 1fr)' padding='10px' paddingTop='60px'>
+        <Grid height='100%' templateColumns='repeat(2, 1fr)' gap='20px' padding='20px' paddingTop='70px'>
           <GridItem colSpan={1}>
             <QuestionDetails
               id={questionString?.id || ""}
@@ -96,14 +96,17 @@ const CodingPage = () => {
             />
           </GridItem>
           <GridItem colSpan={1}>
-            <VStack>
+            <VStack gap='1rem'>
               {/* // TODO: Add a chat box for messaging */}
-              <Select value={language} onChange={(e) => handleLanguageChange(e.target.value)}>
-                <option value='javascript'>JavaScript</option>
-                <option value='python'>Python</option>
-                <option value='java'>Java</option>
-                <option value='cpp'>C++</option>
-              </Select>
+              <HStack width='100%' gap='1rem'>
+                <Select value={language} onChange={(e) => handleLanguageChange(e.target.value)}>
+                  <option value='javascript'>JavaScript</option>
+                  <option value='python'>Python</option>
+                  <option value='java'>Java</option>
+                  <option value='cpp'>C++</option>
+                </Select>
+                <Button onClick={() => handleDisconnect()}> Disconnect </Button>
+              </HStack>
 							<CodeMirror
 								value={code}
 								height='80vh'
@@ -120,7 +123,6 @@ const CodingPage = () => {
 								onChange={handleCodeChange}
 								theme={okaidia}
 							/>
-              <Button mt={4} onClick={() => handleDisconnect()}> Disconnect </Button>
             </VStack>
           </GridItem>
         </Grid>
