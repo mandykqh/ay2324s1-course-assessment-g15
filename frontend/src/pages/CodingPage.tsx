@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Box, Button, Grid, Textarea, VStack, GridItem } from '@chakra-ui/react';
+import { Box, Button, Grid, VStack, GridItem, Select } from '@chakra-ui/react';
 import { io, Socket } from 'socket.io-client';
 import NavigationBar from '../components/NavigationBar';
 import LocalStorageHandler from '../handlers/LocalStorageHandler';
@@ -8,12 +8,19 @@ import { COLLABORATION_SERVICE_URL } from '../configs';
 import AuthRequestHandler from '../handlers/AuthRequestHandler';
 import LoadingPage from './LoadingPage';
 import QuestionDetails from '../components/coding/QuestionDetails';
+import CodeMirror from '@uiw/react-codemirror';
+import { java } from '@codemirror/lang-java';
+import { python } from '@codemirror/lang-python';
+import { cpp } from '@codemirror/lang-cpp';
+import { javascript } from '@codemirror/lang-javascript';
+import { okaidia } from '@uiw/codemirror-theme-okaidia';
 
 const CodingPage = () => {
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(null);
   const [socket, setSocket] = useState<Socket>();
   const [code, setCode] = useState('');
+  const [language, setLanguage] = useState('javascript');
 
   useEffect(() => {
       AuthRequestHandler.isAuth()
@@ -40,6 +47,10 @@ const CodingPage = () => {
       setCode(newCode);
     });
 
+    socket.on('languageChange', (newLanguage) => {
+      setLanguage(newLanguage);
+    });
+
     // TODO: Messaging feature
 
     return () => {
@@ -53,6 +64,14 @@ const CodingPage = () => {
       socket.emit('codeChange', newCode);
     }
     setCode(newCode); // Update the state
+  };
+
+  const handleLanguageChange = (newLanguage: string) => {
+    // Emit code changes to the server
+    if (socket) {
+      socket.emit('languageChange', newLanguage);
+    }
+    setLanguage(newLanguage); // Update the state
   };
 
   function handleDisconnect() {
@@ -78,9 +97,29 @@ const CodingPage = () => {
           </GridItem>
           <GridItem colSpan={1}>
             <VStack>
-              {/* // TODO: Use a real code editor
-              // TODO: Add a chat box for messaging */}
-              <Textarea height='80vh' resize='none' value={code} onChange={(e) => handleCodeChange(e.target.value)} />
+              {/* // TODO: Add a chat box for messaging */}
+              <Select value={language} onChange={(e) => handleLanguageChange(e.target.value)}>
+                <option value='javascript'>JavaScript</option>
+                <option value='python'>Python</option>
+                <option value='java'>Java</option>
+                <option value='cpp'>C++</option>
+              </Select>
+							<CodeMirror
+								value={code}
+								height='80vh'
+								width='50vw'
+								extensions={[
+									language === 'java'
+										? java()
+										: language === 'python'
+										? python()
+										: language === 'cpp'
+										? cpp()
+										: javascript({ jsx: true }),
+								]}
+								onChange={handleCodeChange}
+								theme={okaidia}
+							/>
               <Button mt={4} onClick={() => handleDisconnect()}> Disconnect </Button>
             </VStack>
           </GridItem>
