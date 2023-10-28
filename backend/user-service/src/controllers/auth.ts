@@ -9,6 +9,7 @@ export const login = async (req: express.Request, res: express.Response) => {
         } else {
             if (user.password === req.body.password) {
                 req.session.isAuth = true;
+                req.session.isAdmin = user.role === 'ADMIN';
                 req.session.user = user;
                 return res.status(200).json(user);
             } else {
