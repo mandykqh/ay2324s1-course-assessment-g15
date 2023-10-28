@@ -6,9 +6,24 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import router from './router'
+import session from 'express-session';
+
+const MongoDBStore = require('connect-mongodb-session')(session);
 
 dotenv.config();
 const app = express();
+
+const store = new MongoDBStore({
+    uri: process.env.MONGOURL,
+    collection: 'sessions',
+});
+
+app.use(session({
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: false,
+    store: store,
+}));
 
 app.use(cors({
     credentials: true,
