@@ -1,7 +1,7 @@
 import express from 'express';
 
 import { getAllUsers, addUser, updateUser, deleteUser, getUserByName } from '../controllers/users';
-import { requireAuth, requireCorrectUser } from 'utils/middleware';
+import { requireAuth, requireCorrectUser } from '../utils/middleware';
 
 export default (router: express.Router) => {
     router.get('/users', requireAuth, getAllUsers);
