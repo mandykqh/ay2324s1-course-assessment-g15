@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Button, Flex, Input, Select } from '@chakra-ui/react'
+import Category from '../../models/enums/Category';
 
 const FilterBar = ({ onFilter }) => {
     const [categoryFilter, setCategoryFilter] = useState('');
     const [complexityFilter, setComplexityFilter] = useState('');
+    const allCategories = Object.values(Category).filter(value => typeof value === 'string');
 
     const handleCategoryChange = (event) => {
         setCategoryFilter(event.target.value);
@@ -25,9 +27,11 @@ const FilterBar = ({ onFilter }) => {
         <div className="filter-bar">
             <Flex justifyContent="space-between" alignItems="center" mb={4}>
                 <Select placeholder='Category' value={categoryFilter} onChange={handleCategoryChange}>
-                    <option value='option1'>Option 1</option>
-                    <option value='option2'>Option 2</option>
-                    <option value='option3'>Option 3</option>
+                    {allCategories.map((category) => (
+                        <option key={category} value={category}>
+                            {category}
+                        </option>
+                    ))}
                 </Select>
                 <Select placeholder='Difficulty' value={complexityFilter} onChange={handleComplexityChange}>
                     <option value='Easy'>Easy</option>

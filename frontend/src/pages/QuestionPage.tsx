@@ -56,7 +56,6 @@ const QuestionPage = () => {
   useEffect(() => {
     console.log('Complexity Filter:', complexityFilter);
     let filteredQuestions = questions.filter((q) => q.complexity === complexityFilter)
-    // console.log(filteredQuestions)
     setFilteredQuestions(filteredQuestions)
     console.log(filteredQuestions)
   }, [complexityFilter]);
@@ -161,15 +160,19 @@ const QuestionPage = () => {
               closeHandler={() => setEditModalIsVisible(false)}
               submitUpdateHandler={submitUpdateHandler}
             />
+            {filteredQuestions.length > 0 || !complexityFilter ? (
+              <QuestionTable
+                data={filteredQuestions.length > 0 ? filteredQuestions : !complexityFilter ? questions : []}
+                viewDescriptionHandler={viewDescriptionHandler}
+                addBtnOnClick={() => {
+                  clearQuestionCache();
+                  setAddModalIsVisible(true);
+                }}
+              />
+            ) : (
+              <p>No results found</p>
+            )}
 
-            <QuestionTable
-              data={complexityFilter ? filteredQuestions : questions}
-              viewDescriptionHandler={viewDescriptionHandler}
-              addBtnOnClick={() => {
-                clearQuestionCache();
-                setAddModalIsVisible(true);
-              }}
-            />
 
           </Flex>
         </Center>
