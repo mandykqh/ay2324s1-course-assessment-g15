@@ -8,7 +8,10 @@ const FilterBar = ({ onFilter }) => {
     const allCategories = Object.values(Category).filter(value => typeof value === 'string');
 
     const handleCategoryChange = (event) => {
-        setCategoryFilter(event.target.value);
+        const selectedValue = event.target.value;
+        setCategoryFilter(selectedValue);
+        onFilter({ category: selectedValue });
+
     };
 
     const handleComplexityChange = (event) => {
@@ -19,9 +22,9 @@ const FilterBar = ({ onFilter }) => {
         setComplexityFilter(selectedValue);
         onFilter({ complexity: selectedValue });
     }
-    const handleFilterClick = () => {
-        onFilter({ category: categoryFilter, complexity: complexityFilter });
-    };
+    // const handleFilterClick = () => {
+    //     onFilter({ category: categoryFilter, complexity: complexityFilter });
+    // };
 
     return (
         <div className="filter-bar">

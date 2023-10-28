@@ -29,36 +29,37 @@ const QuestionPage = () => {
 
   const [filteredQuestions, setFilteredQuestions] = useState(questions);
   const [complexityFilter, setComplexityFilter] = useState('');
-
-
-  // const filterQuestions = (categoryFilter, complexityFilter) => {
-  //   // Implement your filtering logic here
-  //   // For example, filter based on the category and complexity filters
-  //   const filtered = questions.filter((question) => {
-  //     if (
-  //       (!categoryFilter || question.categories.includes(categoryFilter)) &&
-  //       (!complexityFilter || question.complexity === complexityFilter)
-  //     ) {
-  //       return true;
-  //     }
-  //     return false;
-  //   });
-  //   setFilteredQuestions(filtered);
-  // };
+  const [categoryFilter, setCategoryFilter] = useState('');
 
   const handleFilter = (filters) => {
-    // if (filters.complexity) {
-    //   setComplexityFilter(filters.complexity);
-    // }
-    setComplexityFilter(filters.complexity)
+
+    // setComplexityFilter(filters.complexity)
+
+    const { category, complexity } = filters;
+
+    // Apply both category and complexity filters
+    let filtered = questions;
+
+    if (category) {
+      filtered = filtered.filter((question) => question.categories.includes(category));
+      console.log(categoryFilter)
+      console.log(filtered)
+    }
+
+    if (complexity) {
+      filtered = filtered.filter((question) => question.complexity === complexity);
+    }
+    setFilteredQuestions(filtered);
+    setComplexityFilter(complexity);
+    setCategoryFilter(category);
   };
 
-  useEffect(() => {
-    console.log('Complexity Filter:', complexityFilter);
-    let filteredQuestions = questions.filter((q) => q.complexity === complexityFilter)
-    setFilteredQuestions(filteredQuestions)
-    console.log(filteredQuestions)
-  }, [complexityFilter]);
+  // useEffect(() => {
+  //   // console.log('Complexity Filter:', complexityFilter);
+  //   let filteredQuestions = questions.filter((q) => q.complexity === complexityFilter)
+  //   setFilteredQuestions(filteredQuestions)
+  //   console.log(filteredQuestions)
+  // }, [complexityFilter]);
 
   useEffect(() => {
     AuthRequestHandler.isAuth()
@@ -160,9 +161,9 @@ const QuestionPage = () => {
               closeHandler={() => setEditModalIsVisible(false)}
               submitUpdateHandler={submitUpdateHandler}
             />
-            {filteredQuestions.length > 0 || !complexityFilter ? (
+            {filteredQuestions.length > 0 || !complexityFilter && !categoryFilter ? (
               <QuestionTable
-                data={filteredQuestions.length > 0 ? filteredQuestions : !complexityFilter ? questions : []}
+                data={filteredQuestions.length > 0 ? filteredQuestions : questions}
                 viewDescriptionHandler={viewDescriptionHandler}
                 addBtnOnClick={() => {
                   clearQuestionCache();
