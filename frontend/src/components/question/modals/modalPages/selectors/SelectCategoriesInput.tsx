@@ -16,6 +16,11 @@ const categoryOptions = getCategoriesString().map(value => {
   );
 });
 
+// type SelectCategoriesInputProps = {
+//   categorySelected: (category: string[]) => void;
+// };
+
+// const SelectCategoriesInput: React.FC<SelectCategoriesInputProps> = ({ categorySelected }) => {
 const SelectCategoriesInput = () => {
   const { questionCache, setQuestionCache } = useContext(QuestionCacheContext);
   const [categories, setCategories] = useState(questionCache.categories);
@@ -26,6 +31,7 @@ const SelectCategoriesInput = () => {
       categories: categories
     });
   }, [categories])
+
 
   return (
     <>
@@ -38,6 +44,7 @@ const SelectCategoriesInput = () => {
               }
             );
             setCategories(inputStringArr);
+            // categorySelected(inputStringArr)
           }}
           isMulti
           options={categoryOptions}
