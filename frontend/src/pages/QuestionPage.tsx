@@ -283,14 +283,17 @@ const QuestionPage = () => {
   // }
   const onFilter = (filterOptions: { categories: string[]; complexity: string }) => {
     const { categories, complexity } = filterOptions;
-
+    console.log(questions)
+    console.log(categories)
     let filtered = questions;
 
     filtered = filtered.filter((question) => {
       return categories.every(c => question.categories.includes(c));
-    }).filter((question) => question.complexity === complexity);
+    });
+    filtered = filtered.filter((question) => question.complexity === complexity);
 
     setFilteredQuestions(filtered);
+    console.log(filtered)
     // setCategoryFilter(categories);
   }
 

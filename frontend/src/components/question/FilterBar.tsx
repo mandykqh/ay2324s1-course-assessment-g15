@@ -127,7 +127,7 @@
 import { useEffect, useState } from 'react';
 import { getCategoriesString, getComplexityStrings, stringToOptionsMapper } from '../../Util';
 import { MultiValue, Select } from 'chakra-react-select';
-import { Box } from '@chakra-ui/react';
+import { Flex, Box } from '@chakra-ui/react';
 import { SECONDARY_COLOR } from '../../CommonStyles';
 
 interface SelectOption {
@@ -160,39 +160,41 @@ const FilterBar: React.FC<FilterBarProps> = ({ onFilter }) => {
 
     useEffect(() => {
         onFilter({ categories: selectedCategories, complexity: selectedComplexity });
-    }, [selectedCategories, selectedComplexity, onFilter]);
+    }, [selectedCategories, selectedComplexity]);
 
 
     return (
         <>
-            <Box backgroundColor={SECONDARY_COLOR} borderRadius="5px">
-                <Select
-                    onChange={(e: MultiValue<SelectOption | unknown>) => {
-                        const inputStringArr = e.map((q) => {
-                            return (q as SelectOption).value;
-                        });
-                        setSelectedCategories(inputStringArr);
-                        onFilter({ categories: inputStringArr, complexity: selectedComplexity })
-                        console.log(inputStringArr)
-                    }}
-                    isMulti
-                    options={categoryOptions}
-                    placeholder="Select Category"
-                    closeMenuOnSelect={false}
-                    value={stringToOptionsMapper(selectedCategories.join(', '))}
-                />
-                <Box backgroundColor={SECONDARY_COLOR} borderRadius='5px'>
+            <Flex justifyContent="space-between" alignItems="center" mb={4} py={5} w={1000}>
+                <Box backgroundColor={SECONDARY_COLOR} borderRadius="5px" flex="60%" mr={5}>
+                    <Select
+                        onChange={(e: MultiValue<SelectOption | unknown>) => {
+                            const inputStringArr = e.map((q) => {
+                                return (q as SelectOption).value;
+                            });
+                            setSelectedCategories(inputStringArr);
+                            // onFilter({ categories: inputStringArr, complexity: selectedComplexity })
+                        }}
+                        isMulti
+                        options={categoryOptions}
+                        placeholder="Select Category"
+                        closeMenuOnSelect={false}
+                        value={stringToOptionsMapper(selectedCategories.join(', '))}
+                    />
+                </Box>
+                <Box backgroundColor={SECONDARY_COLOR} borderRadius='5px' flex="40%" mr={5}>
                     <Select
                         onChange={(e) => {
-                            setSelectedComplexity((e as SelectOption).value);
-                            onFilter({ categories: selectedCategories, complexity: selectedComplexity })
+                            setSelectedComplexity(e ? e.value : '');
+                            // onFilter({ categories: selectedCategories, complexity: selectedComplexity })
                         }}
                         options={complexityOptions}
                         placeholder="Select Complexity"
                         value={stringToOptionsMapper(selectedComplexity)}
+                        isClearable
                     />
                 </Box>
-            </Box>
+            </Flex >
         </>
     );
 };
