@@ -285,13 +285,21 @@ const QuestionPage = () => {
     const { categories, complexity } = filterOptions;
     console.log(questions)
     console.log(categories)
+    setComplexityFilter(complexity);
+    setCategoryFilter(categories);
+    console.log('cat = ' + categories)
+    console.log('compl = ' + complexity)
     let filtered = questions;
+    if (categories) {
+      filtered = filtered.filter((question) => {
+        return categories.every(c => question.categories.includes(c));
+      });
+    }
+    if (complexity) {
 
-    filtered = filtered.filter((question) => {
-      return categories.every(c => question.categories.includes(c));
-    });
-    filtered = filtered.filter((question) => question.complexity === complexity);
 
+      filtered = filtered.filter((question) => question.complexity === complexity);
+    }
     setFilteredQuestions(filtered);
     console.log(filtered)
     // setCategoryFilter(categories);
