@@ -264,17 +264,36 @@ const QuestionPage = () => {
   //   console.log(filteredQuestions)
   // }, [complexityFilter]);
 
-  const onCategorySelected = (category: string[]) => {
+  // const onFilter = (filterOptions: { categories: string[]; complexity: string }) => {
+  //   let filtered = questions;
+
+
+  //   // filtered = filtered.filter((question) => {
+  //   //   console.log(category.every(c => question.categories.includes(c)))
+  //   //   return category.every(c => question.categories.includes(c))
+  //   // })
+  //   filtered = filtered.filter((question) => {
+  //     console.log(category.every(c => question.categories.includes(c)))
+  //     return category.every(c => question.categories.includes(c))
+  //   }).filter((question)=>question.complexity === complexity)
+  //   setFilteredQuestions(filtered)
+  //   setCategoryFilter(category)
+  //   console.log('fil q: ' + filteredQuestions)
+  //   console.log('cat fil: ' + categoryFilter)
+  // }
+  const onFilter = (filterOptions: { categories: string[]; complexity: string }) => {
+    const { categories, complexity } = filterOptions;
+
     let filtered = questions;
+
     filtered = filtered.filter((question) => {
-      console.log(category.every(c => question.categories.includes(c)))
-      return category.every(c => question.categories.includes(c))
-    })
-    setFilteredQuestions(filtered)
-    setCategoryFilter(category)
-    console.log('fil q: ' + filteredQuestions)
-    console.log('cat fil: ' + categoryFilter)
+      return categories.every(c => question.categories.includes(c));
+    }).filter((question) => question.complexity === complexity);
+
+    setFilteredQuestions(filtered);
+    // setCategoryFilter(categories);
   }
+
 
   useEffect(() => {
     AuthRequestHandler.isAuth()
@@ -344,7 +363,7 @@ const QuestionPage = () => {
         <NavigationBar index={0} />
         <Center pt={50}>
           <Flex flexDirection="column" alignItems="center">
-            <FilterBar onCategorySelected={onCategorySelected} />
+            <FilterBar onFilter={onFilter} />
 
             <AddQuestionModal
               isVisible={addModalIsVisible}

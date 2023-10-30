@@ -146,16 +146,22 @@ const complexityOptions = getComplexityStrings().map(value => {
 });
 
 type FilterBarProps = {
-    onCategorySelected: (categories: string[]) => void;
+    // onCategorySelected: (categories: string[]) => void;
+    onFilter: (filterOptions: { categories: string[]; complexity: string }) => void;
 };
 
-const FilterBar: React.FC<FilterBarProps> = ({ onCategorySelected }) => {
+const FilterBar: React.FC<FilterBarProps> = ({ onFilter }) => {
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
     const [selectedComplexity, setSelectedComplexity] = useState('')
     // useEffect(() => {
     //     // Call the callback function with the selected categories
     //     onCategorySelected(selectedCategories);
     // }, [selectedCategories, onCategorySelected]);
+
+    useEffect(() => {
+        onFilter({ categories: selectedCategories, complexity: selectedComplexity });
+    }, [selectedCategories, selectedComplexity, onFilter]);
+
 
     return (
         <>
@@ -166,7 +172,7 @@ const FilterBar: React.FC<FilterBarProps> = ({ onCategorySelected }) => {
                             return (q as SelectOption).value;
                         });
                         setSelectedCategories(inputStringArr);
-                        onCategorySelected(inputStringArr)
+                        onFilter({ categories: inputStringArr, complexity: selectedComplexity })
                         console.log(inputStringArr)
                     }}
                     isMulti
@@ -179,6 +185,7 @@ const FilterBar: React.FC<FilterBarProps> = ({ onCategorySelected }) => {
                     <Select
                         onChange={(e) => {
                             setSelectedComplexity((e as SelectOption).value);
+                            onFilter({ categories: selectedCategories, complexity: selectedComplexity })
                         }}
                         options={complexityOptions}
                         placeholder="Select Complexity"
