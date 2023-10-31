@@ -4,7 +4,7 @@ import { getQuestions } from '../api/QuestionsAPI';
 import { getRoomID } from '../api/CollaborationAPI';
 
 export const rabbitMQSetup = async () => {
-  try{
+  try {
     const connection = await amqp.connect(process.env.RABBITMQ_URL);
     const channel = await connection.createChannel();
     channel.assertQueue(`confirmation_Queue`, { durable: false });
@@ -21,20 +21,20 @@ export const rabbitMQSetup = async () => {
   }
 }
 
-async function matchUsers(queueName : string, channel: amqp.Channel) {
-  try{
+async function matchUsers(queueName: string, channel: amqp.Channel) {
+  try {
     await channel.checkQueue(queueName).then(async (queue) => {
       let user1ID, user2ID;
-      if(queue.messageCount >= 2){
+      if (queue.messageCount >= 2) {
         await channel.get(queueName).then((user1) => {
-          if(user1 !== false){
+          if (user1 !== false) {
             channel.ack(user1);
             user1ID = user1.content.toString();
           }
         });
-        
+
         await channel.get(queueName).then((user2) => {
-          if(user2 !== false){
+          if (user2 !== false) {
             channel.ack(user2);
             user2ID = user2.content.toString();
           }
@@ -42,7 +42,7 @@ async function matchUsers(queueName : string, channel: amqp.Channel) {
         const { categories, complexity } = parseQueueString(queueName);
         const question = await getQuestions(categories, complexity);
         const roomID = await getRoomID();
-        
+
         const confirmation1 = {
           user_id: user1ID,
           other_user: user2ID,
@@ -65,8 +65,8 @@ async function matchUsers(queueName : string, channel: amqp.Channel) {
   }
 };
 
-export const requestMatch = async (channel:amqp.Channel, categories: string[], complexity: string, client:string) => {
-  try{ 
+export const requestMatch = async (channel: amqp.Channel, categories: string[], complexity: string, client: string) => {
+  try {
     for (const category of categories) {
       let queue = `${category}_${complexity}`;
       channel.sendToQueue(queue, Buffer.from(client));
@@ -77,25 +77,25 @@ export const requestMatch = async (channel:amqp.Channel, categories: string[], c
 };
 
 
-export const processQueues = async (channel:amqp.Channel) => {
+export const processQueues = async (channel: amqp.Channel) => {
   for (const category of categoryEnum) {
     for (const complexity of complexityEnum) {
       matchUsers(`${category}_${complexity}`, channel);
     }
   }
 };
-  
-export const deQueue = async (channel:amqp.Channel, categories:string[], complexity:string) => {
-  try{
+
+export const deQueue = async (channel: amqp.Channel, categories: string[], complexity: string) => {
+  try {
     for (const category of categories) {
       let queue = `${category}_${complexity}`;
       await channel.get(queue).then((user) => {
-        if(user !== false){
+        if (user !== false) {
           console.log(`dequeued user ${user.content.toString()} from ${queue}`);
           channel.ack(user);
         }
       });
-    } 
+    }
   } catch (err) {
     console.error(err);
   }

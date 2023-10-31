@@ -1,5 +1,6 @@
+import axios from "axios";
 import React, { useState, useEffect } from 'react';
-import { Box, Center, Text, Button, Grid, Textarea } from '@chakra-ui/react';
+import { GridItem, Box, Center, Text, Button, Grid, Textarea } from '@chakra-ui/react';
 import { io, Socket } from 'socket.io-client';
 import NavigationBar from '../components/NavigationBar';
 import LocalStorageHandler from '../handlers/LocalStorageHandler';
@@ -7,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { COLLABORATION_SERVICE_URL } from '../configs';
 import AuthRequestHandler from '../handlers/AuthRequestHandler';
 import LoadingPage from './LoadingPage';
+import QuestionDetails from "../components/coding/QuestionDisplay";
 
 const CodingPage = () => {
   const navigate = useNavigate();
@@ -15,18 +17,18 @@ const CodingPage = () => {
   const [code, setCode] = useState('');
 
   useEffect(() => {
-      AuthRequestHandler.isAuth()
-        .then(res => {
-          setIsAuthenticated(res.isAuth);
-        })
-        .catch(e => {
-          console.log(e);
-        });
-      // Redirect to collaboration room if matched
-      if (!LocalStorageHandler.isMatched()) {
-        navigate('/collaborate');
-      }
-    }, []);
+    AuthRequestHandler.isAuth()
+      .then(res => {
+        setIsAuthenticated(res.isAuth);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+    // Redirect to collaboration room if matched
+    if (!LocalStorageHandler.isMatched()) {
+      navigate('/collaborate');
+    }
+  }, []);
 
   useEffect(() => {
     const socket = io(COLLABORATION_SERVICE_URL);
@@ -60,6 +62,7 @@ const CodingPage = () => {
   }
 
   if (isAuthenticated) {
+    const questionString = LocalStorageHandler.getMatchData()?.question;
     return (
       <Box>
         <NavigationBar index={1} />
@@ -67,6 +70,16 @@ const CodingPage = () => {
           <Grid>
             {/* // TODO: Use a real code editor
             // TODO: Add a chat box for messaging */}
+            <GridItem colSpan={1}>
+              <QuestionDetails
+                id={questionString?.id || ""}
+                title={questionString?.title || ""}
+                complexity={questionString?.complexity || ""}
+                categories={questionString?.categories || []}
+                description={questionString?.description || ""}
+                link={questionString?.link || ""}
+              />
+            </GridItem>
             <Textarea value={code} onChange={(e) => handleCodeChange(e.target.value)} />
             <Button mt={4} onClick={() => handleDisconnect()}> Disconnect </Button>
           </Grid>
