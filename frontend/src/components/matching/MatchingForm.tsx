@@ -13,36 +13,21 @@ interface SelectOption {
     label: string;
   }
 
-// const categoryOptions = getCategoriesString().map((value: any) => {
-//     return ({ value: value, label: value });
-// });
+const categoryOptions = getCategoriesString().map((value: any) => {
+    return ({ value: value, label: value });
+});
 
-// const complexityOptions = getComplexityStrings().map((value: any) => {
-//     return ({ value: value, label: value });
-// });
+const complexityOptions = getComplexityStrings().map((value: any) => {
+    return ({ value: value, label: value });
+});
 
 const MatchingForm: React.FC = () => {
     const { matchingCache, setMatchingCache } = useContext(MatchingCacheContext);
     const [categories, setCategories] = useState(matchingCache.categories);
     const [complexity, setComplexity] = useState(matchingCache.complexity);
-    const [availableCategories, setAvailableCategories] = useState<any>();
-    const [availableComplexities, setAvailableComplexities] = useState<any>();
 
     // Define a fixed width for the Select components
     const selectWidth = "500px";
-
-    useEffect(() => {
-        const getMatchingFields = async () => {
-            const matchingFields = await QuestionRequestHandler.getMatchingFields();
-            setAvailableCategories(matchingFields.categories.sort().map((value: any) => {
-                return ({ value: value, label: value });
-            }));
-            setAvailableComplexities(matchingFields.complexities.map((value: any) => {
-                return ({ value: value, label: value });
-            }));
-        }
-        getMatchingFields();
-    }, []);
 
     useEffect(() => {
         setMatchingCache({
@@ -67,7 +52,7 @@ const MatchingForm: React.FC = () => {
                             setCategories(inputStringArr);
                         }}
                         isMulti
-                        options={availableCategories}
+                        options={categoryOptions}
                         placeholder="Select Category"
                         closeMenuOnSelect={false}
                         value={ stringToOptionsMapper(matchingCache.categories.join(', ')) }
@@ -79,7 +64,7 @@ const MatchingForm: React.FC = () => {
                 <Box backgroundColor={SECONDARY_COLOR} borderRadius="5px" width={selectWidth}>
                     <Select
                         onChange={(e) => { setComplexity((e as SelectOption).value) }}
-                        options={availableComplexities}
+                        options={complexityOptions}
                         placeholder="Select Category"
                         value={ stringToOptionsMapper(matchingCache.complexity) }
                     />
