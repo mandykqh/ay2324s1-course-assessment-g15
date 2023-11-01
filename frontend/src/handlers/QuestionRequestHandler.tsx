@@ -9,7 +9,7 @@ class QuestionRequestHandler {
 
   static async loadQuestions(): Promise<QuestionString[]> {
     try {
-      const response = await this.client.get(`/questions`);
+      const response = await this.client.get(`/questions`, { withCredentials: true });
       const questions = response.data as QuestionString[];
       return questions;
     } catch (error) {
@@ -19,7 +19,7 @@ class QuestionRequestHandler {
   }
 
   static async createQuestionAndGetID(question: QuestionString): Promise<string> {
-    const response = await this.client.post(`/questions`, question).catch(e => {
+    const response = await this.client.post(`/questions`, question, { withCredentials: true }).catch(e => {
       console.log(e);
       throw (e)
     });
@@ -27,7 +27,7 @@ class QuestionRequestHandler {
   }
 
   static async deleteQuestion(id: string): Promise<void> {
-    const response = await this.client.delete(`/questions/${id}`).catch(e => {
+    const response = await this.client.delete(`/questions/${id}`, { withCredentials: true }).catch(e => {
       console.log(e);
       throw e;
     });
@@ -35,14 +35,14 @@ class QuestionRequestHandler {
   }
 
   static async updateQuestion(question: QuestionString): Promise<QuestionString> {
-    const response = await this.client.patch(`/questions/${question.id}`, question).catch(e => {
+    const response = await this.client.patch(`/questions/${question.id}`, question, { withCredentials: true }).catch(e => {
       throw e;
     });
     return response.data;
   }
 
   static async getMatchingFields(): Promise<any> {
-    const response = await this.client.get(`/fields`).catch(e => {
+    const response = await this.client.get(`/fields`, { withCredentials: true }).catch(e => {
       throw e;
     });
     return response.data;
