@@ -82,6 +82,7 @@ const QuestionPage = () => {
       validator.validateEmptyFields(questionCache);
       await QuestionRequestHandler.createQuestionAndGetID(questionCache).then((id) => {
         setQuestions([...questions, { ...questionCache, id: id }]);
+        setFilteredQuestions([...filteredQuestions, { ...questionCache, id: id }]);
       }
       );
       setAddModalIsVisible(false);
