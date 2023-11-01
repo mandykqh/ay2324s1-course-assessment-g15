@@ -23,15 +23,23 @@ const NavigationBar: React.FC<Props> = ({ index }) => {
       label: 'Collaborate',
       onClick: () => { navigate('../collaborate') }
     }, {
-      label: 'History',
-      onClick: () => { navigate('../history') }
-    }, {
       label: 'More',
       onClick: () => { navigate('../more') }
     }
   ]
 
   function signoutHandler() {
+// <<<<<<< HEAD
+//     AuthRequestHandler.signout()
+//       .then(() => {
+//         LocalStorageHandler.clearUserData();
+//         navigate('..');
+//       })
+//       .catch((e) => {
+//         console.log(e);
+//       });
+//   }
+// =======
 		AuthRequestHandler.signout(LocalStorageHandler.getUserData()!.username)
 			.then(() => {
 				LocalStorageHandler.clearUserData();
@@ -41,6 +49,7 @@ const NavigationBar: React.FC<Props> = ({ index }) => {
 				console.log(e);
 			});
 	}
+// >>>>>>> master
 
   return (
     <Box w={'100%'} h={HEIGHT} backgroundColor={SECONDARY_COLOR} position={'absolute'}>

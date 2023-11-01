@@ -8,6 +8,7 @@ import LocalStorageHandler from '../handlers/LocalStorageHandler';
 import UserHomePage from "../components/user/userManagement/UserHomePage";
 import AuthRequestHandler from "../handlers/AuthRequestHandler";
 import LoadingPage from "./LoadingPage";
+import UserHistory from "../components/user/userManagement/UserHistory";
 
 const UserProfilePage = () => {
   const [currentMenuIndex, setCurrentMenuIndex] = useState(0);
@@ -39,6 +40,7 @@ const UserProfilePage = () => {
                 {currentMenuIndex === 0 && <UserHomePage />}
                 {currentMenuIndex === 1 && <UserPersonalInfo user={userDataString} />}
                 {currentMenuIndex === 2 && <UserSecurity />}
+                {currentMenuIndex === 3 && <UserHistory />}
               </Center>
             </Box>
           </Flex >

@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { COLLABORATION_SERVICE_URL } from '../configs';
 import AuthRequestHandler from '../handlers/AuthRequestHandler';
 import LoadingPage from './LoadingPage';
+import HistoryRequestHandler from '../handlers/HistoryRequestHandler';
 
 const CodingPage = () => {
   const navigate = useNavigate();
@@ -15,18 +16,18 @@ const CodingPage = () => {
   const [code, setCode] = useState('');
 
   useEffect(() => {
-      AuthRequestHandler.isAuth()
-        .then(res => {
-          setIsAuthenticated(res.isAuth);
-        })
-        .catch(e => {
-          console.log(e);
-        });
-      // Redirect to collaboration room if matched
-      if (!LocalStorageHandler.isMatched()) {
-        navigate('/collaborate');
-      }
-    }, []);
+    AuthRequestHandler.isAuth()
+      .then(res => {
+        setIsAuthenticated(res.isAuth);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+    // Redirect to collaboration room if matched
+    if (!LocalStorageHandler.isMatched()) {
+      navigate('/collaborate');
+    }
+  }, []);
 
   useEffect(() => {
     const socket = io(COLLABORATION_SERVICE_URL);
@@ -45,6 +46,23 @@ const CodingPage = () => {
       socket.disconnect();
     };
   }, []);
+
+
+  useEffect(() => {
+    updateHistory();
+  }, []);
+
+  function updateHistory() {
+    let date = new Date();
+    HistoryRequestHandler.updateHistory({
+      userId: LocalStorageHandler.getUserData()?.id!,
+      attempt: {
+        questionId: LocalStorageHandler.getMatchData()?.question.id!,
+        timestamp: date.toISOString(),
+      },
+      complexity: LocalStorageHandler.getMatchData()?.question.complexity!
+    });
+  }
 
   const handleCodeChange = (newCode: string) => {
     // Emit code changes to the server

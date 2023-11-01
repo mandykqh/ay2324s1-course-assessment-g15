@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { QuestionModel } from '../models/question'
-import express from 'express';
+import express, { response } from 'express';
 
 export const getAllQuestions = async (req: express.Request, res: express.Response) => {
     try {
@@ -95,3 +95,13 @@ export const deleteQuestion = async (req: express.Request, res: express.Response
         return res.sendStatus(500).send('internal server error');
     }
 }
+
+export const getQuestionCount = async (req: express.Request, res: express.Response) => {
+    try {
+        const questionCount = await QuestionModel.countDocuments();
+        return res.status(200).json(questionCount);
+    } catch (error) {
+        console.error(error);
+        return res.sendStatus(500).send("internal server error");
+    }
+};
