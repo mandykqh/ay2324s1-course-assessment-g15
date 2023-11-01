@@ -32,28 +32,6 @@ const QuestionPage = () => {
   const [complexityFilter, setComplexityFilter] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
 
-  const handleFilter = (filters) => {
-
-    // setComplexityFilter(filters.complexity)
-
-    const { category, complexity } = filters;
-
-    // Apply both category and complexity filters
-    let filtered = questions;
-
-    if (category) {
-      filtered = filtered.filter((question) => question.categories.includes(category));
-      console.log(categoryFilter)
-      console.log(filtered)
-    }
-
-    if (complexity) {
-      filtered = filtered.filter((question) => question.complexity === complexity);
-    }
-    setFilteredQuestions(filtered);
-    setComplexityFilter(complexity);
-    setCategoryFilter(category);
-  };
 
   // useEffect(() => {
   //   // console.log('Complexity Filter:', complexityFilter);
@@ -167,6 +145,7 @@ const QuestionPage = () => {
     try {
       QuestionRequestHandler.loadQuestions().then((questions: QuestionString[]) => {
         setQuestions(questions);
+        setFilteredQuestions(questions);
       });
     } catch (error) {
       showError('Failed to load questions', toast);
