@@ -74,6 +74,7 @@ const CodingPage = () => {
       socket.on('newQuestion', (question) => {
         console.log(`new question: ${question.title} | ${question.categories} | ${question.complexity} | ${question.description}`);
         setQuestion(question);
+        LocalStorageHandler.updateMatchDataQuestion(question);
       })
       socket.emit("changeQuestion", {
         qnCategory: questionCategory,

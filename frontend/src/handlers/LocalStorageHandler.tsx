@@ -49,6 +49,15 @@ class LocalStorageHandler {
     localStorage.removeItem('matchData');
   }
 
+  static updateMatchDataQuestion(newQuestion: QuestionString) {
+    const matchData = this.getMatchData();
+
+    if (matchData) {
+      matchData.question = newQuestion;
+      this.storeMatchData(matchData);
+    }
+  }
+
   // Filter data
   static storeFilterData(categoryFilter: any, complexityFilter: any, filteredQuestions: any) {
     const filterData = {
