@@ -53,18 +53,23 @@ export const addQuestion = async (req: express.Request, res: express.Response) =
     }
 }
 
-export const getAllCategories = async (req: express.Request, res: express.Response) => {
+export const getMatchingFields = async (req: express.Request, res: express.Response) => {
     const questions = await QuestionModel.find();
     if (!questions) { // Query failed
         return res.sendStatus(404).send("questions not found");
     }
     const categories = new Set();
+    const complexities = new Set();
     questions.forEach((question) => {
         question.categories.forEach((category) => {
             categories.add(category);
         })
+        complexities.add(question.complexity);
     })
-    return res.status(200).json(Array.from(categories));
+    return res.status(200).json({ 
+        categories: Array.from(categories), 
+        complexities: Array.from(complexities) 
+    });
 }
 
 export const updateQuestion = async (req: express.Request, res: express.Response) => {
