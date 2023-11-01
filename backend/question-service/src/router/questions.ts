@@ -4,7 +4,7 @@ import { getAllQuestions, getQuestion, addQuestion, updateQuestion, deleteQuesti
 import { requireAdmin, requireAuth } from '../utils/middleware';
 
 export default (router: express.Router) => {
-    router.get('/questions', getAllQuestions);
+    router.get('/questions', requireAuth, getAllQuestions);
     router.get('/questions/random', getQuestion);
     router.post('/questions', requireAuth, requireAdmin, addQuestion);
     router.patch('/questions/:id', requireAuth, requireAdmin, updateQuestion);
