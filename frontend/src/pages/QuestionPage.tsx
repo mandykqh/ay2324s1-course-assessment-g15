@@ -32,31 +32,6 @@ const QuestionPage = () => {
   const [complexityFilter, setComplexityFilter] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
 
-
-  // useEffect(() => {
-  //   // console.log('Complexity Filter:', complexityFilter);
-  //   let filteredQuestions = questions.filter((q) => q.complexity === complexityFilter)
-  //   setFilteredQuestions(filteredQuestions)
-  //   console.log(filteredQuestions)
-  // }, [complexityFilter]);
-
-  // const onFilter = (filterOptions: { categories: string[]; complexity: string }) => {
-  //   let filtered = questions;
-
-
-  //   // filtered = filtered.filter((question) => {
-  //   //   console.log(category.every(c => question.categories.includes(c)))
-  //   //   return category.every(c => question.categories.includes(c))
-  //   // })
-  //   filtered = filtered.filter((question) => {
-  //     console.log(category.every(c => question.categories.includes(c)))
-  //     return category.every(c => question.categories.includes(c))
-  //   }).filter((question)=>question.complexity === complexity)
-  //   setFilteredQuestions(filtered)
-  //   setCategoryFilter(category)
-  //   console.log('fil q: ' + filteredQuestions)
-  //   console.log('cat fil: ' + categoryFilter)
-  // }
   const onFilter = (filterOptions: { categories: string[]; complexity: string }) => {
     const { categories, complexity } = filterOptions;
     setComplexityFilter(complexity);
@@ -73,18 +48,8 @@ const QuestionPage = () => {
     }
     setFilteredQuestions(filtered);
     console.log(filtered)
-    // setCategoryFilter(categories);
 
     LocalStorageHandler.storeFilterData(categories, complexity, filtered);
-
-    // const filterData = LocalStorageHandler.getFilterData();
-    // if (filterData) {
-    //   const { categoryFilter, complexityFilter, filteredQuestions } = filterData;
-    //   console.log(`get filter data: ${categoryFilter}, ${categoryFilter}, ${filteredQuestions}`);
-    //   setCategoryFilter(categoryFilter);
-    //   setComplexityFilter(complexityFilter);
-    //   setFilteredQuestions(filteredQuestions);
-    // }
   }
 
 
@@ -96,7 +61,6 @@ const QuestionPage = () => {
       .catch(e => {
         console.log(e);
       });
-
 
     // const filterData = LocalStorageHandler.getFilterData();
 
@@ -199,18 +163,6 @@ const QuestionPage = () => {
               closeHandler={() => setEditModalIsVisible(false)}
               submitUpdateHandler={submitUpdateHandler}
             />
-            {/* {filteredQuestions.length > 0 || !complexityFilter && !categoryFilter ? (
-              <QuestionTable
-                data={filteredQuestions.length > 0 ? filteredQuestions : questions}
-                viewDescriptionHandler={viewDescriptionHandler}
-                addBtnOnClick={() => {
-                  clearQuestionCache();
-                  setAddModalIsVisible(true);
-                }}
-              />
-            ) : (
-              <p>No results found</p>
-            )} */}
             {filteredQuestions.length > 0 ? (
               <QuestionTable
                 data={filteredQuestions}

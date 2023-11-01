@@ -16,11 +16,6 @@ const categoryOptions = getCategoriesString().map(value => {
   );
 });
 
-// type SelectCategoriesInputProps = {
-//   categorySelected: (category: string[]) => void;
-// };
-
-// const SelectCategoriesInput: React.FC<SelectCategoriesInputProps> = ({ categorySelected }) => {
 const SelectCategoriesInput = () => {
   const { questionCache, setQuestionCache } = useContext(QuestionCacheContext);
   const [categories, setCategories] = useState(questionCache.categories);
