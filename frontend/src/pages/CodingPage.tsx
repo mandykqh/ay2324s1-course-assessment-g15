@@ -14,6 +14,7 @@ const CodingPage = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
   const [socket, setSocket] = useState<Socket>();
   const [code, setCode] = useState('');
+  const [question, setQuestion] = useState(LocalStorageHandler.getMatchData()?.question);
 
   useEffect(() => {
     AuthRequestHandler.isAuth()
@@ -40,6 +41,10 @@ const CodingPage = () => {
       setCode(newCode);
     });
 
+    socket.on('newQuestion', (question) => {
+      console.log(`new question: ${question.title} | ${question.categories} | ${question.complexity} | ${question.description}`);
+      setQuestion(question);
+    })
     // TODO: Messaging feature
 
     return () => {
@@ -59,6 +64,34 @@ const CodingPage = () => {
     LocalStorageHandler.deleteMatchData();
     navigate('../home');
   }
+
+  const handleQuestionChange = () => {
+    // const room_id = LocalStorageHandler.getMatchData()?.room_id;
+    const questionCategory = ['Algorithm'];
+    const questionComplexity = 'Medium';
+    if (socket) {
+      console.log(socket);
+      socket.on('newQuestion', (question) => {
+        console.log(`new question: ${question.title} | ${question.categories} | ${question.complexity} | ${question.description}`);
+        setQuestion(question);
+      })
+      socket.emit("changeQuestion", {
+        qnCategory: questionCategory,
+        qnComplexity: questionComplexity
+      })
+      // setQuestion({
+      //   id: "",
+      //   title: "",
+      //   complexity: questionComplexity,
+      //   categories: questionCategory,
+      //   description: "",
+      //   link: ""
+      // });
+
+
+    }
+  }
+  // console.log('handleqnchange: ' + question?.title);
   const questionString = LocalStorageHandler.getMatchData()?.question;
   if (isAuthenticated) {
     return (
@@ -68,13 +101,14 @@ const CodingPage = () => {
           <Grid>
             <GridItem colSpan={1}>
               <QuestionDetails
-                id={questionString?.id || ""}
-                title={questionString?.title || ""}
-                complexity={questionString?.complexity || ""}
-                categories={questionString?.categories || []}
-                description={questionString?.description || ""}
-                link={questionString?.link || ""}
+                id={question?.id || ""}
+                title={question?.title || ""}
+                complexity={question?.complexity || ""}
+                categories={question?.categories || []}
+                description={question?.description || ""}
+                link={question?.link || ""}
               />
+              <Button onClick={handleQuestionChange}>Change Question</Button>
             </GridItem>
             {/* // TODO: Use a real code editor
             // TODO: Add a chat box for messaging */}

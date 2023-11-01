@@ -15,7 +15,8 @@ services:
       dockerfile: ./dockerfiles/dockerfile.collaboration-service
     ports:
       - "4000:4000"
-    # environment: Might be used in history service
+    environment: #Might be used in history service
+      QUESTIONS_SERVICE_URL: "http://ques-service:8080/questions"
     #   MONGOURL: 
     
   user-db:

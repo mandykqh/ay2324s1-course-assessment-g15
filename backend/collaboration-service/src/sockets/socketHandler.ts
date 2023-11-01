@@ -1,5 +1,6 @@
 import { Server, Socket } from 'socket.io';
 import { RoomEvents } from '../types/enums/RoomEvents';
+import { getQuestions } from '../api/QuestionsAPI';
 
 export function setupSockets(io: Server) {
   io.on('connection', (socket: Socket) => {
@@ -24,6 +25,16 @@ function handleSocketEvents(socket: Socket) {
     socket.on(RoomEvents.disconnect, () => {
       // Listen for disconnects and inform others in the room
       socket.to(room).emit(RoomEvents.userLeft, socket.id);
+    });
+
+    socket.on('changeQuestion', async (data) => {
+      // Listen for code changes from a client and broadcast them to others in the room
+      socket.to(room).emit('changeQuestion', data);
+      const question = await getQuestions(data.category, data.complexity);
+
+      console.log(`Question changed`);
+      socket.to(room).emit('newQuestion', question);
+      socket.emit('newQuestion', question);
     });
   });
 }
