@@ -53,6 +53,20 @@ export const addQuestion = async (req: express.Request, res: express.Response) =
     }
 }
 
+export const getAllCategories = async (req: express.Request, res: express.Response) => {
+    const questions = await QuestionModel.find();
+    if (!questions) { // Query failed
+        return res.sendStatus(404).send("questions not found");
+    }
+    const categories = new Set();
+    questions.forEach((question) => {
+        question.categories.forEach((category) => {
+            categories.add(category);
+        })
+    })
+    return res.status(200).json(Array.from(categories));
+}
+
 export const updateQuestion = async (req: express.Request, res: express.Response) => {
     try {
         const fieldsToUpdate = req.body;
