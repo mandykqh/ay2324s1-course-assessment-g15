@@ -6,6 +6,7 @@ import { Box } from '@chakra-ui/react';
 import { MultiValue, Select } from "chakra-react-select";
 import React from "react";
 import { MatchingCacheContext } from "../../contexts/MatchingCacheContext";
+import QuestionRequestHandler from "../../handlers/QuestionRequestHandler";
 
 interface SelectOption {
     value: string;
@@ -42,7 +43,6 @@ const MatchingForm: React.FC = () => {
                 <Text as="b">Category</Text>
                 <Box backgroundColor={SECONDARY_COLOR} borderRadius="5px" width={selectWidth}>
                     <Select
-                        // TODO: Change this to multi-select
                         onChange={(e: MultiValue<SelectOption | unknown>) => {
                             const inputStringArr = e.map(
                             (q) => {
@@ -52,16 +52,10 @@ const MatchingForm: React.FC = () => {
                             setCategories(inputStringArr);
                         }}
                         isMulti
-                        // onChange={(e) => {
-                        //     setCategories((e as SelectOption).value);
-                        // }}
                         options={categoryOptions}
                         placeholder="Select Category"
-                        // closeMenuOnSelect={false}
-                        value={
-                            stringToOptionsMapper(matchingCache.categories.join(', '))
-                            // stringToOptionsMapper(matchingCache.categories)
-                        }
+                        closeMenuOnSelect={false}
+                        value={ stringToOptionsMapper(matchingCache.categories.join(', ')) }
                     />
                 </Box>
             </Grid>

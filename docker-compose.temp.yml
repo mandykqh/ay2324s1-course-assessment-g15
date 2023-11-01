@@ -15,8 +15,15 @@ services:
       dockerfile: ./dockerfiles/dockerfile.collaboration-service
     ports:
       - "4000:4000"
-    # environment: Might be used in history service
-    #   MONGOURL: 
+    
+  history-service:
+    build:
+      context: .
+      dockerfile: ./dockerfiles/dockerfile.history-service
+    ports:
+      - "7000:7000"
+    environment:
+      MONGOURL: # Add MongoDB connection URL
     
   user-db:
     image: "postgres:13"

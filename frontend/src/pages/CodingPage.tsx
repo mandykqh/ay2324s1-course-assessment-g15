@@ -14,6 +14,7 @@ import { python } from '@codemirror/lang-python';
 import { cpp } from '@codemirror/lang-cpp';
 import { javascript } from '@codemirror/lang-javascript';
 import { okaidia } from '@uiw/codemirror-theme-okaidia';
+import HistoryRequestHandler from '../handlers/HistoryRequestHandler';
 
 const CodingPage = () => {
   const navigate = useNavigate();
@@ -23,18 +24,18 @@ const CodingPage = () => {
   const [language, setLanguage] = useState('javascript');
 
   useEffect(() => {
-      AuthRequestHandler.isAuth()
-        .then(res => {
-          setIsAuthenticated(res.isAuth);
-        })
-        .catch(e => {
-          console.log(e);
-        });
-      // Redirect to collaboration room if matched
-      if (!LocalStorageHandler.isMatched()) {
-        navigate('/collaborate');
-      }
-    }, []);
+    AuthRequestHandler.isAuth()
+      .then(res => {
+        setIsAuthenticated(res.isAuth);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+    // Redirect to collaboration room if matched
+    if (!LocalStorageHandler.isMatched()) {
+      navigate('/collaborate');
+    }
+  }, []);
 
   useEffect(() => {
     const socket = io(COLLABORATION_SERVICE_URL);
@@ -57,6 +58,23 @@ const CodingPage = () => {
       socket.disconnect();
     };
   }, []);
+
+
+  useEffect(() => {
+    updateHistory();
+  }, []);
+
+  function updateHistory() {
+    let date = new Date();
+    HistoryRequestHandler.updateHistory({
+      userId: LocalStorageHandler.getUserData()?.id!,
+      attempt: {
+        questionId: LocalStorageHandler.getMatchData()?.question.id!,
+        timestamp: date.toISOString(),
+      },
+      complexity: LocalStorageHandler.getMatchData()?.question.complexity!
+    });
+  }
 
   const handleCodeChange = (newCode: string) => {
     // Emit code changes to the server

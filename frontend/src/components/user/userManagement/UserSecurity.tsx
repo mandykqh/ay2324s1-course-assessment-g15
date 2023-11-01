@@ -54,10 +54,11 @@ const UserSecurity = () => {
       showError(`Please enter 'DELETE' to delete your account`, toast);
       return;
     }
-    UserRequestHandler.deleteUser(LocalStorageHandler.getUserData()!.username)
+    const username = LocalStorageHandler.getUserData()!.username;
+    UserRequestHandler.deleteUser(username)
       .then(() => {
         showSuccess('Account deleted!', toast); // TO DEDICATE A PAGE FOR ACCOUN DELETION
-        AuthRequestHandler.signout();
+        AuthRequestHandler.signout(username);
         LocalStorageHandler.clearUserData();
         navigate('/');
       }
