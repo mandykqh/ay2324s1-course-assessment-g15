@@ -56,7 +56,7 @@ const CollaboratePage = () => {
         matchingCache.complexity
       );
       await MatchingSocketHandler.cancelMatch(matchData);
-      setIsModalOpen(false);
+      handleCloseModal();
     } catch (e) {
       console.error(e)
     }

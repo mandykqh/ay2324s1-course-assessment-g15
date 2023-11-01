@@ -6,6 +6,7 @@ import { Box } from '@chakra-ui/react';
 import { MultiValue, Select } from "chakra-react-select";
 import React from "react";
 import { MatchingCacheContext } from "../../contexts/MatchingCacheContext";
+import QuestionRequestHandler from "../../handlers/QuestionRequestHandler";
 
 interface SelectOption {
     value: string;
@@ -27,6 +28,18 @@ const MatchingForm: React.FC = () => {
 
     // Define a fixed width for the Select components
     const selectWidth = "500px";
+
+    useEffect(() => {
+        // Perform an initial GET request here to fetch categories and complexity data
+        QuestionRequestHandler.getMatchingFields().then((data) => {
+            const { categories, complexity } = data;
+            setCategories(categories);
+            setComplexity(complexity);
+          })
+          .catch((error) => {
+            console.error("Error fetching data:", error);
+          });
+      }, []);
 
     useEffect(() => {
         setMatchingCache({
