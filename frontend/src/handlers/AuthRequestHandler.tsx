@@ -19,9 +19,9 @@ class AuthRequestHandler {
         }
     }
 
-    public static async signout() {
+    public static async signout(username: string) {
         try {
-            const response = await this.client.get(`/signout`, { withCredentials: true });
+            const response = await this.client.get(`/signout/${username}`, { withCredentials: true });
             return response.data;
         } catch (e) {
             throw e;
