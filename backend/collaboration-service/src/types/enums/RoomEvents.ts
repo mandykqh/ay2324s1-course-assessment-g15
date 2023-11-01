@@ -3,5 +3,6 @@ export enum RoomEvents {
     userJoined = 'userJoined',
     codeChange = 'codeChange',
     userLeft = 'userLeft',
-    disconnect = 'disconnect'
+    disconnect = 'disconnect',
+    changeQuestion = 'changeQuestion'
 }

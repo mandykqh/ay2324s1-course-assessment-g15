@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useState, useEffect } from 'react';
 import { GridItem, Box, Center, Text, Button, Grid, Textarea } from '@chakra-ui/react';
 import { io, Socket } from 'socket.io-client';
@@ -41,6 +40,24 @@ const CodingPage = () => {
       setCode(newCode);
     });
 
+    socket.on('changeQuestion', (data) => {
+      console.log(data);
+    })
+
+    // socket.emit('match_found', {
+    //   msg: `Match found! You have been matched with user ${obj.other_user}`,
+    //   user_id: data.user_id,
+    //   other_user: obj.other_user,
+    //   room_id: obj.room_id,
+    //   question: obj.question,
+    // });
+
+    // socket.on('changeQuestion', {
+    //   msg: 'Question changed',
+    //   qnCategory: newCategory,
+    // })
+
+
     // TODO: Messaging feature
 
     return () => {
@@ -61,6 +78,24 @@ const CodingPage = () => {
     navigate('../home');
   }
 
+  const handleQuestionChange = () => {
+    // const room_id = LocalStorageHandler.getMatchData()?.room_id;
+    const questionCategory = ['Algorithm'];
+    const questionComplexity = ['Medium'];
+    if (socket) {
+      console.log(socket);
+      // socket.emit("changeQuestion", {
+      //   qnCategory: questionCategory,
+      //   qnComplexity: questionComplexity
+      // })
+      const temp = 'hi';
+      socket.emit('changeQuestion', temp);
+    }
+    else {
+      console.log('no socket handleqnchange');
+    }
+  }
+
   if (isAuthenticated) {
     const questionString = LocalStorageHandler.getMatchData()?.question;
     return (
@@ -79,6 +114,7 @@ const CodingPage = () => {
                 description={questionString?.description || ""}
                 link={questionString?.link || ""}
               />
+              <Button onClick={handleQuestionChange}>Change Question</Button>
             </GridItem>
             <Textarea value={code} onChange={(e) => handleCodeChange(e.target.value)} />
             <Button mt={4} onClick={() => handleDisconnect()}> Disconnect </Button>

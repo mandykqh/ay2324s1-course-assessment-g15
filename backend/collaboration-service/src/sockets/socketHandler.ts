@@ -1,5 +1,6 @@
 import { Server, Socket } from 'socket.io';
 import { RoomEvents } from '../types/enums/RoomEvents';
+import { getQuestions } from '../../../matching-service/src/api/QuestionsAPI';
 
 export function setupSockets(io: Server) {
   io.on('connection', (socket: Socket) => {
@@ -25,5 +26,27 @@ function handleSocketEvents(socket: Socket) {
       // Listen for disconnects and inform others in the room
       socket.to(room).emit(RoomEvents.userLeft, socket.id);
     });
+
+    // socket.on(RoomEvents.changeQuestion, async (data) => {
+    //   try {
+    //     console.log(`Received changeQuestion event from user ${socket.id}`);
+    //     // move to collab/sockets/utils
+    //     const question = await getQuestions(data.category, data.complexity);
+    //     socket.to(room).emit(RoomEvents.changeQuestion, question);
+    //     console.log('Question changed: ' + question)
+    //   } catch (error) {
+    //     console.error('Error handling socket event:', error);
+    //   }
+    // });
+
+    // socket.on(RoomEvents.changeQuestion, (data) => {
+    //   console.log(`Received changeQuestion event from user ${socket.id}`);
+    //   // move to collab/sockets/utils
+    //   // const question = await getQuestions(data.category, data.complexity);
+    //   // socket.to(room).emit(RoomEvents.changeQuestion, question);
+    //   // console.log('Question changed: ' + question)
+    //   socket.to(room).emit(RoomEvents.changeQuestion, data);
+    //   console.log('Question changed: ' + data)
+    // });
   });
 }
