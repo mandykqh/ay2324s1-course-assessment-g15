@@ -9,7 +9,7 @@ export const requireAuth = (req: express.Request, res: express.Response, next: e
 }
 
 export const requireCorrectUser = (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (req.session.user.dataValues.username === req.params.username) {
+    if (req.session.user.username === req.params.username) {
         next();
     } else {
         res.status(401).json({ message: 'Unauthorized' });
@@ -17,7 +17,7 @@ export const requireCorrectUser = (req: express.Request, res: express.Response, 
 }
 
 export const requireAdmin = (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (req.session.user.dataValues.role === 'ADMIN') {
+    if (req.session.user.role === 'ADMIN') {
         next();
     } else {
         res.status(401).json({ message: 'Unauthorized: Not an admin' });
