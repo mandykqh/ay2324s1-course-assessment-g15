@@ -44,7 +44,6 @@ const SelectCategoriesInput = () => {
               }
             );
             setCategories(inputStringArr);
-            // categorySelected(inputStringArr)
           }}
           isMulti
           options={categoryOptions}
