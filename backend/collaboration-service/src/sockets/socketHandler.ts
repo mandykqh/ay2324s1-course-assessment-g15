@@ -29,8 +29,9 @@ function handleSocketEvents(socket: Socket) {
 
     socket.on('changeQuestion', async (data) => {
       // Listen for code changes from a client and broadcast them to others in the room
+      console.log(`question data propogated: ${data.categories}, ${data.complexity}`);
       socket.to(room).emit('changeQuestion', data);
-      const question = await getQuestions(data.category, data.complexity);
+      const question = await getQuestions(data.qnCategory, data.qnComplexity);
 
       console.log(`Question changed`);
       socket.to(room).emit('newQuestion', question);

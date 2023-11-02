@@ -8,6 +8,9 @@ import { COLLABORATION_SERVICE_URL } from '../configs';
 import AuthRequestHandler from '../handlers/AuthRequestHandler';
 import LoadingPage from './LoadingPage';
 import QuestionDetails from '../components/coding/QuestionDetails';
+import SelectCategoriesInput from '../components/question/modals/modalPages/selectors/SelectCategoriesInput';
+import SelectComplexityInput from '../components/question/modals/modalPages/selectors/SelectComplexityInput';
+import QuestionPreferences from '../components/coding/QuestionPreferences';
 
 const CodingPage = () => {
   const navigate = useNavigate();
@@ -15,6 +18,8 @@ const CodingPage = () => {
   const [socket, setSocket] = useState<Socket>();
   const [code, setCode] = useState('');
   const [question, setQuestion] = useState(LocalStorageHandler.getMatchData()?.question);
+  const [complexityFilter, setComplexityFilter] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
 
   useEffect(() => {
     AuthRequestHandler.isAuth()
@@ -42,8 +47,11 @@ const CodingPage = () => {
     });
 
     socket.on('newQuestion', (question) => {
-      console.log(`new question: ${question.title} | ${question.categories} | ${question.complexity} | ${question.description}`);
+      // console.log(`new question: ${question.title} | ${question.categories} | ${question.complexity} | ${question.description}`);
       setQuestion(question);
+      // setCategoryFilter([]);
+      setCategoryFilter(categoryFilter);
+      setComplexityFilter(complexityFilter);
     })
     // TODO: Messaging feature
 
@@ -67,32 +75,34 @@ const CodingPage = () => {
 
   const handleQuestionChange = () => {
     // const room_id = LocalStorageHandler.getMatchData()?.room_id;
-    const questionCategory = ['Algorithm'];
-    const questionComplexity = 'Medium';
+    // const questionCategory = ['Algorithm'];
+    // const questionComplexity = 'Medium';
+    console.log(`qn to change: ${categoryFilter} | ${complexityFilter}`);
     if (socket) {
-      console.log(socket);
+      // console.log(socket);
       socket.on('newQuestion', (question) => {
-        console.log(`new question: ${question.title} | ${question.categories} | ${question.complexity} | ${question.description}`);
+        // console.log(`new question: ${question.title} | ${question.categories} | ${question.complexity} | ${question.description}`);
         setQuestion(question);
         LocalStorageHandler.updateMatchDataQuestion(question);
+        setCategoryFilter(categoryFilter);
+        setComplexityFilter(complexityFilter);
       })
       socket.emit("changeQuestion", {
-        qnCategory: questionCategory,
-        qnComplexity: questionComplexity
+        qnCategory: categoryFilter,
+        qnComplexity: complexityFilter
       })
-      // setQuestion({
-      //   id: "",
-      //   title: "",
-      //   complexity: questionComplexity,
-      //   categories: questionCategory,
-      //   description: "",
-      //   link: ""
-      // });
-
-
     }
   }
-  // console.log('handleqnchange: ' + question?.title);
+
+  const handleFilterPreferences = (filterOptions: { categories: string[]; complexity: string }) => {
+    const { categories, complexity } = filterOptions;
+    setComplexityFilter(complexity);
+    setCategoryFilter(categories);
+    // LocalStorageHandler.storeFilterData(categories, complexity, filtered);
+
+    console.log(`preferences updated: ${complexity} | ${categories}`);
+  }
+
   const questionString = LocalStorageHandler.getMatchData()?.question;
   if (isAuthenticated) {
     return (
@@ -100,6 +110,10 @@ const CodingPage = () => {
         <NavigationBar index={1} />
         <Center height='100vh'>
           <Grid>
+            <GridItem colSpan={1}>
+              <QuestionPreferences onFilter={handleFilterPreferences} />
+              {/* <SelectComplexityInput /> */}
+            </GridItem>
             <GridItem colSpan={1}>
               <QuestionDetails
                 id={question?.id || ""}
