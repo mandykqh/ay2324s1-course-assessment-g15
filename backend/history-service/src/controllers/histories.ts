@@ -5,7 +5,7 @@ export const getHistory = async (req: express.Request, res: express.Response) =>
     try {
         const history = await HistoryModel.findOne({ userId: req.params.userId });
         if (!history) { // Query failed
-            return res.sendStatus(404).send("histories not found");
+            return res.status(404).send("histories not found");
         }
         return res.status(200).json(history);
     } catch (error) {
@@ -28,7 +28,7 @@ export const addHistory = async (req: express.Request, res: express.Response) =>
         const entryExist = await HistoryModel.findOne({ userId: userId });
         console.log(entryExist);
         if (!entryExist) {
-            HistoryModel.create({
+            await HistoryModel.create({
                 userId: userId,
                 attempts: [attempt],
                 total: 1,

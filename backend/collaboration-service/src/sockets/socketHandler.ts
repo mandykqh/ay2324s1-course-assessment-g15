@@ -15,6 +15,12 @@ function handleSocketEvents(socket: Socket) {
     // Broadcast a message to all clients in the room when a user joins
     socket.to(room).emit(RoomEvents.userJoined, socket.id);
 
+    socket.on(RoomEvents.languageChange, (language) => {
+      // Listen for language changes from a client and broadcast them to others in the room
+      socket.to(room).emit(RoomEvents.languageChange, language);
+      console.log(`User ${socket.id} changed language: ${language}`);
+    });
+
     socket.on(RoomEvents.codeChange, (code) => {
       // Listen for code changes from a client and broadcast them to others in the room
       socket.to(room).emit(RoomEvents.codeChange, code);

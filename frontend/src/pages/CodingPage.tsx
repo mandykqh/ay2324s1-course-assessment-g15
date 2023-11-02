@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Center, Text, Button, Grid, Textarea } from '@chakra-ui/react';
+import { useState, useEffect } from 'react';
+import { Box, Button, Grid, VStack, GridItem, Select, HStack } from '@chakra-ui/react';
 import { io, Socket } from 'socket.io-client';
 import NavigationBar from '../components/NavigationBar';
 import LocalStorageHandler from '../handlers/LocalStorageHandler';
@@ -7,6 +7,13 @@ import { useNavigate } from 'react-router-dom';
 import { COLLABORATION_SERVICE_URL } from '../configs';
 import AuthRequestHandler from '../handlers/AuthRequestHandler';
 import LoadingPage from './LoadingPage';
+import QuestionDetails from '../components/coding/QuestionDetails';
+import CodeMirror from '@uiw/react-codemirror';
+import { java } from '@codemirror/lang-java';
+import { python } from '@codemirror/lang-python';
+import { cpp } from '@codemirror/lang-cpp';
+import { javascript } from '@codemirror/lang-javascript';
+import { okaidia } from '@uiw/codemirror-theme-okaidia';
 import HistoryRequestHandler from '../handlers/HistoryRequestHandler';
 
 const CodingPage = () => {
@@ -14,6 +21,7 @@ const CodingPage = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
   const [socket, setSocket] = useState<Socket>();
   const [code, setCode] = useState('');
+  const [language, setLanguage] = useState('javascript');
 
   useEffect(() => {
     AuthRequestHandler.isAuth()
@@ -38,6 +46,10 @@ const CodingPage = () => {
     // Socket event listeners
     socket.on('codeChange', (newCode) => {
       setCode(newCode);
+    });
+
+    socket.on('languageChange', (newLanguage) => {
+      setLanguage(newLanguage);
     });
 
     // TODO: Messaging feature
@@ -72,23 +84,66 @@ const CodingPage = () => {
     setCode(newCode); // Update the state
   };
 
+  const handleLanguageChange = (newLanguage: string) => {
+    // Emit code changes to the server
+    if (socket) {
+      socket.emit('languageChange', newLanguage);
+    }
+    setLanguage(newLanguage); // Update the state
+  };
+
   function handleDisconnect() {
     LocalStorageHandler.deleteMatchData();
     navigate('../home');
   }
 
   if (isAuthenticated) {
+    const questionString = LocalStorageHandler.getMatchData()?.question;
     return (
       <Box>
         <NavigationBar index={1} />
-        <Center height='100vh'>
-          <Grid>
-            {/* // TODO: Use a real code editor
-            // TODO: Add a chat box for messaging */}
-            <Textarea value={code} onChange={(e) => handleCodeChange(e.target.value)} />
-            <Button mt={4} onClick={() => handleDisconnect()}> Disconnect </Button>
-          </Grid>
-        </Center>
+        <Grid height='100%' templateColumns='repeat(2, 1fr)' gap='20px' padding='20px' paddingTop='70px'>
+          <GridItem colSpan={1}>
+            <QuestionDetails
+              id={questionString?.id || ""}
+              title={questionString?.title || ""}
+              complexity={questionString?.complexity || ""}
+              categories={questionString?.categories || []}
+              description={questionString?.description || ""}
+              link={questionString?.link || ""}
+            />
+          </GridItem>
+          <GridItem colSpan={1}>
+            <VStack gap='1rem'>
+              {/* // TODO: Add a chat box for messaging */}
+              <HStack width='100%' gap='1rem'>
+                <Select value={language} onChange={(e) => handleLanguageChange(e.target.value)}>
+                  <option value='javascript'>JavaScript</option>
+                  <option value='python'>Python</option>
+                  <option value='java'>Java</option>
+                  <option value='cpp'>C++</option>
+                </Select>
+                <Button onClick={() => handleDisconnect()}> Disconnect </Button>
+              </HStack>
+							<CodeMirror
+								value={code}
+								height='80vh'
+								width='50vw'
+								extensions={[
+									language === 'java'
+										? java()
+										: language === 'python'
+										? python()
+										: language === 'cpp'
+										? cpp()
+										: javascript({ jsx: true }),
+								]}
+								onChange={handleCodeChange}
+								theme={okaidia}
+							/>
+            </VStack>
+          </GridItem>
+        </Grid>
       </Box>
     );
   } else {

@@ -29,15 +29,27 @@ const NavigationBar: React.FC<Props> = ({ index }) => {
   ]
 
   function signoutHandler() {
-    AuthRequestHandler.signout()
-      .then(() => {
-        LocalStorageHandler.clearUserData();
-        navigate('..');
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }
+// <<<<<<< HEAD
+//     AuthRequestHandler.signout()
+//       .then(() => {
+//         LocalStorageHandler.clearUserData();
+//         navigate('..');
+//       })
+//       .catch((e) => {
+//         console.log(e);
+//       });
+//   }
+// =======
+		AuthRequestHandler.signout(LocalStorageHandler.getUserData()!.username)
+			.then(() => {
+				LocalStorageHandler.clearUserData();
+				navigate('..');
+			})
+			.catch((e) => {
+				console.log(e);
+			});
+	}
+// >>>>>>> master
 
   return (
     <Box w={'100%'} h={HEIGHT} backgroundColor={SECONDARY_COLOR} position={'absolute'}>

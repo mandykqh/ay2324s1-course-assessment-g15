@@ -14,9 +14,9 @@ const LoadingPage = () => {
     }}>
       <Spinner
         thickness='12px'
-        speed='1s'
+        speed='1.5s'
         color='blue.500'
-        boxSize={200}
+        boxSize={50}
       />
       <Text as='strong' fontSize={25} padding={10}>Loading...</Text>
     </div>

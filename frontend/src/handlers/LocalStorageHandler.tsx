@@ -31,18 +31,26 @@ class LocalStorageHandler {
   }
 
   static getMatchData(): MatchDataString | null {
-    if (localStorage.getItem("matchData") === null) {
+    try {
+      if (localStorage.getItem("matchData") === null) {
+        return null;
+      }
+      const data = localStorage.getItem("matchData")!;
+      return JSON.parse(data);
+    } catch (e) {
       return null;
     }
-    const data = localStorage.getItem("matchData")!;
-    return JSON.parse(data);
   }
   
   static isMatched(): boolean {
-    if (localStorage.getItem("matchData") === null) {
-      return false; 
+    try {
+      if (localStorage.getItem("matchData") === null) {
+        return false; 
+      }
+      return true;
+    } catch (e) {
+      return false;
     }
-    return true;
   }
 
   static deleteMatchData() {
