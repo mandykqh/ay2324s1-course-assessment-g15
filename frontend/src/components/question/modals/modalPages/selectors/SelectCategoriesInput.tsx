@@ -3,7 +3,7 @@ import { getCategoriesString, stringToOptionsMapper } from '../../../../../Util'
 import { MultiValue, Select } from "chakra-react-select";
 import { Box } from '@chakra-ui/react';
 import { QuestionCacheContext } from '../../../../../contexts/QuestionCacheContext';
-import { SECONDARY_COLOR } from '../../../../../commonStyles';
+import { SECONDARY_COLOR } from '../../../../../CommonStyles';
 
 interface SelectOption {
   value: string;

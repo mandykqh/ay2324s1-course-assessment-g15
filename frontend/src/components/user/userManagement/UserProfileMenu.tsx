@@ -1,5 +1,5 @@
 import { Text, Box, Center, Image, Flex } from "@chakra-ui/react";
-import { PRIMARY_COLOR, SECONDARY_COLOR } from "../../../commonStyles";
+import { PRIMARY_COLOR, SECONDARY_COLOR } from "../../../CommonStyles";
 import { useState } from "react";
 
 interface MenuItemProps {

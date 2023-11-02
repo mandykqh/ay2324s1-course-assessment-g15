@@ -26,8 +26,9 @@ app.use(session({
 }));
 
 app.use(cors({
-    credentials: true,
-    origin: "http://localhost:5173",
+    origin: process.env.FRONTEND_URL || "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    credentials: true
 }));
 
 app.use(compression());

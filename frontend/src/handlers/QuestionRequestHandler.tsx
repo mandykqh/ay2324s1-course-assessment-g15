@@ -1,5 +1,5 @@
 import axios from "axios";
-import { QuestionString } from "../commons";
+import { QuestionString } from "../Commons";
 import { QUESTIONS_SERVICE_URL } from "../configs";
 
 class QuestionRequestHandler {

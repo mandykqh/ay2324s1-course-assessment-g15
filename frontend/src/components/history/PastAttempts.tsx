@@ -1,5 +1,5 @@
 import { Card, CardBody, List, ListItem, Text, Spacer, Flex, Box } from '@chakra-ui/react'
-import { PRIMARY_COLOR, SECONDARY_COLOR } from '../../commonStyles';
+import { PRIMARY_COLOR, SECONDARY_COLOR } from '../../CommonStyles';
 import React from 'react';
 import { Attempt } from '../../Commons';
 import QuestionRequestHandler from '../../handlers/QuestionRequestHandler';

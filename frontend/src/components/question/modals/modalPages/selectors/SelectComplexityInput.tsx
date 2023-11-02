@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { getComplexityStrings, stringToOptionsMapper } from "../../../../../Util";
 import { Box } from '@chakra-ui/react';
-import { SECONDARY_COLOR } from '../../../../../commonStyles';
+import { SECONDARY_COLOR } from '../../../../../CommonStyles';
 import { Select } from 'chakra-react-select';
 import { QuestionCacheContext } from '../../../../../contexts/QuestionCacheContext';
 

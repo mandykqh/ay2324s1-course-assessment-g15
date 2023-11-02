@@ -1,0 +1,24 @@
+version: '3'
+services:
+  user-service:
+    image: "peerprep15/peerprep15:user-latest"
+    ports:
+      - "80:5000"
+    env_file:
+      - .env
+    depends_on:
+      - user-db
+
+  user-db:
+    image: "postgres:13"
+    container_name: user-db
+    ports:
+      - "5432:5432"
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - user-data:/var/lib/postgresql/data
+
+volumes:
+  user-data:

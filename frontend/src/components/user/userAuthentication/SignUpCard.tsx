@@ -1,5 +1,5 @@
 import { Card, CardHeader, Heading, CardBody, FormLabel, Input, Center, Button } from "@chakra-ui/react";
-import { PRIMARY_COLOR } from "../../../commonStyles";
+import { PRIMARY_COLOR } from "../../../CommonStyles";
 import PasswordInput from "../../common/PasswordInput";
 import { useState } from "react";
 

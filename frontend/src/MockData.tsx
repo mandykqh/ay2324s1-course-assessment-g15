@@ -1,4 +1,4 @@
-import { QuestionString } from "./commons";
+import { QuestionString } from "./Commons";
 import { getCategoriesString } from "./Util";
 
 const desc1 =

@@ -1,7 +1,7 @@
 // ModalPage2.tsx
 import React from "react";
 import { Grid, Textarea, Text } from "@chakra-ui/react";
-import { SECONDARY_COLOR } from "../../../../commonStyles";
+import { SECONDARY_COLOR } from "../../../../CommonStyles";
 
 interface ModalPage2Props {
   description: string;
