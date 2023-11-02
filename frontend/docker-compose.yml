@@ -1,0 +1,8 @@
+version: '3'
+services:
+  frontend:
+    image: "peerprep15/peerprep15:frontend-latest"
+    ports:
+      - "80:5173"
+    env_file:
+      - .env
