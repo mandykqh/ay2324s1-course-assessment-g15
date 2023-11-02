@@ -4,4 +4,4 @@ COPY backend/question-service/package*.json ./
 RUN npm install
 COPY backend/question-service/. .
 EXPOSE 8080
-CMD ["npm", "start"]
+CMD ["npm", "run", "dev"]
