@@ -22,13 +22,15 @@ app.use(compression());
 app.use(bodyParser.json());
 
 app.use(cookieParser());
+app.enable('trust proxy'); // For deployment, as cookies are not set otherwise on an NGINX reverse proxy
 app.use(session({
     secret: 'secret',
     resave: false,
     saveUninitialized: false,
     cookie: {
         secure: false,
-        maxAge: 1000 * 60 * 60 * 24
+        maxAge: 1000 * 60 * 60 * 24,
+        sameSite: "none"
     },
     store: store,
 }));
