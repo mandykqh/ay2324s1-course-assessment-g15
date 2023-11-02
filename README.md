@@ -16,4 +16,4 @@
 - Question service: 8080
 - User service: 5000 for endpoint, 5432 for postgres container
 - Matching Service: 3000 for endpoint, 5672 & 15672 for rabbitMQ container
-- Collaboration Service: 7000
+- History Service: 7000
