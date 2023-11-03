@@ -90,12 +90,13 @@ const QuestionPreferences: React.FC<QuestionPreferencesProps> = ({ onFilter }) =
                 />
                 <Select
                     onChange={(e) => {
-                        setSelectedComplexity((e as SelectOption).value);
+                        setSelectedComplexity(e ? e.value : '');
                         handleComplexityChange(e?.value);
                     }}
                     options={complexityOptions}
                     placeholder="Select Complexity"
                     value={stringToOptionsMapper(selectedComplexity ? selectedComplexity : '')}
+                    isClearable
                 />
             </Box>
         </>

@@ -48,6 +48,10 @@ const CodingPage = () => {
 
     socket.on('newQuestion', (question) => {
       // console.log(`new question: ${question.title} | ${question.categories} | ${question.complexity} | ${question.description}`);
+      if (!question) {
+        alert('no question found');
+        return;
+      }
       setQuestion(question);
       // setCategoryFilter([]);
       setCategoryFilter(categoryFilter);
@@ -82,7 +86,10 @@ const CodingPage = () => {
       // console.log(socket);
       socket.on('newQuestion', (question) => {
         // console.log(`new question: ${question.title} | ${question.categories} | ${question.complexity} | ${question.description}`);
-        setQuestion(question);
+        if (question) {
+          setQuestion(question);
+        }
+
         LocalStorageHandler.updateMatchDataQuestion(question);
         setCategoryFilter(categoryFilter);
         setComplexityFilter(complexityFilter);
