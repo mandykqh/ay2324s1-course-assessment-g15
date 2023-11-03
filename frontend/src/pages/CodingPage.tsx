@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Center, Text, Button, Grid, Textarea, GridItem, Select } from '@chakra-ui/react';
+import { useToast, Box, Center, Text, Button, Grid, Textarea, GridItem, Select } from '@chakra-ui/react';
 import { io, Socket } from 'socket.io-client';
 import NavigationBar from '../components/NavigationBar';
 import LocalStorageHandler from '../handlers/LocalStorageHandler';
@@ -49,8 +49,20 @@ const CodingPage = () => {
     socket.on('newQuestion', (question) => {
       // console.log(`new question: ${question.title} | ${question.categories} | ${question.complexity} | ${question.description}`);
       if (!question) {
+        toast({
+          title: "Error",
+          description: `Change question request by User ${LocalStorageHandler.getUserData()?.username}: No question found.`,
+          status: "error",
+          duration: 3000,
+        });
         return;
       }
+      toast({
+        title: "Question Changed",
+        description: "The question has been successfully changed.",
+        status: "success",
+        duration: 3000, // Optional, you can customize the duration
+      });
       setQuestion(question);
       // setCategoryFilter([]);
       setCategoryFilter(categoryFilter);
@@ -76,11 +88,14 @@ const CodingPage = () => {
     navigate('../home');
   }
 
+  const toast = useToast();
+
   const handleQuestionChange = () => {
     // const room_id = LocalStorageHandler.getMatchData()?.room_id;
     // const questionCategory = ['Algorithm'];
     // const questionComplexity = 'Medium';
     console.log(`qn to change: ${categoryFilter} | ${complexityFilter}`);
+
     if (socket) {
       // console.log(socket);
       socket.on('newQuestion', (question) => {
@@ -88,10 +103,7 @@ const CodingPage = () => {
         if (question) {
           setQuestion(question);
           LocalStorageHandler.updateMatchDataQuestion(question);
-        } else {
-          alert('no question found');
         }
-
         setCategoryFilter(categoryFilter);
         setComplexityFilter(complexityFilter);
       })
@@ -99,6 +111,7 @@ const CodingPage = () => {
         categories: categoryFilter,
         complexity: complexityFilter
       })
+
     }
   }
 
