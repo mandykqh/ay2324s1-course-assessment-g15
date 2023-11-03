@@ -17,3 +17,18 @@ export const getQuestions = async (categories: string[], complexity: string) => 
         throw e;
     }
 }
+
+export const getFilteredQuestion = async (categories: string[], complexity: string) => {
+    try {
+        const response = await client.get("/filtered", {
+            params: {
+                categories: categories,
+                complexity: complexity
+            }
+        });
+        return response.data;
+    } catch (e) {
+        console.error('API/QUESTIONSAPI PROBLEM: ' + e.response.data);
+        throw e;
+    }
+}

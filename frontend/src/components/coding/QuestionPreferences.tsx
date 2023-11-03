@@ -86,7 +86,7 @@ const QuestionPreferences: React.FC<QuestionPreferencesProps> = ({ onFilter }) =
                     options={categoryOptions}
                     placeholder="Select Category"
                     closeMenuOnSelect={false}
-                    value={stringToOptionsMapper(selectedCategories.join(', '))}
+                    value={stringToOptionsMapper(selectedCategories ? selectedCategories.join(', ') : '')}
                 />
                 <Select
                     onChange={(e) => {
@@ -95,7 +95,7 @@ const QuestionPreferences: React.FC<QuestionPreferencesProps> = ({ onFilter }) =
                     }}
                     options={complexityOptions}
                     placeholder="Select Complexity"
-                    value={stringToOptionsMapper(selectedComplexity)}
+                    value={stringToOptionsMapper(selectedComplexity ? selectedComplexity : '')}
                 />
             </Box>
         </>

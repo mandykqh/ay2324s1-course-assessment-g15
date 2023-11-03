@@ -20,8 +20,13 @@ export const getAllQuestions = async (req: express.Request, res: express.Respons
 
 export const getQuestion = async (req: express.Request, res: express.Response) => {
     try {
+        console.log(req.query);
+        console.log(req.body);
+        console.log(req.params.complexity);
         const questions = await QuestionModel.find(req.body);
+
         if (!questions) { // Query failed
+            console.log('CONTROLLERS/QUESTIONS PROBLEM');
             return res.sendStatus(404).send("question not found");
         }
         if (questions.length === 0) { // No question found
@@ -37,6 +42,42 @@ export const getQuestion = async (req: express.Request, res: express.Response) =
         console.error(error);
         return res.sendStatus(500).send("internal server error");
     }
+}
+
+export const getFilteredQuestion = async (req: express.Request, res: express.Response) => {
+    try {
+        console.log(req.query);
+        console.log(req.body);
+        console.log(req.params.complexity);
+        // const questions = await QuestionModel.find(req.body);
+        const filteredQuestions = await QuestionModel.find({ categories: req.query.categories, complexity: req.query.complexity });
+
+        // const { categories, complexity } = req.query;
+        // const filter: { categories?: any, complexity?: any } = {};
+        // if (categories) {
+        //     filter.categories = categories;
+        // }
+        // if (complexity) {
+        //     filter.complexity = complexity;
+        // }
+
+        if (!filteredQuestions) { // Query failed
+            return res.sendStatus(404).send("question not found");
+        }
+        if (filteredQuestions.length === 0) { // No question found
+            return res.sendStatus(204);
+        }
+        if (filteredQuestions.length == 1) {
+            return res.status(200).json(filteredQuestions[0]);
+        }
+
+        const randomIndex = Math.floor(Math.random() * filteredQuestions.length);
+        return res.status(200).json(filteredQuestions[randomIndex]);
+    } catch (error) {
+        console.error(error);
+        return res.sendStatus(500).send("internal server error");
+    }
+
 }
 
 export const addQuestion = async (req: express.Request, res: express.Response) => {

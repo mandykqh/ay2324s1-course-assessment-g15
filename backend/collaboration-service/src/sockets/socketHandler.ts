@@ -1,6 +1,6 @@
 import { Server, Socket } from 'socket.io';
 import { RoomEvents } from '../types/enums/RoomEvents';
-import { getQuestions } from '../api/QuestionsAPI';
+import { getFilteredQuestion, getQuestions } from '../api/Questions';
 
 export function setupSockets(io: Server) {
   io.on('connection', (socket: Socket) => {
@@ -31,7 +31,8 @@ function handleSocketEvents(socket: Socket) {
       // Listen for code changes from a client and broadcast them to others in the room
       console.log(`question data propogated: ${data.categories}, ${data.complexity}`);
       socket.to(room).emit('changeQuestion', data);
-      const question = await getQuestions(data.qnCategory, data.qnComplexity);
+      // const question = await getQuestions(data.qnCategory, data.qnComplexity);
+      const question = await getFilteredQuestion(data.categories, data.complexity);
 
       console.log(`Question changed`);
       socket.to(room).emit('newQuestion', question);

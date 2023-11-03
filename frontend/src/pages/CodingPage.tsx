@@ -88,8 +88,8 @@ const CodingPage = () => {
         setComplexityFilter(complexityFilter);
       })
       socket.emit("changeQuestion", {
-        qnCategory: categoryFilter,
-        qnComplexity: complexityFilter
+        categories: categoryFilter,
+        complexity: complexityFilter
       })
     }
   }
