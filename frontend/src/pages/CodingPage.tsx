@@ -49,7 +49,6 @@ const CodingPage = () => {
     socket.on('newQuestion', (question) => {
       // console.log(`new question: ${question.title} | ${question.categories} | ${question.complexity} | ${question.description}`);
       if (!question) {
-        alert('no question found');
         return;
       }
       setQuestion(question);
@@ -88,9 +87,11 @@ const CodingPage = () => {
         // console.log(`new question: ${question.title} | ${question.categories} | ${question.complexity} | ${question.description}`);
         if (question) {
           setQuestion(question);
+          LocalStorageHandler.updateMatchDataQuestion(question);
+        } else {
+          alert('no question found');
         }
 
-        LocalStorageHandler.updateMatchDataQuestion(question);
         setCategoryFilter(categoryFilter);
         setComplexityFilter(complexityFilter);
       })
