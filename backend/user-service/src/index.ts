@@ -24,7 +24,6 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.set('trust proxy', 1);
 app.use(session({
-    name: 'session',
     secret: 'secret',
     resave: false,
     saveUninitialized: false,
