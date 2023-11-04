@@ -27,6 +27,7 @@ const SelectCategoriesInput = () => {
     });
   }, [categories])
 
+
   return (
     <>
       <Box backgroundColor={SECONDARY_COLOR} borderRadius='5px'>
