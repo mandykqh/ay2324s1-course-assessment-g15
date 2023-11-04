@@ -12,6 +12,7 @@ import LocalStorageHandler from "../handlers/LocalStorageHandler";
 import MatchingSocketHandler from "../handlers/MatchingSocketHandler";
 import Match from "../models/match/Match";
 import { useNavigate } from "react-router-dom";
+import QuestionRequestHandler, { getFilteredQuestion } from "../handlers/QuestionRequestHandler";
 
 const CollaboratePage = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -34,10 +35,10 @@ const CollaboratePage = () => {
         console.log(e);
       });
 
-      // Redirect to collaboration room if matched
-      if (LocalStorageHandler.isMatched()) {
-        navigate('/collaborate/code');
-      }
+    // Redirect to collaboration room if matched
+    if (LocalStorageHandler.isMatched()) {
+      navigate('/collaborate/code');
+    }
   }, []);
 
   const handleOpenModal = () => {
@@ -49,10 +50,10 @@ const CollaboratePage = () => {
   };
 
   async function cancelMatch(matchingCache: MatchingString) {
-    try{
+    try {
       const matchData = new Match(
         LocalStorageHandler.getUserData()!.id.toString(),
-        matchingCache.categories, 
+        matchingCache.categories,
         matchingCache.complexity
       );
       await MatchingSocketHandler.cancelMatch(matchData);
@@ -73,19 +74,23 @@ const CollaboratePage = () => {
       showError('Please select a complexity level', toast);
       return;
     }
+    // if (!QuestionRequestHandler.getFilteredQuestion) {
+    //   showError('No question available specified in this criteria. Try again with another category or complexity level.', toast);
+    //   return;
+    // }
     try {
       handleOpenModal();
       const matchData = new Match(
         LocalStorageHandler.getUserData()!.id.toString(),
-        matchingCache.categories, 
+        matchingCache.categories,
         matchingCache.complexity
-      );      
+      );
       matchingSocket.connect();
       matchingSocket.on('finding_match', (data) => {
         console.log(data);
         setMatchMessage("Finding match...");
       });
-  
+
       matchingSocket.on('match_found', (data: any) => {
         console.log(data);
         setIsMatchFound(true);
@@ -94,7 +99,7 @@ const CollaboratePage = () => {
         matchingSocket.disconnect();
         navigate('/collaborate/code');
       });
-  
+
       matchingSocket.on('timeout', (data) => {
         setIsTimeout(true);
         setMatchMessage("Connection timed out. Please try again!");
@@ -109,30 +114,30 @@ const CollaboratePage = () => {
 
   if (isAuthenticated) {
     return (
-    <MatchingCacheContext.Provider value={ctxValue}>
-      <Box>
-        <NavigationBar index={1} />
-        <Center height='100vh'>
-          <Grid gap={4}>
-            <MatchingForm />
-            <Button 
-              colorScheme="blue"
-              onClick={() => findMatch(matchingCache)}
-            > 
-              Find Match 
-            </Button>
-          </Grid>
-          <TimerModal 
-            isOpen={isModalOpen} 
-            onClose={() => cancelMatch(matchingCache)} 
-            initialTime={30} 
-            status={matchMessage.toString()} 
-            isTimeout={isTimeout} 
-            isMatchFound={isMatchFound}
-          />
-        </Center>
-      </Box>
-    </MatchingCacheContext.Provider>
+      <MatchingCacheContext.Provider value={ctxValue}>
+        <Box>
+          <NavigationBar index={1} />
+          <Center height='100vh'>
+            <Grid gap={4}>
+              <MatchingForm />
+              <Button
+                colorScheme="blue"
+                onClick={() => findMatch(matchingCache)}
+              >
+                Find Match
+              </Button>
+            </Grid>
+            <TimerModal
+              isOpen={isModalOpen}
+              onClose={() => cancelMatch(matchingCache)}
+              initialTime={30}
+              status={matchMessage.toString()}
+              isTimeout={isTimeout}
+              isMatchFound={isMatchFound}
+            />
+          </Center>
+        </Box>
+      </MatchingCacheContext.Provider>
     );
   } else {
     return <LoadingPage />

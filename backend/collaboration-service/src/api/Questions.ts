@@ -27,10 +27,9 @@ export const getFilteredQuestion = async (id: string, categories: string[], comp
                 complexity: complexity
             }
         });
-        console.log(`filtered q: ${response.data} | ${response.data.categories} | ${response.data.complexity}`);
         return response.data;
     } catch (e) {
-        console.error('API/QUESTIONSAPI PROBLEM: ' + e.response.data);
+        console.error(e.response.data);
         throw e;
     }
 }

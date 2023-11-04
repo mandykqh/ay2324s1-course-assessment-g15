@@ -45,6 +45,17 @@ class QuestionRequestHandler {
     const response = await this.client.get('/count', { withCredentials: true }).catch(e => { throw e });
     return response.data;
   }
+
+  static async getFilteredQuestion(): Promise<QuestionString[]> {
+    try {
+      const response = await this.client.get(`/randomfiltered`, { withCredentials: true });
+      const questions = response.data as QuestionString[];
+      return questions;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
 }
 
 export default QuestionRequestHandler;

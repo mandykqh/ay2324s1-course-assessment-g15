@@ -75,7 +75,7 @@ const CodingPage = () => {
         title: "Question Changed",
         description: "The question has been successfully changed.",
         status: "success",
-        duration: 3000, // Optional, you can customize the duration
+        duration: 3000,
       });
       setQuestion(question);
       // setCategoryFilter([]);
@@ -130,15 +130,19 @@ const CodingPage = () => {
   const toast = useToast();
 
   const handleQuestionChange = () => {
-    // const room_id = LocalStorageHandler.getMatchData()?.room_id;
-    // const questionCategory = ['Algorithm'];
-    // const questionComplexity = 'Medium';
     console.log(`qn to change: current qid=${LocalStorageHandler.getMatchData()?.question.id} | ${categoryFilter} | ${complexityFilter}`);
 
+    if (categoryFilter.length < 1 || !complexityFilter) {
+      toast({
+        title: "Error",
+        description: "Category and Complexity fields cannot be empty.",
+        status: "error",
+        duration: 3000,
+      });
+      return;
+    }
     if (socket) {
-      // console.log(socket);
       socket.on('newQuestion', (question) => {
-        // console.log(`new question: ${question.title} | ${question.categories} | ${question.complexity} | ${question.description}`);
         if (question) {
           setQuestion(question);
           LocalStorageHandler.updateMatchDataQuestion(question);
@@ -146,10 +150,6 @@ const CodingPage = () => {
         setCategoryFilter(categoryFilter);
         setComplexityFilter(complexityFilter);
       })
-      // socket.emit("changeQuestion", {
-      //   categories: categoryFilter,
-      //   complexity: complexityFilter
-      // })
       socket.emit("changeQuestion", {
         id: LocalStorageHandler.getMatchData()?.question.id,
         categories: categoryFilter,
@@ -177,6 +177,7 @@ const CodingPage = () => {
         <Grid height='100%' templateColumns='repeat(2, 1fr)' gap='20px' padding='20px' paddingTop='70px'>
           <GridItem colSpan={1}>
             <QuestionPreferences onFilter={handleFilterPreferences} />
+            <Button onClick={handleQuestionChange}>Change Question</Button>
             <QuestionDetails
               id={questionString?.id || ""}
               title={questionString?.title || ""}
@@ -185,7 +186,6 @@ const CodingPage = () => {
               description={questionString?.description || ""}
               link={questionString?.link || ""}
             />
-            <Button onClick={handleQuestionChange}>Change Question</Button>
           </GridItem>
           <GridItem colSpan={1}>
             <VStack gap='1rem'>
