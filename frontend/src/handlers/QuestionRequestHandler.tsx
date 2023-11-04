@@ -40,6 +40,22 @@ class QuestionRequestHandler {
     });
     return response.data;
   }
+
+  static async getAllFilteredQuestions(categories: string[], complexity: string): Promise<QuestionString[]> {
+    try {
+      const response = await this.client.get(`/allfiltered`, {
+        params: {
+          categories: categories,
+          complexity: complexity,
+        },
+      });
+      const questions = response.data as QuestionString[];
+      return questions;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
 }
 
 export default QuestionRequestHandler;
