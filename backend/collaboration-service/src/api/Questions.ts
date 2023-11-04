@@ -18,10 +18,11 @@ export const getQuestions = async (categories: string[], complexity: string) => 
     }
 }
 
-export const getFilteredQuestion = async (categories: string[], complexity: string) => {
+export const getFilteredQuestion = async (id: string, categories: string[], complexity: string) => {
     try {
         const response = await client.get("/filtered", {
             params: {
+                id: id,
                 categories: categories,
                 complexity: complexity
             }

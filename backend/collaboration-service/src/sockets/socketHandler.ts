@@ -32,7 +32,7 @@ function handleSocketEvents(socket: Socket) {
       console.log(`question data propogated: ${data.categories}, ${data.complexity}`);
       socket.to(room).emit('changeQuestion', data);
       // const question = await getQuestions(data.qnCategory, data.qnComplexity);
-      const question = await getFilteredQuestion(data.categories, data.complexity);
+      const question = await getFilteredQuestion(data.id, data.categories, data.complexity);
 
       console.log(`Question changed`);
       socket.to(room).emit('newQuestion', question);

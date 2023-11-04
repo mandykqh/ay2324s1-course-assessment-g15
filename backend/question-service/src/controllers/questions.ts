@@ -49,17 +49,16 @@ export const getFilteredQuestion = async (req: express.Request, res: express.Res
         console.log(req.query);
         console.log(req.body);
         console.log(req.params.complexity);
-        // const questions = await QuestionModel.find(req.body);
-        const filteredQuestions = await QuestionModel.find({ categories: req.query.categories, complexity: req.query.complexity });
+        // const filteredQuestions = await QuestionModel.find({ categories: req.query.categories, complexity: req.query.complexity });
 
-        // const { categories, complexity } = req.query;
-        // const filter: { categories?: any, complexity?: any } = {};
-        // if (categories) {
-        //     filter.categories = categories;
-        // }
-        // if (complexity) {
-        //     filter.complexity = complexity;
-        // }
+        const excludedQuestionId = req.query.id;
+        const filteredQuestions = await QuestionModel.find({
+            $and: [
+                { categories: req.query.categories },
+                { complexity: req.query.complexity },
+                { id: { $ne: excludedQuestionId } }, // Exclude the specified question ID
+            ],
+        });
 
         if (!filteredQuestions) { // Query failed
             return res.sendStatus(404).send("question not found");

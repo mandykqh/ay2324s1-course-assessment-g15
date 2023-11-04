@@ -94,7 +94,7 @@ const CodingPage = () => {
     // const room_id = LocalStorageHandler.getMatchData()?.room_id;
     // const questionCategory = ['Algorithm'];
     // const questionComplexity = 'Medium';
-    console.log(`qn to change: ${categoryFilter} | ${complexityFilter}`);
+    console.log(`qn to change: current qid=${LocalStorageHandler.getMatchData()?.question.id} | ${categoryFilter} | ${complexityFilter}`);
 
     if (socket) {
       // console.log(socket);
@@ -107,7 +107,12 @@ const CodingPage = () => {
         setCategoryFilter(categoryFilter);
         setComplexityFilter(complexityFilter);
       })
+      // socket.emit("changeQuestion", {
+      //   categories: categoryFilter,
+      //   complexity: complexityFilter
+      // })
       socket.emit("changeQuestion", {
+        id: LocalStorageHandler.getMatchData()?.question.id,
         categories: categoryFilter,
         complexity: complexityFilter
       })
