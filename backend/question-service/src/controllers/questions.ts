@@ -20,13 +20,9 @@ export const getAllQuestions = async (req: express.Request, res: express.Respons
 
 export const getQuestion = async (req: express.Request, res: express.Response) => {
     try {
-        console.log(req.query);
-        console.log(req.body);
-        console.log(req.params.complexity);
         const questions = await QuestionModel.find(req.body);
 
         if (!questions) { // Query failed
-            console.log('CONTROLLERS/QUESTIONS PROBLEM');
             return res.sendStatus(404).send("question not found");
         }
         if (questions.length === 0) { // No question found
@@ -44,10 +40,11 @@ export const getQuestion = async (req: express.Request, res: express.Response) =
     }
 }
 
-// Get filtered question excluding given question
 export const getFilteredQuestion = async (req: express.Request, res: express.Response) => {
     try {
-        // const filteredQuestions = await QuestionModel.find({ categories: req.query.categories, complexity: req.query.complexity });
+        console.log(req.query);
+        console.log(req.body);
+        console.log(req.params.complexity);
 
         const excludedQuestionId = req.query.id;
         const filteredQuestions = await QuestionModel.find({
@@ -68,8 +65,7 @@ export const getFilteredQuestion = async (req: express.Request, res: express.Res
             return res.status(200).json(filteredQuestions[0]);
         }
 
-        const randomIndex = Math.floor(Math.random() * filteredQuestions.length);
-        return res.status(200).json(filteredQuestions[randomIndex]);
+        return res.status(200).json(filteredQuestions);
     } catch (error) {
         console.error(error);
         return res.sendStatus(500).send("internal server error");
@@ -78,7 +74,7 @@ export const getFilteredQuestion = async (req: express.Request, res: express.Res
 }
 
 // Get filtered question from question repository
-export const getRandomFilteredQuestion = async (req: express.Request, res: express.Response) => {
+export const getAllFilteredQuestions = async (req: express.Request, res: express.Response) => {
     try {
         console.log(req.query);
         console.log(req.body);

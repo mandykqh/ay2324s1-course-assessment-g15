@@ -1,6 +1,6 @@
 import QuestionRequestHandler from '../handlers/QuestionRequestHandler';
 import { QuestionString, emptyQuestionString } from '../Commons';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Center, Flex, useToast } from '@chakra-ui/react';
 import { QuestionCacheContext } from '../contexts/QuestionCacheContext';
 import QuestionDetailsModal from '../components/question/modals/QuestionDetailsModal';
@@ -27,10 +27,10 @@ const QuestionPage = () => {
   const ctxValue = { questionCache: questionCache, setQuestionCache: setQuestionCache };
   const toast = useToast();
   const [isAuthenticated, setIsAuthenticated] = useState(null);
-
   const [filteredQuestions, setFilteredQuestions] = useState(questions);
   const [complexityFilter, setComplexityFilter] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
+
 
   const onFilter = (filterOptions: { categories: string[]; complexity: string }) => {
     const { categories, complexity } = filterOptions;
@@ -83,6 +83,7 @@ const QuestionPage = () => {
       await QuestionRequestHandler.createQuestionAndGetID(questionCache).then((id) => {
         setQuestions([...questions, { ...questionCache, id: id }]);
         setFilteredQuestions([...filteredQuestions, { ...questionCache, id: id }]);
+        setFilteredQuestions([...filteredQuestions, { ...questionCache, id: id }]);
       }
       );
       setAddModalIsVisible(false);
@@ -111,6 +112,7 @@ const QuestionPage = () => {
       QuestionRequestHandler.loadQuestions().then((questions: QuestionString[]) => {
         setQuestions(questions);
         setFilteredQuestions(questions);
+        setFilteredQuestions(questions);
       });
     } catch (error) {
       showError('Failed to load questions', toast);
@@ -124,7 +126,6 @@ const QuestionPage = () => {
     }
     setViewModalIsVisible(true);
   }
-  // console.log(questions.filter(i => i.complexity == 'Easy'))
 
   if (isAuthenticated) {
     return (
@@ -176,6 +177,7 @@ const QuestionPage = () => {
             ) : (
               <p>No results found</p>
             )}
+
           </Flex>
         </Center>
       </QuestionCacheContext.Provider>

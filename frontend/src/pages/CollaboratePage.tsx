@@ -1,3 +1,4 @@
+import React from 'react'
 import { Box, Grid, Button, Center, useToast } from "@chakra-ui/react";
 import NavigationBar from "../components/NavigationBar";
 import { useEffect, useState } from "react";
@@ -12,7 +13,9 @@ import LocalStorageHandler from "../handlers/LocalStorageHandler";
 import MatchingSocketHandler from "../handlers/MatchingSocketHandler";
 import Match from "../models/match/Match";
 import { useNavigate } from "react-router-dom";
-import QuestionRequestHandler, { getFilteredQuestion } from "../handlers/QuestionRequestHandler";
+import QuestionRequestHandler from '../handlers/QuestionRequestHandler';
+import { QuestionString } from '../Commons';
+
 
 const CollaboratePage = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -74,10 +77,19 @@ const CollaboratePage = () => {
       showError('Please select a complexity level', toast);
       return;
     }
-    // if (!QuestionRequestHandler.getFilteredQuestion) {
-    //   showError('No question available specified in this criteria. Try again with another category or complexity level.', toast);
-    //   return;
-    // }
+
+    try {
+      const filteredQuestions = await QuestionRequestHandler.getAllFilteredQuestions(matchingCache.categories, matchingCache.complexity);
+      if (filteredQuestions.length === 0) {
+        console.log('no qn');
+        showError('No question available specified in this criteria. Try again with another category or complexity level.', toast);
+        return; // Exit the entire findMatch function
+      }
+    } catch (error) {
+      showError('Failed to check question availability', toast);
+      return;
+    }
+
     try {
       handleOpenModal();
       const matchData = new Match(

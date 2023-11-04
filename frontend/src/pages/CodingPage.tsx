@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { useToast, Box, Button, Grid, VStack, GridItem, Select, HStack } from '@chakra-ui/react';
+import React, { useState, useEffect } from 'react';
+import { useToast, Box, Button, Grid, VStack, GridItem, Select, HStack, Textarea, Center } from '@chakra-ui/react';
 import { io, Socket } from 'socket.io-client';
 import NavigationBar from '../components/NavigationBar';
 import LocalStorageHandler from '../handlers/LocalStorageHandler';
@@ -78,7 +78,6 @@ const CodingPage = () => {
         duration: 3000,
       });
       setQuestion(question);
-      // setCategoryFilter([]);
       setCategoryFilter(categoryFilter);
       setComplexityFilter(complexityFilter);
     })
@@ -141,6 +140,7 @@ const CodingPage = () => {
       });
       return;
     }
+
     if (socket) {
       socket.on('newQuestion', (question) => {
         if (question) {
