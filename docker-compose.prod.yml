@@ -17,8 +17,6 @@ services:
       dockerfile: ./dockerfiles/dockerfile.collaboration-service
     ports:
       - "4000:4000"
-    environment:
-      QUESTIONS_SERVICE_URL: "http://ques-service:8080/questions"
     networks:
       - peerprep-network
     
@@ -101,7 +99,7 @@ services:
     ports:
       - "5173:5173"
     environment:
-      VITE_FRONTEND_URL: "http://localhost"
+      VITE_FRONTEND_URL: "http://g15-peerprep.ap-southeast-1.elasticbeanstalk.com"
       VITE_AUTH_SERVICE_URL: "/api/user-service/auth" 
       VITE_COLLABORATION_SERVICE_URL: "/api/collaboration-service/socket.io" 
       VITE_MATCHING_SERVICE_URL: "/api/matching-service/socket.io" 
@@ -121,7 +119,6 @@ services:
     build:
       context: .
       dockerfile: ./nginx/Dockerfile
-    container_name: "proxy"
     restart: always
     ports:
       - "80:80"

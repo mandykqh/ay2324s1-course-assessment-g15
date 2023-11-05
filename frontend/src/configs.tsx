@@ -4,3 +4,4 @@ export const AUTH_SERVICE_URL = import.meta.env.VITE_AUTH_SERVICE_URL || "http:/
 export const MATCHING_SERVICE_URL = import.meta.env.VITE_MATCHING_SERVICE_URL || "http://localhost:3000/";
 export const COLLABORATION_SERVICE_URL = import.meta.env.VITE_COLLABORATION_SERVICE_URL || "http://localhost:4000/";
 export const HISTORY_SERVICE_URL = import.meta.env.VITE_HISTORY_SERVICE_URL || "http://localhost:7000/";
+export const FRONTEND_URL = import.meta.env.VITE_FRONTEND_URL || "http://localhost:5173";

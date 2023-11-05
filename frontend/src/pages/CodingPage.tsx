@@ -4,7 +4,7 @@ import { io, Socket } from 'socket.io-client';
 import NavigationBar from '../components/NavigationBar';
 import LocalStorageHandler from '../handlers/LocalStorageHandler';
 import { useNavigate } from 'react-router-dom';
-import { COLLABORATION_SERVICE_URL } from '../configs';
+import { FRONTEND_URL, COLLABORATION_SERVICE_URL } from '../configs';
 import AuthRequestHandler from '../handlers/AuthRequestHandler';
 import LoadingPage from './LoadingPage';
 import QuestionDetails from '../components/coding/QuestionDetails';
@@ -42,7 +42,9 @@ const CodingPage = () => {
   }, []);
 
   useEffect(() => {
-    const socket = io(COLLABORATION_SERVICE_URL);
+    const socket = io(FRONTEND_URL, {
+      path: COLLABORATION_SERVICE_URL
+    });
     setSocket(socket);
     const matchData = LocalStorageHandler.getMatchData();
     socket.emit('joinRoom', matchData?.room_id);
