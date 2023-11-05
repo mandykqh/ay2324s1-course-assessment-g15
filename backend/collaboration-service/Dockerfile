@@ -1,7 +1,0 @@
-FROM node:latest
-WORKDIR /app
-COPY backend/collaboration-service/package*.json ./
-RUN npm install
-COPY backend/collaboration-service/. .
-EXPOSE 4000
-CMD ["npm", "start"]

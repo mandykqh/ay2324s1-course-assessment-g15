@@ -1,8 +1,0 @@
-version: '3'
-services:
-  history-service:
-    image: "peerprep15/peerprep15:history-latest"
-    ports:
-      - "80:7000"
-    env_file:
-      - .env
