@@ -14,7 +14,7 @@ const QuestionDetails: React.FC<QuestionString> = ({ id, title, complexity, cate
             </HStack>
             <Text color='white'>{description}</Text>
             <span>
-                <Link href={link}><u>Link</u></Link>
+                <Link href={link} target="_blank" rel="noopener noreferrer"><u>Link</u></Link>
             </span>
         </Grid>
     );
