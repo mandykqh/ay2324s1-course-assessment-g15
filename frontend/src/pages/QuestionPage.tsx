@@ -1,7 +1,7 @@
 import QuestionRequestHandler from '../handlers/QuestionRequestHandler';
 import { QuestionString, emptyQuestionString } from '../Commons';
-import { useEffect, useState } from 'react';
-import { Center, useToast } from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
+import { Center, Flex, useToast } from '@chakra-ui/react';
 import { QuestionCacheContext } from '../contexts/QuestionCacheContext';
 import QuestionDetailsModal from '../components/question/modals/QuestionDetailsModal';
 import AddQuestionModal from '../components/question/modals/AddQuestionModal';
@@ -12,6 +12,9 @@ import NavigationBar from '../components/NavigationBar';
 import { showError, showSuccess } from '../Util';
 import AuthRequestHandler from '../handlers/AuthRequestHandler';
 import LoadingPage from './LoadingPage';
+import FilterBar from '../components/question/FilterBar';
+import { FlatTree } from 'framer-motion';
+import LocalStorageHandler from "../handlers/LocalStorageHandler";
 
 let currentQuestion = emptyQuestionString;
 
@@ -24,6 +27,31 @@ const QuestionPage = () => {
   const ctxValue = { questionCache: questionCache, setQuestionCache: setQuestionCache };
   const toast = useToast();
   const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const [filteredQuestions, setFilteredQuestions] = useState(questions);
+  const [complexityFilter, setComplexityFilter] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
+
+
+  const onFilter = (filterOptions: { categories: string[]; complexity: string }) => {
+    const { categories, complexity } = filterOptions;
+    setComplexityFilter(complexity);
+    setCategoryFilter(categories);
+
+    let filtered = questions;
+    if (categories) {
+      filtered = filtered.filter((question) => {
+        return categories.every(c => question.categories.includes(c));
+      });
+    }
+    if (complexity) {
+      filtered = filtered.filter((question) => question.complexity === complexity);
+    }
+    setFilteredQuestions(filtered);
+    console.log(filtered)
+
+    LocalStorageHandler.storeFilterData(categories, complexity, filtered);
+  }
+
 
   useEffect(() => {
     AuthRequestHandler.isAuth()
@@ -33,6 +61,15 @@ const QuestionPage = () => {
       .catch(e => {
         console.log(e);
       });
+
+    // const filterData = LocalStorageHandler.getFilterData();
+
+    // if (filterData) {
+    //   const { categoryFilter, complexityFilter, filteredQuestions } = filterData;
+    //   setCategoryFilter(categoryFilter);
+    //   setComplexityFilter(complexityFilter);
+    //   setFilteredQuestions(filteredQuestions);
+    // }
   }, []);
 
   function clearQuestionCache() {
@@ -45,6 +82,8 @@ const QuestionPage = () => {
       validator.validateEmptyFields(questionCache);
       await QuestionRequestHandler.createQuestionAndGetID(questionCache).then((id) => {
         setQuestions([...questions, { ...questionCache, id: id }]);
+        setFilteredQuestions([...filteredQuestions, { ...questionCache, id: id }]);
+        setFilteredQuestions([...filteredQuestions, { ...questionCache, id: id }]);
       }
       );
       setAddModalIsVisible(false);
@@ -72,6 +111,8 @@ const QuestionPage = () => {
     try {
       QuestionRequestHandler.loadQuestions().then((questions: QuestionString[]) => {
         setQuestions(questions);
+        setFilteredQuestions(questions);
+        setFilteredQuestions(questions);
       });
     } catch (error) {
       showError('Failed to load questions', toast);
@@ -91,44 +132,53 @@ const QuestionPage = () => {
       <QuestionCacheContext.Provider value={ctxValue}>
         <NavigationBar index={0} />
         <Center pt={50}>
-          <AddQuestionModal
-            isVisible={addModalIsVisible}
-            closeHandler={() => setAddModalIsVisible(false)}
-            submitHandler={submitHandler}
-          />
-          <QuestionDetailsModal
-            isVisible={viewModalIsVisible}
-            data={questionCache}
-            closeHandler={() => { setViewModalIsVisible(false); }}
-            editModalHandler={() => {
-              setViewModalIsVisible(false);
-              setEditModalIsVisible(true);
-            }}
-            deleteHandler={(id: string) => {
-              try {
-                QuestionRequestHandler.deleteQuestion(id);
-                showSuccess('Question deleted!', toast)
-                setQuestions(questions.filter(i => i.id !== id));
+          <Flex flexDirection="column" alignItems="center">
+            <FilterBar onFilter={onFilter} />
+
+            <AddQuestionModal
+              isVisible={addModalIsVisible}
+              closeHandler={() => setAddModalIsVisible(false)}
+              submitHandler={submitHandler}
+            />
+            <QuestionDetailsModal
+              isVisible={viewModalIsVisible}
+              data={questionCache}
+              closeHandler={() => { setViewModalIsVisible(false); }}
+              editModalHandler={() => {
                 setViewModalIsVisible(false);
-              } catch (error) {
-                showError('delete fail', toast);
-              }
-            }}
-          />
-          <EditQuestionModal
-            isVisible={editModalIsVisible}
-            questionToEdit={currentQuestion}
-            closeHandler={() => setEditModalIsVisible(false)}
-            submitUpdateHandler={submitUpdateHandler}
-          />
-          <QuestionTable
-            data={questions}
-            viewDescriptionHandler={viewDescriptionHandler}
-            addBtnOnClick={() => {
-              clearQuestionCache();
-              setAddModalIsVisible(true)
-            }}
-          />
+                setEditModalIsVisible(true);
+              }}
+              deleteHandler={(id: string) => {
+                try {
+                  QuestionRequestHandler.deleteQuestion(id);
+                  showSuccess('Question deleted!', toast)
+                  setQuestions(questions.filter(i => i.id !== id));
+                  setViewModalIsVisible(false);
+                } catch (error) {
+                  showError('delete fail', toast);
+                }
+              }}
+            />
+            <EditQuestionModal
+              isVisible={editModalIsVisible}
+              questionToEdit={currentQuestion}
+              closeHandler={() => setEditModalIsVisible(false)}
+              submitUpdateHandler={submitUpdateHandler}
+            />
+            {filteredQuestions.length > 0 ? (
+              <QuestionTable
+                data={filteredQuestions}
+                viewDescriptionHandler={viewDescriptionHandler}
+                addBtnOnClick={() => {
+                  clearQuestionCache();
+                  setAddModalIsVisible(true);
+                }}
+              />
+            ) : (
+              <p>No results found</p>
+            )}
+
+          </Flex>
         </Center>
       </QuestionCacheContext.Provider>
     )

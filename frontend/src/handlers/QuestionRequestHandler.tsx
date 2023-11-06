@@ -40,10 +40,25 @@ class QuestionRequestHandler {
     });
     return response.data;
   }
-
   static async getQuestionsCount(): Promise<number> {
     const response = await this.client.get('/count', { withCredentials: true }).catch(e => { throw e });
     return response.data;
+  }
+
+  static async getAllFilteredQuestions(categories: string[], complexity: string): Promise<QuestionString[]> {
+    try {
+      const response = await this.client.get(`/allfiltered`, {
+        params: {
+          categories: categories,
+          complexity: complexity,
+        },
+      });
+      const questions = response.data as QuestionString[];
+      return questions;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
   }
 }
 

@@ -25,7 +25,7 @@ const io = require('socket.io')(server, {
 });
 
 server.listen(port, () => {
-    console.log(`Server listening on port ${port}`);
+  console.log(`Server listening on port ${port}`);
 });
 
 setupSockets(io);

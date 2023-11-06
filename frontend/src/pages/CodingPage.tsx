@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Box, Button, Grid, VStack, GridItem, Select, HStack } from '@chakra-ui/react';
+import React, { useState, useEffect } from 'react';
+import { useToast, Box, Button, Grid, VStack, GridItem, Select, HStack, Textarea, Center } from '@chakra-ui/react';
 import { io, Socket } from 'socket.io-client';
 import NavigationBar from '../components/NavigationBar';
 import LocalStorageHandler from '../handlers/LocalStorageHandler';
@@ -15,6 +15,7 @@ import { cpp } from '@codemirror/lang-cpp';
 import { javascript } from '@codemirror/lang-javascript';
 import { okaidia } from '@uiw/codemirror-theme-okaidia';
 import HistoryRequestHandler from '../handlers/HistoryRequestHandler';
+import QuestionPreferences from '../components/coding/QuestionPreferences';
 
 const CodingPage = () => {
   const navigate = useNavigate();
@@ -22,6 +23,9 @@ const CodingPage = () => {
   const [socket, setSocket] = useState<Socket>();
   const [code, setCode] = useState('');
   const [language, setLanguage] = useState('javascript');
+  const [question, setQuestion] = useState(LocalStorageHandler.getMatchData()?.question);
+  const [complexityFilter, setComplexityFilter] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
 
   useEffect(() => {
     AuthRequestHandler.isAuth()
@@ -54,6 +58,31 @@ const CodingPage = () => {
       setLanguage(newLanguage);
     });
 
+    socket.on('languageChange', (newLanguage) => {
+      setLanguage(newLanguage);
+    });
+
+    socket.on('newQuestion', (question) => {
+      // console.log(`new question: ${question.title} | ${question.categories} | ${question.complexity} | ${question.description}`);
+      if (!question) {
+        toast({
+          title: "Error",
+          description: `Change question request by User ${LocalStorageHandler.getUserData()?.username}: No question found.`,
+          status: "error",
+          duration: 3000,
+        });
+        return;
+      }
+      toast({
+        title: "Question Changed",
+        description: "The question has been successfully changed.",
+        status: "success",
+        duration: 3000,
+      });
+      setQuestion(question);
+      setCategoryFilter(categoryFilter);
+      setComplexityFilter(complexityFilter);
+    })
     // TODO: Messaging feature
 
     return () => {
@@ -99,6 +128,49 @@ const CodingPage = () => {
     navigate('../home');
   }
 
+  const toast = useToast();
+
+  const handleQuestionChange = () => {
+    console.log(`qn to change: current qid=${LocalStorageHandler.getMatchData()?.question.id} | ${categoryFilter} | ${complexityFilter}`);
+
+    if (categoryFilter.length < 1 || !complexityFilter) {
+      toast({
+        title: "Error",
+        description: "Category and Complexity fields cannot be empty.",
+        status: "error",
+        duration: 3000,
+      });
+      return;
+    }
+
+    if (socket) {
+      socket.on('newQuestion', (question) => {
+        if (question) {
+          setQuestion(question);
+          LocalStorageHandler.updateMatchDataQuestion(question);
+        }
+        setCategoryFilter(categoryFilter);
+        setComplexityFilter(complexityFilter);
+      })
+      socket.emit("changeQuestion", {
+        id: LocalStorageHandler.getMatchData()?.question.id,
+        categories: categoryFilter,
+        complexity: complexityFilter
+      })
+
+    }
+  }
+
+  const handleFilterPreferences = (filterOptions: { categories: string[]; complexity: string }) => {
+    const { categories, complexity } = filterOptions;
+    setComplexityFilter(complexity);
+    setCategoryFilter(categories);
+    // LocalStorageHandler.storeFilterData(categories, complexity, filtered);
+
+    console.log(`preferences updated: ${complexity} | ${categories}`);
+  }
+
+  const questionString = LocalStorageHandler.getMatchData()?.question;
   if (isAuthenticated) {
     const questionString = LocalStorageHandler.getMatchData()?.question;
     return (
@@ -106,6 +178,8 @@ const CodingPage = () => {
         <NavigationBar index={1} />
         <Grid height='100%' templateColumns='repeat(2, 1fr)' gap='20px' padding='20px' paddingTop='70px'>
           <GridItem colSpan={1}>
+            <QuestionPreferences onFilter={handleFilterPreferences} />
+            <Button onClick={handleQuestionChange}>Change Question</Button>
             <QuestionDetails
               id={questionString?.id || ""}
               title={questionString?.title || ""}
@@ -127,22 +201,22 @@ const CodingPage = () => {
                 </Select>
                 <Button onClick={() => handleDisconnect()}> Disconnect </Button>
               </HStack>
-							<CodeMirror
-								value={code}
-								height='80vh'
-								width='50vw'
-								extensions={[
-									language === 'java'
-										? java()
-										: language === 'python'
-										? python()
-										: language === 'cpp'
-										? cpp()
-										: javascript({ jsx: true }),
-								]}
-								onChange={handleCodeChange}
-								theme={okaidia}
-							/>
+              <CodeMirror
+                value={code}
+                height='80vh'
+                width='50vw'
+                extensions={[
+                  language === 'java'
+                    ? java()
+                    : language === 'python'
+                      ? python()
+                      : language === 'cpp'
+                        ? cpp()
+                        : javascript({ jsx: true }),
+                ]}
+                onChange={handleCodeChange}
+                theme={okaidia}
+              />
             </VStack>
           </GridItem>
         </Grid>
