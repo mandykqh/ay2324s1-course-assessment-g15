@@ -1,6 +1,6 @@
 import amqp from 'amqplib';
 import { categoryEnum, complexityEnum } from '../types/enums';
-import { getQuestions, getRandomFilteredQuestion } from '../api/QuestionsAPI';
+import { getRandomFilteredQuestion } from '../api/QuestionsAPI';
 import { getRoomID } from '../api/CollaborationAPI';
 
 export const rabbitMQSetup = async () => {

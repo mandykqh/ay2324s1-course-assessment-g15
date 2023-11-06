@@ -42,9 +42,9 @@ export const getQuestion = async (req: express.Request, res: express.Response) =
 
 export const getFilteredQuestion = async (req: express.Request, res: express.Response) => {
     try {
-        console.log(req.query);
-        console.log(req.body);
-        console.log(req.params.complexity);
+        // console.log(req.query);
+        // console.log(req.body);
+        // console.log(req.params.complexity);
 
         const excludedQuestionId = req.query.id;
         const filteredQuestions = await QuestionModel.find({
@@ -74,12 +74,17 @@ export const getFilteredQuestion = async (req: express.Request, res: express.Res
 }
 
 // Get filtered question from question repository
-export const getAllFilteredQuestions = async (req: express.Request, res: express.Response) => {
+export const getRandomFilteredQuestion = async (req: express.Request, res: express.Response) => {
     try {
         console.log(req.query);
         console.log(req.body);
         console.log(req.params.complexity);
-        const filteredQuestions = await QuestionModel.find({ categories: req.query.categories, complexity: req.query.complexity });
+        const filteredQuestions = await QuestionModel.find({
+            $and: [
+                { categories: req.query.categories },
+                { complexity: req.query.complexity },
+            ],
+        });
 
         if (!filteredQuestions) { // Query failed
             return res.sendStatus(404).send("question not found");
@@ -93,6 +98,37 @@ export const getAllFilteredQuestions = async (req: express.Request, res: express
 
         const randomIndex = Math.floor(Math.random() * filteredQuestions.length);
         return res.status(200).json(filteredQuestions[randomIndex]);
+    } catch (error) {
+        console.error(error);
+        return res.sendStatus(500).send("internal server error");
+    }
+
+}
+
+// Get filtered question from question repository
+export const getAllFilteredQuestions = async (req: express.Request, res: express.Response) => {
+    try {
+        console.log(req.query);
+        console.log(req.body);
+        console.log(req.params.complexity);
+        const filteredQuestions = await QuestionModel.find({
+            $and: [
+                { categories: req.query.categories },
+                { complexity: req.query.complexity },
+            ],
+        });
+
+        if (!filteredQuestions) { // Query failed
+            return res.sendStatus(404).send("question not found");
+        }
+        if (filteredQuestions.length === 0) { // No question found
+            return res.sendStatus(204);
+        }
+        if (filteredQuestions.length == 1) {
+            return res.status(200).json(filteredQuestions[0]);
+        }
+
+        return res.status(200).json(filteredQuestions);
     } catch (error) {
         console.error(error);
         return res.sendStatus(500).send("internal server error");
