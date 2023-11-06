@@ -18,38 +18,12 @@ export const getAllQuestions = async (req: express.Request, res: express.Respons
     }
 }
 
-export const getQuestion = async (req: express.Request, res: express.Response) => {
-    try {
-        const questions = await QuestionModel.find(req.body);
-
-        if (!questions) { // Query failed
-            return res.sendStatus(404).send("question not found");
-        }
-        if (questions.length === 0) { // No question found
-            return res.sendStatus(204);
-        }
-        if (questions.length == 1) {
-            return res.status(200).json(questions[0]);
-        }
-
-        const randomIndex = Math.floor(Math.random() * questions.length);
-        return res.status(200).json(questions[randomIndex]);
-    } catch (error) {
-        console.error(error);
-        return res.sendStatus(500).send("internal server error");
-    }
-}
-
 export const getFilteredQuestion = async (req: express.Request, res: express.Response) => {
     try {
-        // console.log(req.query);
-        // console.log(req.body);
-        // console.log(req.params.complexity);
-
         const excludedQuestionId = req.query.id;
         const filteredQuestions = await QuestionModel.find({
             $and: [
-                { categories: req.query.categories },
+                { categories: { $all: req.query.categories } },
                 { complexity: req.query.complexity },
                 { id: { $ne: excludedQuestionId } }, // Exclude the specified question ID
             ],
@@ -76,12 +50,9 @@ export const getFilteredQuestion = async (req: express.Request, res: express.Res
 // Get filtered question from question repository
 export const getRandomFilteredQuestion = async (req: express.Request, res: express.Response) => {
     try {
-        console.log(req.query);
-        console.log(req.body);
-        console.log(req.params.complexity);
         const filteredQuestions = await QuestionModel.find({
             $and: [
-                { categories: req.query.categories },
+                { categories: { $all: req.query.categories } },
                 { complexity: req.query.complexity },
             ],
         });
@@ -113,7 +84,7 @@ export const getAllFilteredQuestions = async (req: express.Request, res: express
         console.log(req.params.complexity);
         const filteredQuestions = await QuestionModel.find({
             $and: [
-                { categories: req.query.categories },
+                { categories: { $all: req.query.categories } },
                 { complexity: req.query.complexity },
             ],
         });
