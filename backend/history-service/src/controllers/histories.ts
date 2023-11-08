@@ -23,10 +23,8 @@ export const addHistory = async (req: express.Request, res: express.Response) =>
         const mediumCount = complexity == 'Medium' ? 1 : 0;
         const hardCount = complexity == 'Hard' ? 1 : 0;
 
-        console.log(userId, attempt, complexity);
 
         const entryExist = await HistoryModel.findOne({ userId: userId });
-        console.log(entryExist);
         if (!entryExist) {
             await HistoryModel.create({
                 userId: userId,

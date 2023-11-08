@@ -33,7 +33,6 @@ export const signout = async (req: express.Request, res: express.Response) => {
 };
 
 export const check = async (req: express.Request, res: express.Response) => {
-    console.log(req.session);
     if (req.session.isAuth) {
         return res.status(200).json({ isAuth: true, user: req.session.user });
     } else {
