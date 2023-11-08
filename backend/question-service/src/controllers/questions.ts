@@ -52,7 +52,7 @@ export const getRandomFilteredQuestion = async (req: express.Request, res: expre
     try {
         const filteredQuestions = await QuestionModel.find({
             $and: [
-                { categories: { $all: req.query.categories } },
+                { categories: { $in: req.query.categories } },
                 { complexity: req.query.complexity },
             ],
         });
@@ -77,14 +77,14 @@ export const getRandomFilteredQuestion = async (req: express.Request, res: expre
 }
 
 // Get filtered question from question repository
+// This is used by the frontend to check for questions before queueing
+// Since the match is based on (complexity.user1 == complexity.user2) AND (category.user1 intersect category.user2),
+// We only need to check if questions exist in any of the provided categories
 export const getAllFilteredQuestions = async (req: express.Request, res: express.Response) => {
     try {
-        console.log(req.query);
-        console.log(req.body);
-        console.log(req.params.complexity);
         const filteredQuestions = await QuestionModel.find({
             $and: [
-                { categories: { $all: req.query.categories } },
+                { categories: { $in: req.query.categories } },
                 { complexity: req.query.complexity },
             ],
         });
