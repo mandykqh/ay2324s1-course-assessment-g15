@@ -48,12 +48,11 @@ export const getFilteredQuestion = async (req: express.Request, res: express.Res
 }
 
 // Get filtered question from question repository
-// This is only used by the matching service, and it only sends one category
 export const getRandomFilteredQuestion = async (req: express.Request, res: express.Response) => {
     try {
         const filteredQuestions = await QuestionModel.find({
             $and: [
-                { categories: req.query.categories },
+                { categories: { $in: req.query.categories } },
                 { complexity: req.query.complexity },
             ],
         });

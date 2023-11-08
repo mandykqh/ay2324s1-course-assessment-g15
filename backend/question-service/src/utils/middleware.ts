@@ -1,7 +1,6 @@
 import express from 'express';
 
 export const requireAuth = (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    console.log(req.session);
     if (req.session.isAuth) {
         next();
     } else {
