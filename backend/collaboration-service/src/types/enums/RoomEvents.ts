@@ -5,5 +5,9 @@ export enum RoomEvents {
     codeChange = 'codeChange',
     userLeft = 'userLeft',
     disconnect = 'disconnect',
-    messageChange = 'messageChange'
+    messageChange = 'messageChange',
+    clientReady = 'client-ready',
+    canvasState = 'canvas-state',
+    drawLine = 'draw-line',
+    canvasClear = 'canvas-clear'
 }
