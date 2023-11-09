@@ -76,35 +76,57 @@ export const getRandomFilteredQuestion = async (req: express.Request, res: expre
 
 }
 
-// Get filtered question from question repository
-// This is used by the frontend to check for questions before queueing
-// Since the match is based on (complexity.user1 == complexity.user2) AND (category.user1 intersect category.user2),
-// We only need to check if questions exist in any of the provided categories
-export const getAllFilteredQuestions = async (req: express.Request, res: express.Response) => {
+// We need to check if there are questions for each combination of categories and complexity
+export const checkCategoryAndComplexity = async (req: express.Request, res: express.Response) => {
     try {
-        const filteredQuestions = await QuestionModel.find({
-            $and: [
-                { categories: { $in: req.query.categories } },
-                { complexity: req.query.complexity },
-            ],
-        });
+        
+        // check if categories are a single string or an array
+        if (typeof req.query.categories === "string") {
+            const questions = await QuestionModel.find({
+                $and: [
+                    { categories: req.query.categories },
+                    { complexity: req.query.complexity },
+                ],
+            });
+            if (questions.length > 0) {
+                // All combinations have questions, send a success message
+                return res.status(200).send("Success");
+            } else {
+                // Some categories don't have questions, send the list of empty categories
+                return res.status(404).json({
+                    message: `There are no ${req.query.complexity} questions in the following categories:`,
+                    emptyCategories: req.query.categories,
+                });
+            }
+        }
 
-        if (!filteredQuestions) { // Query failed
-            return res.sendStatus(404).send("question not found");
-        }
-        if (filteredQuestions.length === 0) { // No question found
-            return res.sendStatus(204);
-        }
-        if (filteredQuestions.length == 1) {
-            return res.status(200).json(filteredQuestions[0]);
+        const emptyCategories: String[] = [];
+        for (const category of (req.query.categories as String[])) {
+            const questions = await QuestionModel.find({
+                $and: [
+                    { categories: category },
+                    { complexity: req.query.complexity },
+                ],
+            });
+            if (!questions || questions.length === 0) {
+                emptyCategories.push(category);
+            }
         }
 
-        return res.status(200).json(filteredQuestions);
+        if (emptyCategories.length === 0) {
+            // All combinations have questions, send a success message
+            return res.status(200).send("Success");
+        } else {
+            // Some categories don't have questions, send the list of empty categories
+            return res.status(404).json({
+                message: "There are no questions in the following categories:",
+                emptyCategories: emptyCategories,
+            });
+        }
     } catch (error) {
         console.error(error);
-        return res.sendStatus(500).send("internal server error");
+        return res.sendStatus(500).send("Internal server error");
     }
-
 }
 
 
