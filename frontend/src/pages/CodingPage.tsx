@@ -20,6 +20,7 @@ import QuestionPreferences from '../components/coding/QuestionPreferences';
 import Chat from '../components/chat/chatDetails';
 import { ChatMessage } from '../Commons';
 import { ChatIcon, EditIcon } from "@chakra-ui/icons";
+import Canvas from '../components/canvas/canvas';
 
 const CodingPage = () => {
   const navigate = useNavigate();
@@ -33,6 +34,7 @@ const CodingPage = () => {
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [isChatDrawerOpen, setIsChatDrawerOpen] = useState(false);
+  const [isCanvasDrawerOpen, setIsCanvasDrawerOpen] = useState(false);
 
   useEffect(() => {
     AuthRequestHandler.isAuth()
@@ -143,6 +145,10 @@ const CodingPage = () => {
   const toggleChatDrawer = () => {
     setIsChatDrawerOpen(!isChatDrawerOpen);
   };
+
+  const toggleCanvasDrawer = () => {
+    setIsCanvasDrawerOpen(!isCanvasDrawerOpen);
+  }
 
   const handleCodeChange = (newCode: string) => {
     // Emit code changes to the server
@@ -279,6 +285,15 @@ const CodingPage = () => {
                 onClick={toggleChatDrawer} 
                 zIndex="1"
               />
+              <IconButton
+                aria-label="Canvas"
+                icon={<EditIcon />} 
+                position="absolute"
+                bottom="0px"
+                right="70px"
+                onClick={toggleCanvasDrawer}
+                zIndex="1"
+              />
             </VStack>
           </GridItem>
         </Grid>
@@ -293,6 +308,18 @@ const CodingPage = () => {
                 newMessage={newMessage}
                 onNewMessageChange={handleNewMessageChange}
                 onSendMessage={handleSendMessage}
+              />
+            </DrawerBody>
+          </DrawerContent>
+        </Drawer>
+        <Drawer placement="left" isOpen={isCanvasDrawerOpen} onClose={toggleCanvasDrawer} size={'full'}>
+          <DrawerOverlay />
+          <DrawerContent>
+            <DrawerCloseButton />
+            <DrawerHeader>Canvas</DrawerHeader>
+            <DrawerBody>
+              <Canvas
+                socket={socket}
               />
             </DrawerBody>
           </DrawerContent>
