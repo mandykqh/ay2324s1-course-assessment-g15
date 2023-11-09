@@ -78,11 +78,12 @@ const CollaboratePage = () => {
       return;
     }
 
+    // Validate user input
     try {
-      const filteredQuestions = await QuestionRequestHandler.getAllFilteredQuestions(matchingCache.categories, matchingCache.complexity);
-      if (filteredQuestions.length === 0) {
-        console.log('no qn');
-        showError('No question available specified in this criteria. Try again with another category or complexity level.', toast);
+      const check = await QuestionRequestHandler.checkMatchFilter(matchingCache.categories, matchingCache.complexity);
+      // if check is an object, it means there is no question available
+      if (typeof check === 'object') {
+        showError(`${check.message} ${check.emptyCategories.join(",")}`, toast);
         return; // Exit the entire findMatch function
       }
     } catch (error) {
@@ -90,6 +91,7 @@ const CollaboratePage = () => {
       return;
     }
 
+    // Attempt matching with collaboration service
     try {
       handleOpenModal();
       const matchData = new Match(
