@@ -32,6 +32,11 @@ function handleSocketEvents(socket: Socket) {
       // Listen for disconnects and inform others in the room
       socket.to(room).emit(RoomEvents.userLeft, socket.id);
     });
+    
+    socket.on(RoomEvents.messageChange, (message) => {
+      socket.to(room).emit(RoomEvents.messageChange, message);
+      console.log(`User ${socket.id} sent message: ${message}`);
+    });
 
     socket.on('changeQuestion', async (data) => {
       // Listen for code changes from a client and broadcast them to others in the room

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useToast, Box, Button, Grid, VStack, GridItem, Select, HStack, Textarea, Center } from '@chakra-ui/react';
+import { Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, IconButton, 
+        useToast, Box, Button, Grid, VStack, GridItem, Select, HStack, Textarea, Center } from '@chakra-ui/react';
 import { io, Socket } from 'socket.io-client';
 import NavigationBar from '../components/NavigationBar';
 import LocalStorageHandler from '../handlers/LocalStorageHandler';
@@ -16,6 +17,9 @@ import { javascript } from '@codemirror/lang-javascript';
 import { okaidia } from '@uiw/codemirror-theme-okaidia';
 import HistoryRequestHandler from '../handlers/HistoryRequestHandler';
 import QuestionPreferences from '../components/coding/QuestionPreferences';
+import Chat from '../components/chat/chatDetails';
+import { ChatMessage } from '../Commons';
+import { ChatIcon, EditIcon } from "@chakra-ui/icons";
 
 const CodingPage = () => {
   const navigate = useNavigate();
@@ -26,6 +30,9 @@ const CodingPage = () => {
   const [question, setQuestion] = useState(LocalStorageHandler.getMatchData()?.question);
   const [complexityFilter, setComplexityFilter] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
+  const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
+  const [newMessage, setNewMessage] = useState('');
+  const [isChatDrawerOpen, setIsChatDrawerOpen] = useState(false);
 
   useEffect(() => {
     AuthRequestHandler.isAuth()
@@ -83,7 +90,12 @@ const CodingPage = () => {
       setCategoryFilter(categoryFilter);
       setComplexityFilter(complexityFilter);
     })
-    // TODO: Messaging feature
+
+    socket.on('messageChange', (message) => {
+      // Handle incoming messages and update chat history
+      const newMessageObj = { sender: LocalStorageHandler.getUserData()?.id!, text: message };
+      updateChatHistory(newMessageObj);
+    });
 
     return () => {
       socket.disconnect();
@@ -92,6 +104,8 @@ const CodingPage = () => {
 
 
   useEffect(() => {
+    const clientChatHistory = getChatHistory();
+    setChatHistory(clientChatHistory);
     updateHistory();
   }, []);
 
@@ -106,6 +120,29 @@ const CodingPage = () => {
       complexity: LocalStorageHandler.getMatchData()?.question.complexity!
     });
   }
+  const getChatHistory = () => {
+    const clientId = LocalStorageHandler.getUserData()?.id!;
+    const storedChatHistory = LocalStorageHandler.getChatData(`chatHistory_${clientId}`);
+    return storedChatHistory;
+  };
+
+  const updateChatHistory = (newMessage: ChatMessage) => {
+    const clientId = LocalStorageHandler.getUserData()?.id!;
+    const storedChatHistory = getChatHistory();
+    const updatedChatHistory = [...storedChatHistory, newMessage];
+    LocalStorageHandler.storeChatData(`chatHistory_${clientId}`,updatedChatHistory);
+    setChatHistory(updatedChatHistory);
+  };
+
+  const clearChatHistory = () => {
+    const clientId = LocalStorageHandler.getUserData()?.id!;
+    localStorage.setItem(`chatHistory_${clientId}`, JSON.stringify([]));
+    setChatHistory([]);
+  };
+
+  const toggleChatDrawer = () => {
+    setIsChatDrawerOpen(!isChatDrawerOpen);
+  };
 
   const handleCodeChange = (newCode: string) => {
     // Emit code changes to the server
@@ -123,8 +160,24 @@ const CodingPage = () => {
     setLanguage(newLanguage); // Update the state
   };
 
+  const handleNewMessageChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newMessageText = event.target.value; // Extract the message text
+    setNewMessage(newMessageText); // Update the new message state with the text
+  };
+
+  const handleSendMessage = () => {
+    if (socket && newMessage.trim() !== '') {
+      socket.emit('messageChange', newMessage); // Send the message to the server
+      // Append the sent message to the chat history
+      const sentMessage = { sender: LocalStorageHandler.getUserData()?.id!, text: newMessage };
+      updateChatHistory(sentMessage);
+      setNewMessage(''); // Clear the new message input field
+    }
+  };
+
   function handleDisconnect() {
     LocalStorageHandler.deleteMatchData();
+    clearChatHistory();
     navigate('../home');
   }
 
@@ -217,9 +270,33 @@ const CodingPage = () => {
                 onChange={handleCodeChange}
                 theme={okaidia}
               />
+              <IconButton 
+                aria-label="Chat" 
+                icon={<ChatIcon />} 
+                position="absolute" 
+                bottom="0px" 
+                right="20px" 
+                onClick={toggleChatDrawer} 
+                zIndex="1"
+              />
             </VStack>
           </GridItem>
         </Grid>
+        <Drawer placement="left" isOpen={isChatDrawerOpen} onClose={toggleChatDrawer}>
+          <DrawerOverlay />
+          <DrawerContent>
+            <DrawerCloseButton />
+            <DrawerHeader>Chat</DrawerHeader>
+            <DrawerBody>
+              <Chat
+                messages={chatHistory}
+                newMessage={newMessage}
+                onNewMessageChange={handleNewMessageChange}
+                onSendMessage={handleSendMessage}
+              />
+            </DrawerBody>
+          </DrawerContent>
+        </Drawer>
       </Box>
     );
   } else {
