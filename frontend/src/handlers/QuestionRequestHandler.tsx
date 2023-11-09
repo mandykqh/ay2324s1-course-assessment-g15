@@ -45,16 +45,16 @@ class QuestionRequestHandler {
     return response.data;
   }
 
-  static async getAllFilteredQuestions(categories: string[], complexity: string): Promise<QuestionString[]> {
+  static async checkMatchFilter(categories: string[], complexity: string): Promise<any> {
     try {
-      const response = await this.client.get(`/allfiltered`, {
+      const response = await this.client.get(`/check`, {
         params: {
           categories: categories,
           complexity: complexity,
         },
+        withCredentials: true,
       });
-      const questions = response.data as QuestionString[];
-      return questions;
+      return response.data;
     } catch (error) {
       console.log(error);
       throw error;

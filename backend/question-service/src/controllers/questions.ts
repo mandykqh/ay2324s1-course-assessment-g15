@@ -93,7 +93,7 @@ export const checkCategoryAndComplexity = async (req: express.Request, res: expr
                 return res.status(200).send("Success");
             } else {
                 // Some categories don't have questions, send the list of empty categories
-                return res.status(404).json({
+                return res.status(200).json({
                     message: `There are no ${req.query.complexity} questions in the following categories:`,
                     emptyCategories: req.query.categories,
                 });
@@ -118,8 +118,8 @@ export const checkCategoryAndComplexity = async (req: express.Request, res: expr
             return res.status(200).send("Success");
         } else {
             // Some categories don't have questions, send the list of empty categories
-            return res.status(404).json({
-                message: "There are no questions in the following categories:",
+            return res.status(200).json({
+                message: `There are no ${req.query.complexity} questions in the following categories:`,
                 emptyCategories: emptyCategories,
             });
         }
