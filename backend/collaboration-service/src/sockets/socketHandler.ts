@@ -1,6 +1,7 @@
 import { Server, Socket } from 'socket.io';
 import { RoomEvents } from '../types/enums/RoomEvents';
 import { getFilteredQuestion, getQuestions } from '../api/Questions';
+import {DrawLine} from '../types/drawtypes/drawtypes';
 
 export function setupSockets(io: Server) {
   io.on('connection', (socket: Socket) => {
