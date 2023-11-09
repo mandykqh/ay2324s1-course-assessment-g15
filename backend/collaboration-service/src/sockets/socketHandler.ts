@@ -32,11 +32,26 @@ function handleSocketEvents(socket: Socket) {
       // Listen for disconnects and inform others in the room
       socket.to(room).emit(RoomEvents.userLeft, socket.id);
     });
-    
+
     socket.on(RoomEvents.messageChange, (message) => {
       socket.to(room).emit(RoomEvents.messageChange, message);
       console.log(`User ${socket.id} sent message: ${message}`);
     });
+
+    socket.on(RoomEvents.clientReady, () => {
+      socket.to(room).emit('get-canvas-state')
+    })
+
+    socket.on(RoomEvents.canvasState, (state) => {
+      console.log('received canvas state')
+      socket.to(room).emit('canvas-state-from-server', state)
+    })
+
+    socket.on(RoomEvents.drawLine, ({ prevPoint, currentPoint, color }: DrawLine) => {
+      socket.to(room).emit('draw-line', { prevPoint, currentPoint, color })
+    })
+
+    socket.on(RoomEvents.canvasClear, () => socket.to(room).emit('canvas-clear'))
 
     socket.on('changeQuestion', async (data) => {
       // Listen for code changes from a client and broadcast them to others in the room
