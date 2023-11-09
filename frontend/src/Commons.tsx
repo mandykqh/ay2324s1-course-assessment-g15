@@ -58,3 +58,15 @@ export interface Attempt {
   questionId: string;
   timestamp: string;
 };
+
+export interface ChatMessage {
+  sender: string;
+  text: string;
+};
+
+export interface ChatProps {
+  messages: ChatMessage[];
+  newMessage: string;
+  onNewMessageChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onSendMessage: () => void;
+};
