@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Box, Stack, Text } from "@chakra-ui/react";
+import { Box, Stack, Text, filter } from "@chakra-ui/react";
 import HistoryOverview from "../../history/HistoryOverview";
 import PastAttempts from "../../history/PastAttempts";
 import HistoryRequestHandler from "../../../handlers/HistoryRequestHandler";
-import { Attempt } from "../../../Commons";
+import { Attempt, HistoryDataString, HistoryResponseString, QuestionString } from "../../../Commons";
 import QuestionRequestHandler from "../../../handlers/QuestionRequestHandler";
 
 const UserHistory = () => {
@@ -15,21 +15,37 @@ const UserHistory = () => {
   const [hard, setHard] = useState(0);
   const [attempts, setAttempts] = useState<Attempt[]>([]);
 
+  function getUniqueQuestions(value: HistoryResponseString) {
+    let arr = value.attempts.map(x => x.questionId);
+    arr = arr.filter((value, index) => arr.indexOf(value) === index);
+    return arr.filter(value => value !== undefined);
+  }
+
   useEffect(() => {
     HistoryRequestHandler.getHistory()
       .then((r) => {
-        QuestionRequestHandler.getQuestionsCount().then(r => setTotal(r));
-        setTotal(100);
-        setAttempted(parseInt(r.total));
-        setEasy(parseInt(r.easy));
-        setMedium(parseInt(r.medium));
-        setHard(parseInt(r.hard));
+        QuestionRequestHandler.getQuestionsCount().then(total => setTotal(total));
+        let uniqueQuestions = getUniqueQuestions(r)
+        setAttempted(uniqueQuestions.length);
         QuestionRequestHandler.loadQuestions().then((qns) => {
+          setEasy(qns.filter(x => x.complexity === 'Easy')
+            .map(value => uniqueQuestions.includes(value.id))
+            .filter(x => x).length)
+          setMedium(qns.filter(x => x.complexity === 'Medium')
+            .map(value => uniqueQuestions.includes(value.id))
+            .filter(x => x).length)
+          setHard(qns.filter(x => x.complexity === 'Hard')
+            .map(value => uniqueQuestions.includes(value.id))
+            .filter(x => x).length)
           let updatedAttempts = r.attempts.map((entry) => {
+            let title = "Question does not exist anymore";
+            let filtered = qns.filter((q) => q.id === entry.questionId)[0];
+            if (filtered !== undefined) {
+              title = filtered.title;
+            }
             return {
-              questionId:
-                qns.filter((q) =>
-                  q.id === entry.questionId)[0].title, timestamp: entry.timestamp
+              questionId: title,
+              timestamp: entry.timestamp
             }
           });
           setAttempts(updatedAttempts);

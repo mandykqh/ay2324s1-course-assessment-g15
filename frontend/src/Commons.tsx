@@ -75,3 +75,15 @@ export interface ChatProps {
 export interface CanvasProps {
   socket?: Socket;
 }
+
+export interface HistoryResponseString {
+  userId: string;
+  total: string;
+  easy: string;
+  medium: string,
+  hard: string,
+  attempts: [{
+    questionId: string,
+    timestamp: string
+  }]
+}

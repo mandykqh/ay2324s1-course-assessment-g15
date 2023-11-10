@@ -1,19 +1,7 @@
-import axios, { AxiosError, AxiosInstance } from 'axios';
-import { HistoryDataString, UserDataString } from '../Commons';
+import axios from 'axios';
+import { HistoryDataString, HistoryResponseString } from '../Commons';
 import { HISTORY_SERVICE_URL } from '../configs';
 import LocalStorageHandler from './LocalStorageHandler';
-
-interface HistoryResponseString {
-  userId: string;
-  total: string;
-  easy: string;
-  medium: string,
-  hard: string,
-  attempts: [{
-    questionId: string,
-    timestamp: string
-  }]
-}
 
 class HistoryRequestHandler {
   static client = axios.create({
