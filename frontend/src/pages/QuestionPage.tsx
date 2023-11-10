@@ -1,7 +1,7 @@
 import QuestionRequestHandler from '../handlers/QuestionRequestHandler';
 import { QuestionString, emptyQuestionString } from '../Commons';
 import React, { useEffect, useState } from 'react';
-import { Center, Flex, useToast } from '@chakra-ui/react';
+import { Box, Button, Center, Flex, HStack, useToast } from '@chakra-ui/react';
 import { QuestionCacheContext } from '../contexts/QuestionCacheContext';
 import QuestionDetailsModal from '../components/question/modals/QuestionDetailsModal';
 import AddQuestionModal from '../components/question/modals/AddQuestionModal';
@@ -14,10 +14,15 @@ import AuthRequestHandler from '../handlers/AuthRequestHandler';
 import LoadingPage from './LoadingPage';
 import { FlatTree } from 'framer-motion';
 import LocalStorageHandler from "../handlers/LocalStorageHandler";
+import FilterBar from '../components/question/FilterBar';
 
 let currentQuestion = emptyQuestionString;
 
-const QuestionPage = () => {
+interface Props {
+  addBtnOnClick: () => void;
+}
+
+const QuestionPage: React.FC<Props> = ({ addBtnOnClick }) => {
   const [addModalIsVisible, setAddModalIsVisible] = useState(false);
   const [viewModalIsVisible, setViewModalIsVisible] = useState(false);
   const [editModalIsVisible, setEditModalIsVisible] = useState(false);
@@ -29,6 +34,8 @@ const QuestionPage = () => {
   const [filteredQuestions, setFilteredQuestions] = useState(questions);
   const [complexityFilter, setComplexityFilter] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
+  const userData = LocalStorageHandler.getUserData();
+  const userRole = userData ? userData.role : null;
 
 
   const onFilter = (filterOptions: { categories: string[]; complexity: string }) => {
@@ -132,8 +139,26 @@ const QuestionPage = () => {
         <NavigationBar index={0} />
         <Center pt={50}>
           <Flex flexDirection="column" alignItems="center">
-            {/* <FilterBar onFilter={onFilter} /> */}
+            <Box maxWidth={'70vw'}>
+              <HStack>
+                <FilterBar onFilter={onFilter} />
+                {userRole === 'ADMIN'
+                  ?
+                  <Button colorScheme='blue'
+                    borderRadius='10px'
+                    w='120px'
+                    ml='5px'
+                    onClick={() => {
+                      clearQuestionCache();
+                      setAddModalIsVisible(true);
+                    }} my={5} float='right' isDisabled={userRole === 'ADMIN' ? false : true}>
+                    Add +
+                  </Button>
+                  : <br />}
+              </HStack>
 
+
+            </Box>
             <AddQuestionModal
               isVisible={addModalIsVisible}
               closeHandler={() => setAddModalIsVisible(false)}
@@ -168,11 +193,6 @@ const QuestionPage = () => {
               <QuestionTable
                 data={filteredQuestions}
                 viewDescriptionHandler={viewDescriptionHandler}
-                addBtnOnClick={() => {
-                  clearQuestionCache();
-                  setAddModalIsVisible(true);
-                }}
-                onFilter={onFilter}
               />
             ) : (
               <p>No results found</p>
@@ -180,7 +200,7 @@ const QuestionPage = () => {
 
           </Flex>
         </Center>
-      </QuestionCacheContext.Provider>
+      </QuestionCacheContext.Provider >
     )
   } else {
     return <LoadingPage />

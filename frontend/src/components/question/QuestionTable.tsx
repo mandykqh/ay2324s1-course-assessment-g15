@@ -20,16 +20,14 @@ const QuestionTd = ({ value }: { value: string }) => {
 interface Props {
   data: QuestionString[]
   viewDescriptionHandler: (id: string) => void;
-  addBtnOnClick: () => void;
-  onFilter: () => void;
 }
 
 const QuestionTable: React.FC<Props> =
-  ({ data, viewDescriptionHandler, addBtnOnClick, onFilter }) => {
+  ({ data, viewDescriptionHandler }) => {
     const [questionsList, setQuestionsList] = useState<Question[]>([]);
     const headings = ['Id', 'Title', 'Category', 'Complexity'];
-    const userData = LocalStorageHandler.getUserData();
-    const userRole = userData ? userData.role : null;
+    // const userData = LocalStorageHandler.getUserData();
+    // const userRole = userData ? userData.role : null;
 
     // Hook to update questionsList
     useEffect(() => {
@@ -45,7 +43,7 @@ const QuestionTable: React.FC<Props> =
 
     return (
       <TableContainer>
-        <Box>
+        {/* <Box>
           <FilterBar onFilter={onFilter} />
           {userRole === 'ADMIN'
             ?
@@ -53,7 +51,7 @@ const QuestionTable: React.FC<Props> =
               Add
             </Button>
             : <br />}
-        </Box>
+        </Box> */}
         <Box border="1.5px solid #244153" borderRadius="xl" overflow="hidden">
           <Table variant='simple' borderRadius="full" className='question-table' width={'70vw'}>
             <Thead>

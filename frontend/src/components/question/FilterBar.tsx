@@ -46,11 +46,12 @@ const FilterBar: React.FC<FilterBarProps> = ({ onFilter }) => {
             border: '2px solid #244153',
             borderRadius: '10px',
             backgroundColor: '#0D1117',
+            overflow: 'hidden',
         }),
         option: (provided, state) => ({
             ...provided,
             backgroundColor: state.isSelected ? '#040B11' : state.isFocused ? '#0B1825' : '#0D1117', // Change the background color as needed
-            color: state.isSelected ? '#808080' : 'white', // Change the text color as needed
+            color: state.isSelected ? '#808080' : 'white',
         }),
         menu: (provided) => ({
             ...provided,
@@ -64,11 +65,11 @@ const FilterBar: React.FC<FilterBarProps> = ({ onFilter }) => {
 
     return (
         <>
-            <Flex justifyContent="space-between" alignItems="center" mb={4} py={5} w={1000}>
+            <Flex justifyContent="space-between" alignItems="center" my={5} w={1000}>
                 <Box
                     borderRadius="5px"
-                    flex="60%"
-                    mr={5}
+                    flex="80%"
+                    mr={3}
                 >
                     <Select
                         onChange={(e: MultiValue<SelectOption | unknown>) => {
@@ -108,7 +109,8 @@ const FilterBar: React.FC<FilterBarProps> = ({ onFilter }) => {
                         }}
                     />
                 </Box>
-                <Box backgroundColor={SECONDARY_COLOR} borderRadius='5px' flex="40%" mr={5}>
+                <Box borderRadius='5px' flex="25%"
+                >
                     <Select
                         onChange={(e) => {
                             setSelectedComplexity(e ? e.value : '');
