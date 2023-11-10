@@ -59,6 +59,8 @@ services:
       PG_PASSWORD: 12345
       PG_DB: peerprep
       PG_HOST: user-db
+      ADMIN_USERNAME: ${ADMIN_USERNAME}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
     depends_on: 
       - user-db
     networks:
