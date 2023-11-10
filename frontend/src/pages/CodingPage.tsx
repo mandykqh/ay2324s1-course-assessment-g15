@@ -142,6 +142,11 @@ const CodingPage = () => {
     setChatHistory([]);
   };
 
+  const clearCanvasHistory = () => {
+    const roomId = LocalStorageHandler.getMatchData()?.room_id!;
+    localStorage.setItem(`canvas_${roomId}`, JSON.stringify([]));
+  }
+
   const toggleChatDrawer = () => {
     setIsChatDrawerOpen(!isChatDrawerOpen);
   };
@@ -185,6 +190,7 @@ const CodingPage = () => {
   function handleDisconnect() {
     LocalStorageHandler.deleteMatchData();
     clearChatHistory();
+    clearCanvasHistory();
     navigate('../home');
   }
 

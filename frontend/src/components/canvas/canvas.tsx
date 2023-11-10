@@ -4,6 +4,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useDraw } from "./hooks/useDraw";
 import { drawLine } from "./utils/drawLine";
 import { CanvasProps } from "../../Commons";
+import LocalStorageHandler from "../../handlers/LocalStorageHandler";
 
 const CanvasPage: React.FC<CanvasProps> = ({ socket }) => {
   const [color, setColor] = useState<string>("#000");
@@ -15,7 +16,6 @@ const CanvasPage: React.FC<CanvasProps> = ({ socket }) => {
   useEffect(() => { 
     const ctx = canvasRef.current?.getContext("2d");
     ctxRef.current = ctx as CanvasRenderingContext2D | null;
-
 
     // Add event listener for window resize
 
@@ -37,12 +37,22 @@ const CanvasPage: React.FC<CanvasProps> = ({ socket }) => {
 
     socket?.on("draw-line", ({ prevPoint, currentPoint, color, width }: DrawLineProps) => {
       if (!ctx) return console.log("no ctx here");
-      drawLine({ prevPoint, currentPoint, ctx, color , width});
+      drawLine({ prevPoint, currentPoint, ctx, color, width });
     });
 
     socket?.on("canvas-clear", () => {
       clearCanvas();
     })
+
+    const roomId = LocalStorageHandler.getMatchData()?.room_id
+    const savedCanvasState = LocalStorageHandler.getCanvasData(`canvas_${roomId}`);
+    if (savedCanvasState) {
+      const img = new Image();
+      img.src = savedCanvasState;
+      img.onload = () => {
+        ctx?.drawImage(img, 0, 0);
+      };
+    }
 
     return () => {
       socket?.off("draw-line");
@@ -53,10 +63,16 @@ const CanvasPage: React.FC<CanvasProps> = ({ socket }) => {
   }, [canvasRef]);
 
   function createLine({ prevPoint, currentPoint, ctx }: Draw) {
-    socket?.emit("draw-line", { prevPoint, currentPoint, color, lineWidth });
-    // Set the updated history in the state
+    // Emit the draw-line event with the updated drawing history
     const width = lineWidth;
-    drawLine({ prevPoint, currentPoint, ctx, color, width });
+    socket?.emit("draw-line", { prevPoint, currentPoint, color, width});
+    drawLine({ prevPoint, currentPoint,ctx, color, width});
+
+    if (canvasRef.current) {
+      const roomId = LocalStorageHandler.getMatchData()?.room_id!;
+      const key = `canvas_${roomId}`;
+      LocalStorageHandler.storeCanvasData(key, canvasRef.current.toDataURL());
+    }
   }
 
   function handleLineWidthChange(newWidth:number) {
@@ -77,6 +93,10 @@ const CanvasPage: React.FC<CanvasProps> = ({ socket }) => {
     }
   };
 
+  const clearCanvasHistory = () => {
+    const roomId = LocalStorageHandler.getMatchData()?.room_id!;
+    localStorage.setItem(`canvas_${roomId}`, JSON.stringify([]));
+  }
 
   return (
     <Flex justifyContent="center" alignItems="center">
@@ -95,6 +115,7 @@ const CanvasPage: React.FC<CanvasProps> = ({ socket }) => {
               onClick={() => {
                 socket?.emit("canvas-clear");
                 clearCanvas();
+                clearCanvasHistory();
               }}
             >
               Clear

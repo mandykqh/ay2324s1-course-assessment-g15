@@ -1,7 +1,8 @@
 type Point = { x: number; y: number }
 
-export type DrawLine = {
+export type DrawLineProps = {
   prevPoint: Point | null
   currentPoint: Point
   color: string
+  width: number
 }

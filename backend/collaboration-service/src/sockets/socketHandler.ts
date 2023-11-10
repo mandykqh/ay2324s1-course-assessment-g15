@@ -1,7 +1,7 @@
 import { Server, Socket } from 'socket.io';
 import { RoomEvents } from '../types/enums/RoomEvents';
 import { getFilteredQuestion, getQuestions } from '../api/Questions';
-import {DrawLine} from '../types/drawtypes/drawtypes';
+import {DrawLineProps} from '../types/drawtypes/drawtypes';
 
 export function setupSockets(io: Server) {
   io.on('connection', (socket: Socket) => {
@@ -48,8 +48,8 @@ function handleSocketEvents(socket: Socket) {
       socket.to(room).emit('canvas-state-from-server', state)
     })
 
-    socket.on(RoomEvents.drawLine, ({ prevPoint, currentPoint, color }: DrawLine) => {
-      socket.to(room).emit('draw-line', { prevPoint, currentPoint, color })
+    socket.on(RoomEvents.drawLine, ({ prevPoint, currentPoint, color, width }: DrawLineProps) => {
+      socket.to(room).emit('draw-line', { prevPoint, currentPoint, color, width })
     })
 
     socket.on(RoomEvents.canvasClear, () => socket.to(room).emit('canvas-clear'))
