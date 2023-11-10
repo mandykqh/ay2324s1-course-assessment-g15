@@ -35,8 +35,8 @@ const Chat: React.FC<ChatProps> = ({ messages, newMessage, onNewMessageChange, o
       >
         {messages.map((message, index) => (
           <div key={index}>
-            <Text fontWeight="bold" color={message.sender == LocalStorageHandler.getMatchData()?.user_id ? 'yellow' : 'white'}>
-              User {message.sender}:
+            <Text fontWeight="bold" color={message.sender === LocalStorageHandler.getUserData()?.username ? 'yellow' : 'white'}>
+              {message.sender}:
             </Text>
             <Textarea
               value={message.text}

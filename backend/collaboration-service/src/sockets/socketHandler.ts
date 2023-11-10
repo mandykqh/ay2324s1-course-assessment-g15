@@ -34,8 +34,8 @@ function handleSocketEvents(socket: Socket) {
       socket.to(room).emit(RoomEvents.userLeft, socket.id);
     });
 
-    socket.on(RoomEvents.messageChange, (message) => {
-      socket.to(room).emit(RoomEvents.messageChange, message);
+    socket.on(RoomEvents.messageChange, (message, user) => {
+      socket.to(room).emit(RoomEvents.messageChange, message, user);
       console.log(`User ${socket.id} sent message: ${message}`);
     });
 

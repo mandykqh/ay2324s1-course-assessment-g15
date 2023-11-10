@@ -1,4 +1,4 @@
-import { VStack, Box, Text, Flex, Button, Slider, SliderTrack, SliderFilledTrack, SliderThumb, Switch } from "@chakra-ui/react";
+import { HStack, VStack, Box, Text, Flex, Button, Slider, SliderTrack, SliderFilledTrack, SliderThumb, Switch } from "@chakra-ui/react";
 import { ChromePicker } from "react-color";
 import React, { useEffect, useState, useRef } from "react";
 import { useDraw } from "./hooks/useDraw";
@@ -15,6 +15,9 @@ const CanvasPage: React.FC<CanvasProps> = ({ socket }) => {
   useEffect(() => { 
     const ctx = canvasRef.current?.getContext("2d");
     ctxRef.current = ctx as CanvasRenderingContext2D | null;
+
+
+    // Add event listener for window resize
 
     socket?.emit("client-ready");
 
@@ -77,54 +80,62 @@ const CanvasPage: React.FC<CanvasProps> = ({ socket }) => {
 
   return (
     <Flex justifyContent="center" alignItems="center">
-      <Box flex="1" bg="white">
-        <canvas
-          ref={canvasRef}
-          onMouseDown={onMouseDown}
-          width={950}
-          height={850}
-          className="border border-black rounded-md"
-        />
-      </Box>
-      <VStack ml={4} align="flex-start">
-        <ChromePicker color={color} onChange={(e) => setColor(e.hex)} />
-        <Button
-          type="button"
-          p={2}
-          rounded="md"
-          borderWidth={1}
-          color="white"
-          borderColor="white"
-          onClick={() => {
-            socket?.emit("canvas-clear");
-            clearCanvas();
-          }}
-        >
-          Clear
-        </Button>
-        <Text fontSize="md" ml={1} color={'white'}>Eraser</Text>
-        <Switch
-          size="sm"
-          colorScheme="gray"
-          color={"blue"}
-          isChecked={isEraserMode}
-          onChange={toggleEraserMode}
-        />
-        <Box>
-          <Text fontSize="md" color={"white"} mb={2}>
-            Line Width
-          </Text>
-          <Slider
-            min={1} // Set the minimum line width
-            max={20} // Set the maximum line width
-            value={lineWidth}
-            onChange={(newWidth) => handleLineWidthChange(newWidth)}
-          >
-            <SliderTrack>
-              <SliderFilledTrack />
-            </SliderTrack>
-            <SliderThumb />
-          </Slider>
+      <VStack>
+      <HStack mr="auto" >
+        <HStack>
+          <ChromePicker color={color} onChange={(e) => setColor(e.hex)} />
+          <VStack>
+            <Button
+              type="button"
+              p={2}
+              rounded="md"
+              borderWidth={1}
+              color="white"
+              borderColor="white"
+              onClick={() => {
+                socket?.emit("canvas-clear");
+                clearCanvas();
+              }}
+            >
+              Clear
+            </Button>
+            <HStack>
+              <Text fontSize="md" mb={2} color={'white'}>Eraser</Text>
+              <Switch
+                size="sm"
+                colorScheme="gray"
+                color={"blue"}
+                isChecked={isEraserMode}
+                onChange={toggleEraserMode}
+              />
+            </HStack>
+            <Box>
+              <Text fontSize="md" color={"white"} mb={2}>
+                Line Width
+              </Text>
+              <Slider
+                min={5} // Set the minimum line width
+                max={25} // Set the maximum line width
+                value={lineWidth}
+                onChange={(newWidth) => handleLineWidthChange(newWidth)}
+              >
+              <SliderTrack>
+                <SliderFilledTrack />
+              </SliderTrack>
+              <SliderThumb />
+              </Slider>
+            </Box>
+          </VStack>
+        </HStack>
+      </HStack>
+        <Box flex="1" bg="white" style={{ position: 'relative', width: '900px', height: '800px'  }}>
+          <canvas
+            ref={canvasRef}
+            onMouseDown={onMouseDown}
+            width='900'
+            height='800'
+            style={{ display: 'block', borderRadius: '8px' }}
+          />
         </Box>
       </VStack>
     </Flex>

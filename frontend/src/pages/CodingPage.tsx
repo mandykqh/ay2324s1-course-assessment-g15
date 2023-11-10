@@ -93,9 +93,9 @@ const CodingPage = () => {
       setComplexityFilter(complexityFilter);
     })
 
-    socket.on('messageChange', (message) => {
+    socket.on('messageChange', (message, user) => {
       // Handle incoming messages and update chat history
-      const newMessageObj = { sender: LocalStorageHandler.getUserData()?.id!, text: message };
+      const newMessageObj = { sender: user, text: message };
       updateChatHistory(newMessageObj);
     });
 
@@ -173,9 +173,10 @@ const CodingPage = () => {
 
   const handleSendMessage = () => {
     if (socket && newMessage.trim() !== '') {
-      socket.emit('messageChange', newMessage); // Send the message to the server
+      const user = LocalStorageHandler.getUserData()?.username!
+      socket.emit('messageChange', newMessage, user); // Send the message to the server
       // Append the sent message to the chat history
-      const sentMessage = { sender: LocalStorageHandler.getUserData()?.id!, text: newMessage };
+      const sentMessage = { sender: user, text: newMessage };
       updateChatHistory(sentMessage);
       setNewMessage(''); // Clear the new message input field
     }
@@ -312,7 +313,7 @@ const CodingPage = () => {
             </DrawerBody>
           </DrawerContent>
         </Drawer>
-        <Drawer placement="left" isOpen={isCanvasDrawerOpen} onClose={toggleCanvasDrawer} size={'full'}>
+        <Drawer placement="left" isOpen={isCanvasDrawerOpen} onClose={toggleCanvasDrawer} size={'xl'}>
           <DrawerOverlay />
           <DrawerContent>
             <DrawerCloseButton />
