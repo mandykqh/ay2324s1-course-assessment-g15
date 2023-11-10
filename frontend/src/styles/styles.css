@@ -1,9 +1,0 @@
-.select-input {
-    overflow: 'hidden';
-    color: white;
-    background-color: '#0B1825';
-}
-
-.select-input::placeholder {
-    color: red
-}

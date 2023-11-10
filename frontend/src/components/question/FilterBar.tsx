@@ -39,6 +39,28 @@ const FilterBar: React.FC<FilterBarProps> = ({ onFilter }) => {
         onFilter({ categories: selectedCategories, complexity: selectedComplexity });
     }, [selectedCategories, selectedComplexity]);
 
+    const selectorStyles = {
+        control: (baseStyles) => ({
+            ...baseStyles,
+            // borderColor: '#244153',
+            border: '2px solid #244153',
+            borderRadius: '10px',
+            backgroundColor: '#0D1117',
+        }),
+        option: (provided, state) => ({
+            ...provided,
+            backgroundColor: state.isSelected ? '#040B11' : state.isFocused ? '#0B1825' : '#0D1117', // Change the background color as needed
+            color: state.isSelected ? '#808080' : 'white', // Change the text color as needed
+        }),
+        menu: (provided) => ({
+            ...provided,
+            backgroundColor: '#0D1117',
+            overflow: 'hidden',
+            borderRadius: '15px',
+            border: '2px solid #244153',
+        }),
+
+    }
 
     return (
         <>
@@ -62,54 +84,28 @@ const FilterBar: React.FC<FilterBarProps> = ({ onFilter }) => {
                         closeMenuOnSelect={false}
                         value={stringToOptionsMapper(selectedCategories.join(', '))}
                         styles={{
-                            control: (baseStyles) => ({
-                                ...baseStyles,
-                                // borderColor: '#244153',
-                                border: '2px solid #244153',
-                                borderRadius: '10px',
-                                backgroundColor: '#0D1117',
-                            }),
-                            option: (provided, state) => ({
-                                ...provided,
-                                backgroundColor: state.isFocused ? '#0B1825' : '#0D1117', // Change the background color as needed
-                                color: state.isSelected ? 'black' : 'white', // Change the text color as needed
-                            }),
-                            menu: (provided) => ({
-                                ...provided,
-                                backgroundColor: 'transparent',
-                            }),
-                            multiValue: (base, state) => {
-                                return state.data.isFixed ? { ...base, backgroundColor: '#0B1825' } : base;
+                            ...selectorStyles,
+                            multiValue: (base) => {
+                                return { ...base, backgroundColor: '#0F2031', borderRadius: '7px', };
                             },
                             multiValueLabel: (base, state) => {
-                                return state.data.isFixed
-                                    ? { ...base, fontWeight: 'bold', color: 'black', paddingRight: 6 }
-                                    : base;
+                                return {
+                                    ...base, fontWeight: 'bold',
+                                    color: 'white',
+                                    paddingRight: 6,
+                                };
                             },
                             multiValueRemove: (base, state) => {
                                 return state.data.isFixed ? { ...base, display: 'none' } : base;
                             },
-                            placeholder: (provided, state) => ({
-                                ...provided,
-                                color: '#244153', // Change the color of the selected label in the Select bar
-                            }),
-
+                            // placeholder: (provided) => ({
+                            //     ...provided,
+                            //     color: '#244153',
+                            // }),
                         }}
-                        // theme={(theme) => ({
-                        //     ...theme,
-                        //     borderRadius: '18px',
-                        //     colors: {
-                        //         ...theme.colors,
-                        //         text: 'white',
-                        //         primary25: 'hotpink',
-                        //         primary: 'black',
-                        //     },
-                        // })}
                         components={{
                             IndicatorSeparator: () => null
                         }}
-                        className='select-input'
-
                     />
                 </Box>
                 <Box backgroundColor={SECONDARY_COLOR} borderRadius='5px' flex="40%" mr={5}>
@@ -119,9 +115,24 @@ const FilterBar: React.FC<FilterBarProps> = ({ onFilter }) => {
                             // onFilter({ categories: selectedCategories, complexity: selectedComplexity })
                         }}
                         options={complexityOptions}
-                        placeholder="Filter Complexity"
+                        placeholder="Select Complexity"
                         value={stringToOptionsMapper(selectedComplexity)}
                         isClearable
+                        styles={{
+                            ...selectorStyles,
+                            singleValue: (provided, state) => ({
+                                ...provided,
+                                color: 'white',
+                            }),
+                            option: (provided, state) => ({
+                                ...provided,
+                                backgroundColor: state.isSelected ? 'black' : state.isFocused ? '#0B1825' : '#0D1117',
+                                color: 'white',
+                            }),
+                        }}
+                        components={{
+                            IndicatorSeparator: () => null
+                        }}
                     />
                 </Box>
             </Flex >

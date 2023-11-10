@@ -12,7 +12,6 @@ import NavigationBar from '../components/NavigationBar';
 import { showError, showSuccess } from '../Util';
 import AuthRequestHandler from '../handlers/AuthRequestHandler';
 import LoadingPage from './LoadingPage';
-import FilterBar from '../components/question/FilterBar';
 import { FlatTree } from 'framer-motion';
 import LocalStorageHandler from "../handlers/LocalStorageHandler";
 
