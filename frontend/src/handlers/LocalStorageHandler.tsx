@@ -66,6 +66,24 @@ class LocalStorageHandler {
     }
   }
 
+  // Chat data
+  static storeChatData(key:string, chatData: any) {
+    localStorage.setItem(key, JSON.stringify(chatData));
+  }
+
+  static getChatData(key:string) {
+    return JSON.parse(localStorage.getItem(key) || '[]');
+  }
+
+  // Canvas data
+  static storeCanvasData(key:string, canvasData: any) {
+    localStorage.setItem(key, canvasData);
+  }
+
+  static getCanvasData(key:string) {
+    return localStorage.getItem(key);
+  }
+
   // Filter data
   static storeFilterData(categoryFilter: any, complexityFilter: any, filteredQuestions: any) {
     const filterData = {
