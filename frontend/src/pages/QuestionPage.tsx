@@ -140,7 +140,7 @@ const QuestionPage: React.FC<Props> = ({ addBtnOnClick }) => {
         <Center pt={50}>
           <Flex flexDirection="column" alignItems="center">
             <Box maxWidth={'70vw'}>
-              <HStack>
+              <HStack mt='20px'>
                 <FilterBar onFilter={onFilter} />
                 {userRole === 'ADMIN'
                   ?
@@ -152,7 +152,7 @@ const QuestionPage: React.FC<Props> = ({ addBtnOnClick }) => {
                       clearQuestionCache();
                       setAddModalIsVisible(true);
                     }} my={5} float='right' isDisabled={userRole === 'ADMIN' ? false : true}>
-                    Add +
+                    Add
                   </Button>
                   : <br />}
               </HStack>

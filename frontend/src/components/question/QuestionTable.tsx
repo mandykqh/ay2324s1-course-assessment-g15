@@ -4,7 +4,6 @@ import { QuestionString } from '../../Commons';
 import { Text, TableContainer, Table, Thead, Tr, Th, Tbody, Td, Button, Box } from '@chakra-ui/react';
 import LocalStorageHandler from "../../handlers/LocalStorageHandler";
 import ComplexityTag from "./ComplexityTag";
-import FilterBar from "./FilterBar";
 
 const QuestionTd = ({ value }: { value: string }) => {
   return (
@@ -42,16 +41,7 @@ const QuestionTable: React.FC<Props> =
 
 
     return (
-      <TableContainer>
-        {/* <Box>
-          <FilterBar onFilter={onFilter} />
-          {userRole === 'ADMIN'
-            ?
-            <Button colorScheme='blue' onClick={addBtnOnClick} m={5} float='right' isDisabled={userRole === 'ADMIN' ? false : true}>
-              Add
-            </Button>
-            : <br />}
-        </Box> */}
+      <TableContainer mb='40px'>
         <Box border="1.5px solid #244153" borderRadius="xl" overflow="hidden">
           <Table variant='simple' borderRadius="full" className='question-table' width={'70vw'}>
             <Thead>

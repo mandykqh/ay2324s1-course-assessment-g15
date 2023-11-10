@@ -1,11 +1,7 @@
 import { useEffect, useState } from 'react';
 import Select from 'react-select'
 import { getCategoriesString, getComplexityStrings, stringToOptionsMapper } from '../../Util';
-// import { MultiValue, Select } from 'chakra-react-select';
-import '../../styles/styles.css'
-
 import { Flex, Box } from '@chakra-ui/react';
-import { SECONDARY_COLOR } from '../../CommonStyles';
 
 interface SelectOption {
     value: string;
@@ -23,17 +19,12 @@ const complexityOptions = getComplexityStrings().map(value => {
 });
 
 type FilterBarProps = {
-    // onCategorySelected: (categories: string[]) => void;
     onFilter: (filterOptions: { categories: string[]; complexity: string }) => void;
 };
 
 const FilterBar: React.FC<FilterBarProps> = ({ onFilter }) => {
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
     const [selectedComplexity, setSelectedComplexity] = useState('')
-    // useEffect(() => {
-    //     // Call the callback function with the selected categories
-    //     onCategorySelected(selectedCategories);
-    // }, [selectedCategories, onCategorySelected]);
 
     useEffect(() => {
         onFilter({ categories: selectedCategories, complexity: selectedComplexity });
@@ -77,7 +68,6 @@ const FilterBar: React.FC<FilterBarProps> = ({ onFilter }) => {
                                 return (q as SelectOption).value;
                             });
                             setSelectedCategories(inputStringArr);
-                            // onFilter({ categories: inputStringArr, complexity: selectedComplexity })
                         }}
                         isMulti
                         options={categoryOptions}
@@ -114,7 +104,6 @@ const FilterBar: React.FC<FilterBarProps> = ({ onFilter }) => {
                     <Select
                         onChange={(e) => {
                             setSelectedComplexity(e ? e.value : '');
-                            // onFilter({ categories: selectedCategories, complexity: selectedComplexity })
                         }}
                         options={complexityOptions}
                         placeholder="Select Complexity"
