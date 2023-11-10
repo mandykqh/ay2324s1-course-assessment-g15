@@ -133,7 +133,7 @@ const QuestionPage = () => {
         <NavigationBar index={0} />
         <Center pt={50}>
           <Flex flexDirection="column" alignItems="center">
-            <FilterBar onFilter={onFilter} />
+            {/* <FilterBar onFilter={onFilter} /> */}
 
             <AddQuestionModal
               isVisible={addModalIsVisible}
@@ -173,6 +173,7 @@ const QuestionPage = () => {
                   clearQuestionCache();
                   setAddModalIsVisible(true);
                 }}
+                onFilter={onFilter}
               />
             ) : (
               <p>No results found</p>

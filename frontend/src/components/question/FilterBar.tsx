@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
+import Select from 'react-select'
 import { getCategoriesString, getComplexityStrings, stringToOptionsMapper } from '../../Util';
-import { MultiValue, Select } from 'chakra-react-select';
+// import { MultiValue, Select } from 'chakra-react-select';
+import '../../styles/styles.css'
+
 import { Flex, Box } from '@chakra-ui/react';
 import { SECONDARY_COLOR } from '../../CommonStyles';
 
@@ -40,7 +43,11 @@ const FilterBar: React.FC<FilterBarProps> = ({ onFilter }) => {
     return (
         <>
             <Flex justifyContent="space-between" alignItems="center" mb={4} py={5} w={1000}>
-                <Box backgroundColor={SECONDARY_COLOR} borderRadius="5px" flex="60%" mr={5}>
+                <Box
+                    borderRadius="5px"
+                    flex="60%"
+                    mr={5}
+                >
                     <Select
                         onChange={(e: MultiValue<SelectOption | unknown>) => {
                             const inputStringArr = e.map((q) => {
@@ -51,9 +58,58 @@ const FilterBar: React.FC<FilterBarProps> = ({ onFilter }) => {
                         }}
                         isMulti
                         options={categoryOptions}
-                        placeholder="Filter Category"
+                        placeholder="Select Category"
                         closeMenuOnSelect={false}
                         value={stringToOptionsMapper(selectedCategories.join(', '))}
+                        styles={{
+                            control: (baseStyles) => ({
+                                ...baseStyles,
+                                // borderColor: '#244153',
+                                border: '2px solid #244153',
+                                borderRadius: '10px',
+                                backgroundColor: '#0D1117',
+                            }),
+                            option: (provided, state) => ({
+                                ...provided,
+                                backgroundColor: state.isFocused ? '#0B1825' : '#0D1117', // Change the background color as needed
+                                color: state.isSelected ? 'black' : 'white', // Change the text color as needed
+                            }),
+                            menu: (provided) => ({
+                                ...provided,
+                                backgroundColor: 'transparent',
+                            }),
+                            multiValue: (base, state) => {
+                                return state.data.isFixed ? { ...base, backgroundColor: '#0B1825' } : base;
+                            },
+                            multiValueLabel: (base, state) => {
+                                return state.data.isFixed
+                                    ? { ...base, fontWeight: 'bold', color: 'black', paddingRight: 6 }
+                                    : base;
+                            },
+                            multiValueRemove: (base, state) => {
+                                return state.data.isFixed ? { ...base, display: 'none' } : base;
+                            },
+                            placeholder: (provided, state) => ({
+                                ...provided,
+                                color: '#244153', // Change the color of the selected label in the Select bar
+                            }),
+
+                        }}
+                        // theme={(theme) => ({
+                        //     ...theme,
+                        //     borderRadius: '18px',
+                        //     colors: {
+                        //         ...theme.colors,
+                        //         text: 'white',
+                        //         primary25: 'hotpink',
+                        //         primary: 'black',
+                        //     },
+                        // })}
+                        components={{
+                            IndicatorSeparator: () => null
+                        }}
+                        className='select-input'
+
                     />
                 </Box>
                 <Box backgroundColor={SECONDARY_COLOR} borderRadius='5px' flex="40%" mr={5}>

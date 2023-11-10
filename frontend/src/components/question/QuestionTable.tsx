@@ -4,6 +4,7 @@ import { QuestionString } from '../../Commons';
 import { Text, TableContainer, Table, Thead, Tr, Th, Tbody, Td, Button, Box } from '@chakra-ui/react';
 import LocalStorageHandler from "../../handlers/LocalStorageHandler";
 import ComplexityTag from "./ComplexityTag";
+import FilterBar from "./FilterBar";
 
 const QuestionTd = ({ value }: { value: string }) => {
   return (
@@ -20,10 +21,11 @@ interface Props {
   data: QuestionString[]
   viewDescriptionHandler: (id: string) => void;
   addBtnOnClick: () => void;
+  onFilter: () => void;
 }
 
 const QuestionTable: React.FC<Props> =
-  ({ data, viewDescriptionHandler, addBtnOnClick }) => {
+  ({ data, viewDescriptionHandler, addBtnOnClick, onFilter }) => {
     const [questionsList, setQuestionsList] = useState<Question[]>([]);
     const headings = ['Id', 'Title', 'Category', 'Complexity'];
     const userData = LocalStorageHandler.getUserData();
@@ -44,6 +46,7 @@ const QuestionTable: React.FC<Props> =
     return (
       <TableContainer>
         <Box>
+          <FilterBar onFilter={onFilter} />
           {userRole === 'ADMIN'
             ?
             <Button colorScheme='blue' onClick={addBtnOnClick} m={5} float='right' isDisabled={userRole === 'ADMIN' ? false : true}>
@@ -67,7 +70,7 @@ const QuestionTable: React.FC<Props> =
             <Tbody>
               {questionsList.map((qn: Question, key: number) => {
                 const isEvenRow = key % 2 === 0;
-                const rowBackground = isEvenRow ? 'transparent' : '#0F2031';
+                const rowBackground = isEvenRow ? '#0B1825' : '#0F2031';
                 return (
                   <Tr
                     key={key}

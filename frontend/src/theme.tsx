@@ -10,7 +10,7 @@ const theme = extendTheme({
   styles: {
     global: () => ({
       body: {
-        bg: '#0B1825',
+        bg: '#0D1117',
         letterSpacing: '2%',
 
       }
