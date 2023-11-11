@@ -52,7 +52,7 @@ const CollaboratePage = () => {
       <TimerModal
         isOpen={isModalOpen}
         onClose={() => cancelMatch(matchingCache)}
-        initialTime={3}
+        initialTime={30}
         status={matchMessage.toString()}
         isTimeout={isTimeout}
         isMatchFound={isMatchFound}
@@ -62,15 +62,24 @@ const CollaboratePage = () => {
 
   function renderFindMatchButton() {
     function updateHistory() {
-      let date = new Date();
-      HistoryRequestHandler.updateHistory({
-        userId: LocalStorageHandler.getUserData()?.id!,
-        attempt: {
-          questionId: LocalStorageHandler.getMatchData()?.question.id!,
-          timestamp: date.toISOString(),
-        },
-        complexity: LocalStorageHandler.getMatchData()?.question.complexity!
-      });
+      const userData = LocalStorageHandler.getUserData();
+      const matchQuestionData = LocalStorageHandler.getMatchData()?.question;
+      if (userData && matchQuestionData) {
+        const date = new Date();
+        const historyData = {
+          userId: LocalStorageHandler.getUserData()?.id!,
+          attempt: {
+            questionId: matchQuestionData.id!,
+            timestamp: date.toISOString(),
+          },
+          complexity: matchQuestionData.complexity!
+        };
+        try {
+          HistoryRequestHandler.updateHistory(historyData);
+        } catch (e) {
+          showError((e as Error).message, toast);
+        }
+      }
     }
 
     async function findMatch(matchingCache: MatchingString) {
@@ -98,6 +107,25 @@ const CollaboratePage = () => {
         return;
       }
 
+      const handleFindMatch = () => {
+        setMatchMessage("Finding match...");
+      }
+
+      const handleMatchFound = (data: any) => {
+        setIsMatchFound(true);
+        setMatchMessage(data.msg);
+        LocalStorageHandler.storeMatchData(data);
+        matchingSocket.disconnect();
+        updateHistory();
+        navigate('/collaborate/code');
+      }
+
+      const handleTimeOut = () => {
+        setIsTimeout(true);
+        setMatchMessage("Connection timed out. Please try again!");
+        matchingSocket.disconnect();
+      }
+
       // Attempt matching with collaboration service
       try {
         setIsModalOpen(true);
@@ -107,25 +135,9 @@ const CollaboratePage = () => {
           matchingCache.complexity
         );
         matchingSocket.connect();
-        matchingSocket.on('finding_match', (data) => {
-          setMatchMessage("Finding match...");
-        });
-
-        matchingSocket.on('match_found', (data: any) => {
-          setIsMatchFound(true);
-          setMatchMessage(data.msg);
-          LocalStorageHandler.storeMatchData(data);
-          matchingSocket.disconnect();
-          updateHistory();
-          navigate('/collaborate/code');
-        });
-
-        matchingSocket.on('timeout', (data) => {
-          setIsTimeout(true);
-          setMatchMessage("Connection timed out. Please try again!");
-          matchingSocket.disconnect();
-        });
-
+        matchingSocket.on('finding_match', handleFindMatch);
+        matchingSocket.on('match_found', handleMatchFound);
+        matchingSocket.on('timeout', handleTimeOut);
         await MatchingSocketHandler.findMatch(matchData);
       } catch (e) {
         showError((e as Error).message, toast)
