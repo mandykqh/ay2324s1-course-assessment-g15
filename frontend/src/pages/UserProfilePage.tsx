@@ -37,10 +37,9 @@ const UserProfilePage = () => {
             />
             <Box width={'80vw'}>
               <Center alignItems={'center'} justifyItems={'center'} height={'100%'}>
-                {currentMenuIndex === 0 && <UserHomePage />}
-                {currentMenuIndex === 1 && <UserPersonalInfo user={userDataString} />}
-                {currentMenuIndex === 2 && <UserSecurity />}
-                {currentMenuIndex === 3 && <UserHistory />}
+                {currentMenuIndex === 0 && <UserPersonalInfo user={userDataString} />}
+                {currentMenuIndex === 1 && <UserSecurity />}
+                {currentMenuIndex === 2 && <UserHistory />}
               </Center>
             </Box>
           </Flex >

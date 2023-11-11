@@ -79,9 +79,6 @@ export interface CanvasProps {
 export interface HistoryResponseString {
   userId: string;
   total: string;
-  easy: string;
-  medium: string,
-  hard: string,
   attempts: [{
     questionId: string,
     timestamp: string

@@ -48,27 +48,21 @@ const UserProfileMenu: React.FC<MenuProps> =
         <MenuItem
           index={0}
           selectedIndex={currentMenuIndex}
-          label='Home'
-          imageUrl='src\assets\images\user.png'
+          label='Personal Info'
+          imageUrl='src\assets\images\personal_info.png'
           onClick={() => { setCurrentMenuIndex(0) }} />
         <MenuItem
           index={1}
           selectedIndex={currentMenuIndex}
-          label='Personal Info'
-          imageUrl='src\assets\images\personal_info.png'
+          label='Security'
+          imageUrl='src\assets\images\security.png'
           onClick={() => { setCurrentMenuIndex(1) }} />
         <MenuItem
           index={2}
           selectedIndex={currentMenuIndex}
-          label='Security'
-          imageUrl='src\assets\images\security.png'
-          onClick={() => { setCurrentMenuIndex(2) }} />
-        <MenuItem
-          index={3}
-          selectedIndex={currentMenuIndex}
           label='History'
           imageUrl='src\assets\images\history.png'
-          onClick={() => { setCurrentMenuIndex(3) }} />
+          onClick={() => { setCurrentMenuIndex(2) }} />
       </Box>
     );
   }

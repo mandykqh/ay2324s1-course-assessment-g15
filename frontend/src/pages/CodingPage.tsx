@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, IconButton, 
-        useToast, Box, Button, Grid, VStack, GridItem, Select, HStack, Textarea, Center } from '@chakra-ui/react';
+import {
+  Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, IconButton,
+  useToast, Box, Button, Grid, VStack, GridItem, Select, HStack, Textarea, Center
+} from '@chakra-ui/react';
 import { io, Socket } from 'socket.io-client';
 import NavigationBar from '../components/NavigationBar';
 import LocalStorageHandler from '../handlers/LocalStorageHandler';
@@ -108,20 +110,9 @@ const CodingPage = () => {
   useEffect(() => {
     const clientChatHistory = getChatHistory();
     setChatHistory(clientChatHistory);
-    updateHistory();
   }, []);
 
-  function updateHistory() {
-    let date = new Date();
-    HistoryRequestHandler.updateHistory({
-      userId: LocalStorageHandler.getUserData()?.id!,
-      attempt: {
-        questionId: LocalStorageHandler.getMatchData()?.question.id!,
-        timestamp: date.toISOString(),
-      },
-      complexity: LocalStorageHandler.getMatchData()?.question.complexity!
-    });
-  }
+
   const getChatHistory = () => {
     const clientId = LocalStorageHandler.getUserData()?.id!;
     const storedChatHistory = LocalStorageHandler.getChatData(`chatHistory_${clientId}`);
@@ -132,7 +123,7 @@ const CodingPage = () => {
     const clientId = LocalStorageHandler.getUserData()?.id!;
     const storedChatHistory = getChatHistory();
     const updatedChatHistory = [...storedChatHistory, newMessage];
-    LocalStorageHandler.storeChatData(`chatHistory_${clientId}`,updatedChatHistory);
+    LocalStorageHandler.storeChatData(`chatHistory_${clientId}`, updatedChatHistory);
     setChatHistory(updatedChatHistory);
   };
 
@@ -283,18 +274,18 @@ const CodingPage = () => {
                 onChange={handleCodeChange}
                 theme={okaidia}
               />
-              <IconButton 
-                aria-label="Chat" 
-                icon={<ChatIcon />} 
-                position="absolute" 
-                bottom="0px" 
-                right="20px" 
-                onClick={toggleChatDrawer} 
+              <IconButton
+                aria-label="Chat"
+                icon={<ChatIcon />}
+                position="absolute"
+                bottom="0px"
+                right="20px"
+                onClick={toggleChatDrawer}
                 zIndex="1"
               />
               <IconButton
                 aria-label="Canvas"
-                icon={<EditIcon />} 
+                icon={<EditIcon />}
                 position="absolute"
                 bottom="0px"
                 right="70px"
