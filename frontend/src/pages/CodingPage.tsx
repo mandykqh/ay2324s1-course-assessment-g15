@@ -15,7 +15,6 @@ import { cpp } from '@codemirror/lang-cpp';
 import { javascript } from '@codemirror/lang-javascript';
 import { okaidia } from '@uiw/codemirror-theme-okaidia';
 import HistoryRequestHandler from '../handlers/HistoryRequestHandler';
-import QuestionPreferences from '../components/coding/QuestionPreferences';
 
 const CodingPage = () => {
   const navigate = useNavigate();
@@ -26,6 +25,7 @@ const CodingPage = () => {
   const [question, setQuestion] = useState(LocalStorageHandler.getMatchData()?.question);
   const [complexityFilter, setComplexityFilter] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
+  const [isPreferencesModalVisible, setIsPreferencesModalVisible] = useState(false);
 
   useEffect(() => {
     AuthRequestHandler.isAuth()
@@ -178,8 +178,6 @@ const CodingPage = () => {
         <NavigationBar index={1} />
         <Grid height='100%' templateColumns='repeat(2, 1fr)' gap='20px' padding='20px' paddingTop='70px'>
           <GridItem colSpan={1}>
-            <QuestionPreferences onFilter={handleFilterPreferences} />
-            <Button onClick={handleQuestionChange}>Change Question</Button>
             <QuestionDetails
               id={questionString?.id || ""}
               title={questionString?.title || ""}
@@ -187,6 +185,8 @@ const CodingPage = () => {
               categories={questionString?.categories || []}
               description={questionString?.description || ""}
               link={questionString?.link || ""}
+              onFilter={handleFilterPreferences}
+              onQuestionChange={handleQuestionChange}
             />
           </GridItem>
           <GridItem colSpan={1}>
@@ -220,7 +220,7 @@ const CodingPage = () => {
             </VStack>
           </GridItem>
         </Grid>
-      </Box>
+      </Box >
     );
   } else {
     return <LoadingPage />
