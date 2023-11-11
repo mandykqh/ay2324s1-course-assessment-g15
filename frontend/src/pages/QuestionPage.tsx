@@ -1,18 +1,18 @@
-import QuestionRequestHandler from '../handlers/QuestionRequestHandler';
-import { QuestionString, emptyQuestionString } from '../Commons';
 import { useEffect, useState } from 'react';
 import { Center, Flex, useToast } from '@chakra-ui/react';
-import { QuestionCacheContext } from '../contexts/QuestionCacheContext';
+import QuestionRequestHandler from '../handlers/QuestionRequestHandler';
+import LocalStorageHandler from "../handlers/LocalStorageHandler";
 import QuestionDetailsModal from '../components/question/modals/QuestionDetailsModal';
+import EditQuestionModal from '../components/question/modals/EditQuestionModal';
 import AddQuestionModal from '../components/question/modals/AddQuestionModal';
 import QuestionTable from '../components/question/QuestionTable';
-import EditQuestionModal from '../components/question/modals/EditQuestionModal';
+import { QuestionCacheContext } from '../contexts/QuestionCacheContext';
 import QuestionValidator from '../models/question/QuestionValidator';
-import NavigationBar from '../components/NavigationBar';
-import { authChecker, showError, showSuccess } from '../Util';
-import LoadingPage from './LoadingPage';
 import FilterBar from '../components/question/FilterBar';
-import LocalStorageHandler from "../handlers/LocalStorageHandler";
+import NavigationBar from '../components/NavigationBar';
+import LoadingPage from './LoadingPage';
+import { QuestionString, emptyQuestionString } from '../Commons';
+import { authChecker, showError, showSuccess } from '../Util';
 
 let currentQuestion = emptyQuestionString;
 
@@ -21,56 +21,13 @@ const QuestionPage = () => {
   const [viewModalIsVisible, setViewModalIsVisible] = useState(false);
   const [editModalIsVisible, setEditModalIsVisible] = useState(false);
   const [questions, setQuestions] = useState<QuestionString[]>([]);
+  const [filteredQuestions, setFilteredQuestions] = useState(questions);
   const [questionCache, setQuestionCache] = useState<QuestionString>(emptyQuestionString);
   const [isAuthenticated, setIsAuthenticated] = useState(null);
-  const [filteredQuestions, setFilteredQuestions] = useState(questions);
-  const ctxValue = { questionCache: questionCache, setQuestionCache: setQuestionCache };
+  const ctxValue = { questionCache, setQuestionCache };
   const toast = useToast();
 
-  const onFilter = (filterOptions: { categories: string[]; complexity: string }) => {
-    const { categories, complexity } = filterOptions;
-    let filtered = questions;
-    if (categories) {
-      filtered = filtered.filter((question) => {
-        return categories.every(c => question.categories.includes(c));
-      });
-    }
-    if (complexity) {
-      filtered = filtered.filter((question) => question.complexity === complexity);
-    }
-    setFilteredQuestions(filtered);
-    LocalStorageHandler.storeFilterData(categories, complexity, filtered);
-  }
-
-  async function submitHandler() {
-    try {
-      let validator = new QuestionValidator();
-      validator.validateEmptyFields(questionCache);
-      QuestionRequestHandler.createQuestionAndGetID(questionCache).then((id) => {
-        setQuestions([...questions, { ...questionCache, id: id }]);
-        setFilteredQuestions([...filteredQuestions, { ...questionCache, id: id }]);
-        setAddModalIsVisible(false);
-        showSuccess('Question added', toast);
-      });
-    } catch (e) {
-      showError((e as Error).message, toast);
-    }
-  }
-
-  async function submitUpdateHandler(question: QuestionString) {
-    try {
-      let validator = new QuestionValidator();
-      validator.validateEmptyFields(questionCache);
-      await QuestionRequestHandler.updateQuestion(questionCache).then(() => {
-        setQuestions(questions.map((q) => (q.id === questionCache.id ? questionCache : q)!));
-        setEditModalIsVisible(false);
-        showSuccess(`Question ${question.id} updated!`, toast)
-      });
-    } catch (e) {
-      showError((e as Error).message, toast);
-    }
-  }
-
+  // Load Question on pageload
   useEffect(() => {
     try {
       QuestionRequestHandler.loadQuestions().then((questions: QuestionString[]) => {
@@ -82,70 +39,149 @@ const QuestionPage = () => {
     }
   }, []);
 
-  function viewDescriptionHandler(id: string) {
-    const selectedQuestion = questions.filter(i => i.id.toString() === id)[0];
-    if (selectedQuestion !== undefined) {
-      setQuestionCache(selectedQuestion);
+  function renderAddQuestionModal() {
+    const addQuestionHandler = () => {
+      try {
+        let validator = new QuestionValidator();
+        validator.validateEmptyFields(questionCache);
+        QuestionRequestHandler.createQuestionAndGetID(questionCache).then((id) => {
+          setQuestions([...questions, { ...questionCache, id: id }]);
+          setFilteredQuestions([...filteredQuestions, { ...questionCache, id: id }]);
+          setAddModalIsVisible(false);
+          showSuccess('Question added', toast);
+        });
+      } catch (e) {
+        showError((e as Error).message, toast);
+      }
     }
-    setViewModalIsVisible(true);
+
+    return (
+      <AddQuestionModal
+        isVisible={addModalIsVisible}
+        closeHandler={() => setAddModalIsVisible(false)}
+        submitHandler={addQuestionHandler}
+      />
+    );
   }
 
-  authChecker(setIsAuthenticated);
-  if (isAuthenticated) {
+  function renderQuestionDetailsModal() {
+    const handleEdit = () => {
+      setViewModalIsVisible(false);
+      setEditModalIsVisible(true);
+    }
+
+    const handleDelete = (id: string) => {
+      try {
+        QuestionRequestHandler.deleteQuestion(id);
+        showSuccess('Question deleted!', toast)
+        setFilteredQuestions(questions.filter(i => i.id !== id));
+        setViewModalIsVisible(false);
+      } catch (error) {
+        showError('delete fail', toast);
+      }
+    }
+
     return (
-      <QuestionCacheContext.Provider value={ctxValue}>
+      <QuestionDetailsModal
+        isVisible={viewModalIsVisible}
+        data={questionCache}
+        closeHandler={() => { setViewModalIsVisible(false); }}
+        editModalHandler={handleEdit}
+        deleteHandler={(id: string) => handleDelete(id)}
+      />
+    );
+  }
+
+  function renderEditQuestionModal() {
+    const updateQuestionHandler = (question: QuestionString) => {
+      try {
+        let validator = new QuestionValidator();
+        validator.validateEmptyFields(questionCache);
+        QuestionRequestHandler.updateQuestion(questionCache).then(() => {
+          setQuestions(questions.map((q) => (q.id === questionCache.id ? questionCache : q)!));
+          setEditModalIsVisible(false);
+          showSuccess(`Question ${question.id} updated!`, toast)
+        });
+      } catch (e) {
+        showError((e as Error).message, toast);
+      }
+    }
+
+    return (
+      <EditQuestionModal
+        isVisible={editModalIsVisible}
+        questionToEdit={currentQuestion}
+        closeHandler={() => setEditModalIsVisible(false)}
+        submitUpdateHandler={updateQuestionHandler}
+      />
+    );
+  }
+
+  function renderQuestionTable() {
+    const viewQuestionHandler = (id: string) => {
+      const selectedQuestion = questions.filter(i => i.id.toString() === id)[0];
+      if (selectedQuestion !== undefined) {
+        setQuestionCache(selectedQuestion);
+      }
+      setViewModalIsVisible(true);
+    }
+
+    return (
+      <QuestionTable
+        data={filteredQuestions.sort((a, b) => parseInt(a.id) - parseInt(b.id))}
+        viewDescriptionHandler={viewQuestionHandler}
+        addBtnOnClick={() => {
+          setQuestionCache(emptyQuestionString)
+          setAddModalIsVisible(true);
+        }}
+      />
+    );
+  }
+
+  function renderFilterBar() {
+    function onFilter({ categories, complexity }: { categories: string[]; complexity: string }) {
+      const filtered = questions.filter((question) => {
+        const categoryFilter = !categories || categories.every(c => question.categories.includes(c));
+        const complexityFilter = !complexity || question.complexity === complexity;
+        return categoryFilter && complexityFilter;
+      });
+      setFilteredQuestions(filtered);
+      LocalStorageHandler.storeFilterData(categories, complexity, filtered);
+    }
+
+    return (
+      <FilterBar onFilter={onFilter} />
+    );
+  }
+
+  function renderPageContent() {
+    return (
+      <>
         <NavigationBar index={0} />
         <Center pt={50}>
           <Flex flexDirection="column" alignItems="center">
-            <FilterBar onFilter={onFilter} />
-            <AddQuestionModal
-              isVisible={addModalIsVisible}
-              closeHandler={() => setAddModalIsVisible(false)}
-              submitHandler={submitHandler}
-            />
-            <QuestionDetailsModal
-              isVisible={viewModalIsVisible}
-              data={questionCache}
-              closeHandler={() => { setViewModalIsVisible(false); }}
-              editModalHandler={() => {
-                setViewModalIsVisible(false);
-                setEditModalIsVisible(true);
-              }}
-              deleteHandler={(id: string) => {
-                try {
-                  QuestionRequestHandler.deleteQuestion(id);
-                  showSuccess('Question deleted!', toast)
-                  setFilteredQuestions(questions.filter(i => i.id !== id));
-                  setViewModalIsVisible(false);
-                } catch (error) {
-                  showError('delete fail', toast);
-                }
-              }}
-            />
-            <EditQuestionModal
-              isVisible={editModalIsVisible}
-              questionToEdit={currentQuestion}
-              closeHandler={() => setEditModalIsVisible(false)}
-              submitUpdateHandler={submitUpdateHandler}
-            />
-            {filteredQuestions.length > 0 && (
-              <QuestionTable
-                data={filteredQuestions.sort((a, b) => parseInt(a.id) - parseInt(b.id))}
-                viewDescriptionHandler={viewDescriptionHandler}
-                addBtnOnClick={() => {
-                  setQuestionCache(emptyQuestionString)
-                  setAddModalIsVisible(true);
-                }}
-              />
-            )}
+            {renderFilterBar()}
+            {renderAddQuestionModal()}
+            {renderQuestionDetailsModal()}
+            {renderEditQuestionModal()}
+            {filteredQuestions.length > 0 && renderQuestionTable()}
             {filteredQuestions.length == 0 && <p>No results found</p>}
           </Flex>
         </Center>
-      </QuestionCacheContext.Provider>
-    )
-  } else {
-    return <LoadingPage />
+      </>
+    );
   }
+
+  function renderAuthenticatedPage() {
+    return (
+      <QuestionCacheContext.Provider value={ctxValue}>
+        {renderPageContent()}
+      </QuestionCacheContext.Provider>
+    );
+  }
+
+  authChecker(setIsAuthenticated);
+  return isAuthenticated ? renderAuthenticatedPage() : <LoadingPage />
 };
 
 export default QuestionPage;
