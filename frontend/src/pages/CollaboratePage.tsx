@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Grid, Button, Center, useToast } from "@chakra-ui/react";
+import { GridItem, Box, Grid, Button, Center, useToast } from "@chakra-ui/react";
 import NavigationBar from "../components/NavigationBar";
 import { useEffect, useState } from "react";
 import { MatchingCacheContext } from "../contexts/MatchingCacheContext";
@@ -129,17 +129,26 @@ const CollaboratePage = () => {
   if (isAuthenticated) {
     return (
       <MatchingCacheContext.Provider value={ctxValue}>
-        <Box>
+        <Box >
           <NavigationBar index={1} />
           <Center height='100vh'>
-            <Grid gap={4}>
-              <MatchingForm />
-              <Button
-                colorScheme="blue"
-                onClick={() => findMatch(matchingCache)}
-              >
-                Find Match
-              </Button>
+            <Grid gap={4} >
+              <GridItem bg='primary.blue3'
+                p='30px'
+                borderRadius={10}
+                border='2px solid #244153'
+                boxShadow='lg' >
+                <MatchingForm />
+                <Button
+                  w='100%'
+                  mt='40px'
+                  colorScheme="blue"
+                  onClick={() => findMatch(matchingCache)}
+                >
+                  Find Match
+                </Button>
+              </GridItem>
+
             </Grid>
             <TimerModal
               isOpen={isModalOpen}
@@ -151,7 +160,7 @@ const CollaboratePage = () => {
             />
           </Center>
         </Box>
-      </MatchingCacheContext.Provider>
+      </MatchingCacheContext.Provider >
     );
   } else {
     return <LoadingPage />

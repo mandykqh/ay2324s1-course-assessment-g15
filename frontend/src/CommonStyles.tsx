@@ -29,7 +29,7 @@ export const selectorStyles = {
 }
 export const multiSelectStyles = {
     multiValue: (base) => {
-        return { ...base, backgroundColor: '#0F2031', borderRadius: '7px', };
+        return { ...base, backgroundColor: '#233A43', borderRadius: '7px', };
     },
     multiValueLabel: (base, state) => {
         return {
