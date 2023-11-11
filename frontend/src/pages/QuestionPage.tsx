@@ -115,7 +115,7 @@ const QuestionPage = () => {
                 try {
                   QuestionRequestHandler.deleteQuestion(id);
                   showSuccess('Question deleted!', toast)
-                  setQuestions(questions.filter(i => i.id !== id));
+                  setFilteredQuestions(questions.filter(i => i.id !== id));
                   setViewModalIsVisible(false);
                 } catch (error) {
                   showError('delete fail', toast);
