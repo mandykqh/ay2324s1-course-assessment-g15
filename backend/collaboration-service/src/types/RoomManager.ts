@@ -1,49 +1,32 @@
 class RoomManager {
     private static instance: RoomManager | null = null; // Singleton
+    private currentRoomNumber: number = 0;
 
-    private numberOfRooms: number;
-    private activeRooms: number[];
-
-    constructor(numberOfRooms: number) {
-        this.numberOfRooms = numberOfRooms;
-        this.activeRooms = [];
+    private constructor() {
+        // Private constructor to enforce singleton pattern
     }
 
-    generateRoomNumber() {
-        return Math.floor(Math.random() * this.numberOfRooms);
-    }
-
-    getNewRoomID() {
-        if (this.activeRooms.length === this.numberOfRooms) {
-            return -1;
-        }
-        
-        let newRoomNumber;
-        do {
-            newRoomNumber = this.generateRoomNumber();
-        } while (this.activeRooms.includes(newRoomNumber));
-
-        this.activeRooms.push(newRoomNumber);
-        return newRoomNumber;
-    }
-
-    removeRoom(roomNumber: number) {
-        this.activeRooms = this.activeRooms.filter((room) => room !== roomNumber);
-    }
-
-    static getInstance(numberOfRooms: number) {
+    static getInstance() {
         if (!RoomManager.instance) {
-            RoomManager.instance = new RoomManager(numberOfRooms);
+            RoomManager.instance = new RoomManager();
         }
         return RoomManager.instance;
     }
 
-    getActiveRooms() {
-        return this.activeRooms;
+    generateRoomNumber() {
+        const newRoomNumber = this.currentRoomNumber;
+        this.currentRoomNumber = (this.currentRoomNumber + 1) % Number.MAX_SAFE_INTEGER;
+        return newRoomNumber;
+    }
+
+    getNewRoomID() {
+        const newRoomNumber = this.generateRoomNumber();
+        return newRoomNumber;
     }
 
     getNumberOfRooms() {
-        return this.numberOfRooms;
+        // There is no limit on the number of rooms
+        return Infinity;
     }
 }
 

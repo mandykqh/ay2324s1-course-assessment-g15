@@ -3,8 +3,6 @@ import http from 'http';
 import bodyParser from 'body-parser';
 import compression from 'compression';
 import dotenv from 'dotenv';
-import cors from 'cors';
-import { Server, Socket } from 'socket.io';
 import router from './router';
 import { setupSockets } from './sockets/socketHandler';
 
