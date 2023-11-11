@@ -69,7 +69,8 @@ const UserSecurity = () => {
 
   return (
     <Center flexDirection={'column'} w={'100rem'} pt={100} pb={100}>
-      <Box border={'1px solid white'} borderRadius={5} p={5} w={'60%'} backgroundColor={SECONDARY_COLOR}>
+      <Box borderRadius={15} p={5} w={'60%'} bg='primary.blue3'
+        border='2px solid #244153'>
         <Box marginBottom={10}>
           <Text as='b' fontSize={25}>
             Change Password
@@ -106,8 +107,8 @@ const UserSecurity = () => {
         </Button>
       </Box >
 
-      <Box border={'1px solid white'} borderRadius={5} p={5} mt={10} w={'60%'} backgroundColor={SECONDARY_COLOR}>
-        <Box marginBottom={10}>
+      <Box borderRadius={15} p={5} w={'60%'} bg='primary.blue3' p={5} mt={10} w={'60%'} border='2px solid #244153'>
+        <Box marginBottom={10} >
           <Text as='b' fontSize={25}>
             Delete Account
           </Text>
@@ -120,7 +121,8 @@ const UserSecurity = () => {
             <Text as='sub' color={'#999999'}>To confirm this, type "DELETE"</Text>
           </Box>
           <Center height={50}>
-            <Input onChange={(e) => { setDeleteInput(e.target.value) }}></Input>
+            <Input bg='primary.blue1'
+              border='2px solid #244153' onChange={(e) => { setDeleteInput(e.target.value) }}></Input>
           </Center>
           <Button
             colorScheme={'red'}

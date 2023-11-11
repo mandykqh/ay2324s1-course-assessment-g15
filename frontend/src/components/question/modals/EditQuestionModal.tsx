@@ -1,5 +1,4 @@
 import React, { useEffect, useContext, useState } from "react";
-import { PRIMARY_COLOR } from '../../../CommonStyles';
 import ModalPage1 from './modalPages/ModalPage1';
 import ModalPage2 from './modalPages/ModalPage2';
 import { QuestionCacheContext } from '../../../contexts/QuestionCacheContext';

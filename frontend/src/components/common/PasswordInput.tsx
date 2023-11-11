@@ -18,10 +18,11 @@ const PasswordInput: React.FC<PasswordInputProps> =
         </Text>
         <InputGroup size='md' mt={2}>
           <Input
+            bg='primary.blue1'
+            border='2px solid #244153'
             pr='4.5rem'
             type={passwordShowing ? 'text' : 'password'}
             placeholder={`Enter ${label.toLowerCase()}`}
-            backgroundColor={PRIMARY_COLOR}
             onChange={(e) => valueSetter(e.target.value)}
             value={value}
           />
