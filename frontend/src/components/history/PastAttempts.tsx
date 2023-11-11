@@ -23,7 +23,7 @@ const AttemptEntry = ({ title, date }: { title: string, date: string }) => {
 const PastAttempts = ({ attempts }: { attempts: Attempt[] }) => {
   return (
     <Box>
-      <List width={600} sx={{
+      <List width={520} sx={{
         '& > :last-of-type': {
           borderBottomRadius: '15px',
         },

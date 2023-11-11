@@ -43,7 +43,7 @@ const QuestionTable: React.FC<Props> =
     return (
       <TableContainer mb='40px'>
         <Box border="1.5px solid #244153" borderRadius="xl" overflow="hidden">
-          <Table variant='simple' borderRadius="full" className='question-table' width={'70vw'}>
+          <Table variant='simple' borderRadius="full" className='question-table' width={'50vw'}>
             <Thead>
               <Tr>
                 {headings.map((label) =>

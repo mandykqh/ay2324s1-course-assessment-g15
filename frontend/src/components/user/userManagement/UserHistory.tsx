@@ -41,9 +41,9 @@ const UserHistory = () => {
   return (
     <Box>
       <Stack>
-        <Box pb={3} mb={3}>
-          <Text textStyle='h1'>
-            Attempts Overview
+        <Box pb={2} >
+          <Text textStyle='h1' color='primary.green'>
+            Your Statistics
           </Text>
         </Box>
         <HistoryOverview
@@ -54,9 +54,9 @@ const UserHistory = () => {
           hard={hard}
         />
         <Stack>
-          <Box pb={3} pt={5} mb={3}>
-            <Text textStyle='h1'>
-              Recent Attempts
+          <Box pb={2} pt={5} >
+            <Text textStyle='h1' color='primary.green'>
+              Past Attempts
             </Text>
           </Box>
           {attempted > 0 && <PastAttempts attempts={attempts} />}

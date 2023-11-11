@@ -17,7 +17,7 @@ const NavigationBar: React.FC<Props> = ({ index }) => {
 
   const tabHeadings = [
     {
-      label: 'Questions',
+      label: 'Overview',
       onClick: () => { navigate('../home') }
     }, {
       label: 'Collaborate',
