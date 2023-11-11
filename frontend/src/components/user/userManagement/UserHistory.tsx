@@ -41,8 +41,8 @@ const UserHistory = () => {
   return (
     <Box>
       <Stack>
-        <Box pb={3} borderBottom={'1px solid #999'} mb={3}>
-          <Text fontSize={24}>
+        <Box pb={3} mb={3}>
+          <Text textStyle='h1'>
             Attempts Overview
           </Text>
         </Box>
@@ -54,8 +54,8 @@ const UserHistory = () => {
           hard={hard}
         />
         <Stack>
-          <Box pb={3} pt={5} borderBottom={'1px solid #999'} mb={3}>
-            <Text fontSize={24}>
+          <Box pb={3} pt={5} mb={3}>
+            <Text textStyle='h1'>
               Recent Attempts
             </Text>
           </Box>

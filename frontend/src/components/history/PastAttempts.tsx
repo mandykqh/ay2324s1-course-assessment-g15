@@ -8,7 +8,7 @@ const AttemptEntry = ({ title, date }: { title: string, date: string }) => {
   return (
     <Card
       borderRadius={0}
-      border={'1px solid #999'}
+      border={'2px solid #244153'}
       mb={-1}
       p={3}
       direction={{ base: 'column', sm: 'row' }}
@@ -22,18 +22,24 @@ const AttemptEntry = ({ title, date }: { title: string, date: string }) => {
 
 const PastAttempts = ({ attempts }: { attempts: Attempt[] }) => {
   return (
-    <List width={600}>
-      <ListItem bg={SECONDARY_COLOR} p={3} border={"1px solid #999"}>
-        <Flex>
-          <Text fontWeight={'bold'}>Question Title</Text>
-          <Spacer />
-          <Text fontWeight={'bold'}>Date Attempted</Text>
-        </Flex>
-      </ListItem>
-      {attempts.map((entry, index) =>
-        <ListItem key={index}><AttemptEntry title={entry.questionId} date={entry.timestamp.substring(0, 10)} /></ListItem>
-      )}
-    </List>
+    <Box>
+      <List width={600} sx={{
+        '& > :last-of-type': {
+          borderBottomRadius: '15px',
+        },
+      }}>
+        <ListItem bg='primary.blue2' p={3} border={"2px solid #244153"} borderTopRadius={15}>
+          <Flex>
+            <Text textStyle='h1' color='white'>Question Title</Text>
+            <Spacer />
+            <Text textStyle='h1' color='white'>Date Attempted</Text>
+          </Flex>
+        </ListItem>
+        {attempts.map((entry, index) =>
+          <ListItem key={index} ><AttemptEntry title={entry.questionId} date={entry.timestamp.substring(0, 10)} /></ListItem>
+        )}
+      </List>
+    </Box >
   );
 }
 
