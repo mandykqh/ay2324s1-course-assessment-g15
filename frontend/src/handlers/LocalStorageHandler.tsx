@@ -91,18 +91,7 @@ class LocalStorageHandler {
       complexityFilter,
       filteredQuestions,
     };
-    console.log('filter data qns: ' + filterData.categoryFilter);
     localStorage.setItem('filterData', JSON.stringify(filterData));
-    console.log('stored filter data');
-  }
-
-  static getFilterData() {
-    const data = localStorage.getItem('filterData');
-    return data ? JSON.parse(data) : null;
-  }
-
-  static clearFilterData() {
-    localStorage.removeItem('filterData');
   }
 }
 

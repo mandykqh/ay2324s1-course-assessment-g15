@@ -1,6 +1,6 @@
 import QuestionRequestHandler from '../handlers/QuestionRequestHandler';
 import { QuestionString, emptyQuestionString } from '../Commons';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Center, Flex, useToast } from '@chakra-ui/react';
 import { QuestionCacheContext } from '../contexts/QuestionCacheContext';
 import QuestionDetailsModal from '../components/question/modals/QuestionDetailsModal';
@@ -9,11 +9,9 @@ import QuestionTable from '../components/question/QuestionTable';
 import EditQuestionModal from '../components/question/modals/EditQuestionModal';
 import QuestionValidator from '../models/question/QuestionValidator';
 import NavigationBar from '../components/NavigationBar';
-import { showError, showSuccess } from '../Util';
-import AuthRequestHandler from '../handlers/AuthRequestHandler';
+import { authChecker, showError, showSuccess } from '../Util';
 import LoadingPage from './LoadingPage';
 import FilterBar from '../components/question/FilterBar';
-import { FlatTree } from 'framer-motion';
 import LocalStorageHandler from "../handlers/LocalStorageHandler";
 
 let currentQuestion = emptyQuestionString;
@@ -24,19 +22,13 @@ const QuestionPage = () => {
   const [editModalIsVisible, setEditModalIsVisible] = useState(false);
   const [questions, setQuestions] = useState<QuestionString[]>([]);
   const [questionCache, setQuestionCache] = useState<QuestionString>(emptyQuestionString);
-  const ctxValue = { questionCache: questionCache, setQuestionCache: setQuestionCache };
-  const toast = useToast();
   const [isAuthenticated, setIsAuthenticated] = useState(null);
   const [filteredQuestions, setFilteredQuestions] = useState(questions);
-  const [complexityFilter, setComplexityFilter] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
-
+  const ctxValue = { questionCache: questionCache, setQuestionCache: setQuestionCache };
+  const toast = useToast();
 
   const onFilter = (filterOptions: { categories: string[]; complexity: string }) => {
     const { categories, complexity } = filterOptions;
-    setComplexityFilter(complexity);
-    setCategoryFilter(categories);
-
     let filtered = questions;
     if (categories) {
       filtered = filtered.filter((question) => {
@@ -47,47 +39,19 @@ const QuestionPage = () => {
       filtered = filtered.filter((question) => question.complexity === complexity);
     }
     setFilteredQuestions(filtered);
-    console.log(filtered)
-
     LocalStorageHandler.storeFilterData(categories, complexity, filtered);
-  }
-
-
-  useEffect(() => {
-    AuthRequestHandler.isAuth()
-      .then(res => {
-        setIsAuthenticated(res.isAuth);
-      })
-      .catch(e => {
-        console.log(e);
-      });
-
-    // const filterData = LocalStorageHandler.getFilterData();
-
-    // if (filterData) {
-    //   const { categoryFilter, complexityFilter, filteredQuestions } = filterData;
-    //   setCategoryFilter(categoryFilter);
-    //   setComplexityFilter(complexityFilter);
-    //   setFilteredQuestions(filteredQuestions);
-    // }
-  }, []);
-
-  function clearQuestionCache() {
-    setQuestionCache(emptyQuestionString);
   }
 
   async function submitHandler() {
     try {
       let validator = new QuestionValidator();
       validator.validateEmptyFields(questionCache);
-      await QuestionRequestHandler.createQuestionAndGetID(questionCache).then((id) => {
+      QuestionRequestHandler.createQuestionAndGetID(questionCache).then((id) => {
         setQuestions([...questions, { ...questionCache, id: id }]);
         setFilteredQuestions([...filteredQuestions, { ...questionCache, id: id }]);
-        setFilteredQuestions([...filteredQuestions, { ...questionCache, id: id }]);
-      }
-      );
-      setAddModalIsVisible(false);
-      showSuccess('Question added', toast);
+        setAddModalIsVisible(false);
+        showSuccess('Question added', toast);
+      });
     } catch (e) {
       showError((e as Error).message, toast);
     }
@@ -112,7 +76,6 @@ const QuestionPage = () => {
       QuestionRequestHandler.loadQuestions().then((questions: QuestionString[]) => {
         setQuestions(questions);
         setFilteredQuestions(questions);
-        setFilteredQuestions(questions);
       });
     } catch (error) {
       showError('Failed to load questions', toast);
@@ -127,6 +90,7 @@ const QuestionPage = () => {
     setViewModalIsVisible(true);
   }
 
+  authChecker(setIsAuthenticated);
   if (isAuthenticated) {
     return (
       <QuestionCacheContext.Provider value={ctxValue}>
@@ -134,7 +98,6 @@ const QuestionPage = () => {
         <Center pt={50}>
           <Flex flexDirection="column" alignItems="center">
             <FilterBar onFilter={onFilter} />
-
             <AddQuestionModal
               isVisible={addModalIsVisible}
               closeHandler={() => setAddModalIsVisible(false)}
@@ -170,7 +133,7 @@ const QuestionPage = () => {
                 data={filteredQuestions}
                 viewDescriptionHandler={viewDescriptionHandler}
                 addBtnOnClick={() => {
-                  clearQuestionCache();
+                  setQuestionCache(emptyQuestionString)
                   setAddModalIsVisible(true);
                 }}
               />

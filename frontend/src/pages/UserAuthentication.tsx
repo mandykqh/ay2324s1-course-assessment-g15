@@ -6,7 +6,7 @@ import SignUpCard from "../components/user/userAuthentication/SignUpCard";
 import UserRequestHandler from "../handlers/UserRequestHandler";
 import AuthRequestHandler from "../handlers/AuthRequestHandler";
 import { useNavigate } from "react-router-dom";
-import { showError, showSuccess } from "../Util";
+import { authChecker, showError, showSuccess } from "../Util";
 import LocalStorageHandler from "../handlers/LocalStorageHandler";
 import { UserDataString } from "../Commons";
 
@@ -79,13 +79,7 @@ function LoginPage() {
     { label: 'Sign Up', onClick: () => toggleView() },
   ]
 
-  // Check if User is authenticated
-  useEffect(() => {
-    AuthRequestHandler.isAuth()
-      .then(res => { setIsAuthenticated(res.isAuth); console.log(res) })
-      .catch(e => { console.log("Error: " + e.message); });
-  }, []);
-
+  authChecker(setIsAuthenticated);
   if (isAuthenticated) {
     navigate('../home');
     return;
