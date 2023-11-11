@@ -1,14 +1,14 @@
-import { Box, Flex, Tab, TabList, Tabs, useToast } from "@chakra-ui/react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Box, Flex, Tab, TabList, Tabs, useToast } from "@chakra-ui/react";
+import LocalStorageHandler from "../handlers/LocalStorageHandler";
 import WelcomeLogo from "../components/user/userAuthentication/WelcomeLogo";
 import LoginCard from "../components/user/userAuthentication/LoginCard";
 import SignUpCard from "../components/user/userAuthentication/SignUpCard";
 import UserRequestHandler from "../handlers/UserRequestHandler";
 import AuthRequestHandler from "../handlers/AuthRequestHandler";
-import { useNavigate } from "react-router-dom";
-import { authChecker, showError, showSuccess } from "../Util";
-import LocalStorageHandler from "../handlers/LocalStorageHandler";
 import { UserDataString } from "../Commons";
+import { authChecker, showError, showSuccess } from "../Util";
 
 function saveUserData(result: UserDataString) {
   LocalStorageHandler.storeUserData({
