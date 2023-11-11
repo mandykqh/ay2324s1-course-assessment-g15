@@ -18,15 +18,6 @@ const HistorySchema = new mongoose.Schema({
   total: {
     type: Number,
   },
-  easy: {
-    type: Number,
-  },
-  medium: {
-    type: Number,
-  },
-  hard: {
-    type: Number,
-  }
 });
 
 export const HistoryModel = mongoose.model('History', HistorySchema);

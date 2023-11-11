@@ -11,9 +11,16 @@ import {
 } from "@chakra-ui/react";
 import { PRIMARY_COLOR } from "../../CommonStyles";
 
-const HistoryOverview =
-  ({ total, attempted, easy, medium, hard }:
-    { total: number, attempted: number, easy: number, medium: number, hard: number }) => {
+interface Props {
+  total: number;
+  attempted: number;
+  easy: number;
+  medium: number;
+  hard: number;
+};
+
+const HistoryOverview: React.FC<Props> =
+  ({ total, attempted, easy, medium, hard }) => {
     let completed = (Math.round(attempted / total * 100) / 100) * 100;
     return (
       <Card width={'600px'}>
