@@ -1,4 +1,4 @@
-import { HStack, Divider, Tag, Box, Flex, Text, Center, Tab, TabList, TabPanel, TabPanels, Tabs, Spacer, Image, Button, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
+import { HStack, Divider, Tag, Box, Flex, Text, Center, Tab, TabList, TabPanel, TabPanels, Tabs, Spacer, Image, Button, Menu, MenuButton, MenuItem, MenuList, TabIndicator } from "@chakra-ui/react";
 import { SECONDARY_COLOR } from "../CommonStyles";
 import { useNavigate } from "react-router-dom";
 import LocalStorageHandler from "../handlers/LocalStorageHandler";
@@ -65,7 +65,11 @@ const NavigationBar: React.FC<Props> = ({ index }) => {
           </HStack>
           <Tabs variant={'line'} index={index}>
             <TabList>
-              {tabHeadings.map(h => <Tab key={h.label} onClick={h.onClick}>{h.label}</Tab>)}
+              {tabHeadings.map(h =>
+                <Tab color='primary.green'
+                  textStyle='h1'
+                  key={h.label} onClick={h.onClick}>{h.label}
+                </Tab>)}
             </TabList>
           </Tabs>
         </Center>
