@@ -19,6 +19,29 @@ interface Props {
   hard: number;
 };
 
+const CountLabel = ({ color, label, value }:
+  { color: string, label: string, value: number }) => {
+  return (
+    <Center flexDirection={'column'}>
+      <Text color={color}>{label}</Text>
+      <Text>{value}</Text>
+    </Center>
+  );
+}
+
+const QuestionProgress = ({ completed }: { completed: number }) => {
+  return (
+    <Center>
+      <CircularProgress value={completed} size={'160px'} thickness={5} mr={50}>
+        <CircularProgressLabel fontSize={20}>
+          <Text fontWeight={'bold'}>{`${completed}%`}</Text>
+          <Text fontSize={15}>Attempted</Text>
+        </CircularProgressLabel>
+      </CircularProgress>
+    </Center>
+  );
+}
+
 const HistoryOverview: React.FC<Props> =
   ({ total, attempted, easy, medium, hard }) => {
     let completed = (Math.round(attempted / total * 100) / 100) * 100;
@@ -41,29 +64,13 @@ const HistoryOverview: React.FC<Props> =
                   borderRadius={5}
                   mt={50}
                 >
-                  <Center flexDirection={'column'}>
-                    <Text color={'#77DD77'}>Easy</Text>
-                    <Text>{easy}</Text>
-                  </Center>
-                  <Center flexDirection={'column'}>
-                    <Text color={'#FFFAA0'}>Medium</Text>
-                    <Text >{medium}</Text>
-                  </Center>
-                  <Center flexDirection={'column'}>
-                    <Text color={'#FF6961'}>Hard</Text>
-                    <Text>{hard}</Text>
-                  </Center>
+                  <CountLabel color='#77DD77' label='Easy' value={easy} />
+                  <CountLabel color='#FFFAA0' label='Medium' value={medium} />
+                  <CountLabel color='#FF6961' label='Hard' value={hard} />
                 </Flex>
               </Stack>
               <Spacer />
-              <Center>
-                <CircularProgress value={completed} size={'160px'} thickness={5} mr={50}>
-                  <CircularProgressLabel fontSize={20}>
-                    <Text fontWeight={'bold'}>{`${completed}%`}</Text>
-                    <Text fontSize={15}>Attempted</Text>
-                  </CircularProgressLabel>
-                </CircularProgress>
-              </Center>
+              <QuestionProgress completed={completed} />
             </Flex>
           </Stack>
         </CardBody>

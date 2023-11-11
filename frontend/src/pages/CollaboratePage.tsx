@@ -14,7 +14,6 @@ import MatchingSocketHandler from "../handlers/MatchingSocketHandler";
 import Match from "../models/match/Match";
 import { useNavigate } from "react-router-dom";
 import QuestionRequestHandler from '../handlers/QuestionRequestHandler';
-import { QuestionString } from '../Commons';
 import HistoryRequestHandler from '../handlers/HistoryRequestHandler';
 
 
@@ -124,7 +123,7 @@ const CollaboratePage = () => {
         setMatchMessage(data.msg);
         LocalStorageHandler.storeMatchData(data);
         matchingSocket.disconnect();
-        //updateHistory();
+        updateHistory();
         navigate('/collaborate/code');
       });
 

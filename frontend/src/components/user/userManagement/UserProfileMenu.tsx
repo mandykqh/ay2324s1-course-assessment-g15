@@ -1,6 +1,5 @@
 import { Text, Box, Center, Image, Flex } from "@chakra-ui/react";
 import { PRIMARY_COLOR, SECONDARY_COLOR } from "../../../CommonStyles";
-import { useState } from "react";
 
 interface MenuItemProps {
   label: string;
@@ -11,14 +10,12 @@ interface MenuItemProps {
 }
 
 const MenuItem: React.FC<MenuItemProps> = ({ label, imageUrl, index, selectedIndex, onClick }) => {
-
+  let backgroundColor = index === selectedIndex ? SECONDARY_COLOR : PRIMARY_COLOR;
   return (
     <Box
       p={3}
-      backgroundColor={index === selectedIndex ? SECONDARY_COLOR : PRIMARY_COLOR}
-      style={{
-        cursor: 'pointer'
-      }}
+      backgroundColor={backgroundColor}
+      style={{ cursor: 'pointer' }}
       onClick={onClick}
     >
       <Flex marginLeft={5}>
@@ -31,7 +28,6 @@ const MenuItem: React.FC<MenuItemProps> = ({ label, imageUrl, index, selectedInd
           </Text>
         </Center>
       </Flex>
-
     </Box >
   );
 }
