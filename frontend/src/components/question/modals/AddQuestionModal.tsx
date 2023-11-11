@@ -2,7 +2,6 @@ import React, { useContext, useState } from "react";
 import { emptyQuestionString } from '../../../Commons';
 import ModalPage1 from './modalPages/ModalPage1';
 import ModalPage2 from './modalPages/ModalPage2';
-import { PRIMARY_COLOR } from '../../../CommonStyles';
 import { QuestionCacheContext } from '../../../contexts/QuestionCacheContext';
 import {
   Modal,

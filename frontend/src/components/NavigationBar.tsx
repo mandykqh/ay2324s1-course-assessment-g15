@@ -1,8 +1,6 @@
 import { HStack, Divider, Tag, Box, Flex, Text, Center, Tab, TabList, TabPanel, TabPanels, Tabs, Spacer, Image, Button, Menu, MenuButton, MenuItem, MenuList, TabIndicator } from "@chakra-ui/react";
-import { SECONDARY_COLOR } from "../CommonStyles";
 import { useNavigate } from "react-router-dom";
 import LocalStorageHandler from "../handlers/LocalStorageHandler";
-import { useEffect, useState } from "react";
 import AuthRequestHandler from "../handlers/AuthRequestHandler";
 
 const HEIGHT = 50;
@@ -86,7 +84,7 @@ const NavigationBar: React.FC<Props> = ({ index }) => {
             <Image h={30} src='src\assets\images\user.png' />
           </Center>
         </MenuButton>
-        <MenuList>
+        <MenuList bg='primary.blue2'>
           <MenuItem onClick={() => navigate('../profile')}>Edit profile</MenuItem>
           <MenuItem onClick={signoutHandler}>Sign out</MenuItem>
         </MenuList>

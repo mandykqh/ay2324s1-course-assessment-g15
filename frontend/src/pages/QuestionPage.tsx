@@ -15,7 +15,6 @@ import LoadingPage from './LoadingPage';
 import { FlatTree } from 'framer-motion';
 import LocalStorageHandler from "../handlers/LocalStorageHandler";
 import FilterBar from '../components/question/FilterBar';
-import HistoryOverview from '../components/history/HistoryOverview';
 import UserHistory from '../components/user/userManagement/UserHistory';
 
 let currentQuestion = emptyQuestionString;
@@ -137,76 +136,6 @@ const QuestionPage: React.FC<Props> = ({ addBtnOnClick }) => {
 
   if (isAuthenticated) {
     return (
-      // <QuestionCacheContext.Provider value={ctxValue}>
-      //   <NavigationBar index={0} />
-      //   <Center pt={50}>
-      //     <Flex flexDirection="column" alignItems="center">
-      //       <Box maxWidth={'70vw'}>
-      //         <HStack mt='20px'>
-      //           <FilterBar onFilter={onFilter} />
-      //           {userRole === 'ADMIN'
-      //             ?
-      //             <Button colorScheme='blue'
-      //               borderRadius='10px'
-      //               w='120px'
-      //               ml='5px'
-      //               onClick={() => {
-      //                 clearQuestionCache();
-      //                 setAddModalIsVisible(true);
-      //               }} my={5} float='right' isDisabled={userRole === 'ADMIN' ? false : true}>
-      //               Add
-      //             </Button>
-      //             : <br />}
-      //         </HStack>
-
-
-      //       </Box>
-      //       <AddQuestionModal
-      //         isVisible={addModalIsVisible}
-      //         closeHandler={() => setAddModalIsVisible(false)}
-      //         submitHandler={submitHandler}
-      //       />
-      //       <QuestionDetailsModal
-      //         isVisible={viewModalIsVisible}
-      //         data={questionCache}
-      //         closeHandler={() => { setViewModalIsVisible(false); }}
-      //         editModalHandler={() => {
-      //           setViewModalIsVisible(false);
-      //           setEditModalIsVisible(true);
-      //         }}
-      //         deleteHandler={(id: string) => {
-      //           try {
-      //             QuestionRequestHandler.deleteQuestion(id);
-      //             showSuccess('Question deleted!', toast)
-      //             setQuestions(questions.filter(i => i.id !== id));
-      //             setViewModalIsVisible(false);
-      //           } catch (error) {
-      //             showError('delete fail', toast);
-      //           }
-      //         }}
-      //       />
-      //       <EditQuestionModal
-      //         isVisible={editModalIsVisible}
-      //         questionToEdit={currentQuestion}
-      //         closeHandler={() => setEditModalIsVisible(false)}
-      //         submitUpdateHandler={submitUpdateHandler}
-      //       />
-      //       {filteredQuestions.length > 0 ? (
-      //         <QuestionTable
-      //           data={filteredQuestions}
-      //           viewDescriptionHandler={viewDescriptionHandler}
-      //         />
-      //       ) : (
-      //         <p>No results found</p>
-      //       )}
-
-      //     </Flex>
-      //     <Flex>
-      //       <UserHistory />
-      //     </Flex>
-      //   </Center>
-      // </QuestionCacheContext.Provider >
-
       <QuestionCacheContext.Provider value={ctxValue}>
         <NavigationBar index={0} />
         <Flex direction="row" align="start" pt={50} wrap="nowrap">
@@ -281,52 +210,7 @@ const QuestionPage: React.FC<Props> = ({ addBtnOnClick }) => {
   } else {
     return <LoadingPage />
   }
-  //     <QuestionCacheContext.Provider value={ctxValue}>
-  //       <Flex>
-  //         {/* Collapsible Sidebar */}
-  //         <Box
-  //           w="50px" // Width of the sidebar when collapsed
-  //           h="100vh"
-  //           bg="blue.600"
-  //           transition="all .3s"
-  //           _hover={{ w: "200px" }} // Width of the sidebar when expanded
-  //           position="absolute"
-  //         >
-  //           <Flex
-  //             direction="column"
-  //             p="4"
-  //             w="full"
-  //             h="100vh"
-  //             bg="blue.700"
-  //             color="white"
-  //             position="absolute"
-  //             top={0}
-  //             left={0}
-  //             right={0}
-  //             bottom={0}
-  //             overflow="hidden"
-  //           >
-  //             {/* Add your sidebar icons here */}
 
-  //             {/* More icons... */}
-  //           </Flex>
-  //         </Box>
-
-  //         {/* Main content */}
-  //         <Box flex="1" w="0"> {/* Set w="0" to prevent flexbox overflow */}
-  //           <NavigationBar index={0} />
-  //           <Center pt={50}>
-  //             <Flex flexDirection="column" alignItems="center">
-  //               {/* ... existing main content */}
-  //             </Flex>
-  //           </Center>
-  //         </Box>
-  //       </Flex>
-  //     </QuestionCacheContext.Provider >
-  //   );
-  // } else {
-  //   return <LoadingPage />
-  // }
 };
 
 export default QuestionPage;
