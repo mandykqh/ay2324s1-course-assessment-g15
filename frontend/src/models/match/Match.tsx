@@ -1,6 +1,6 @@
 class Match {
     user_id: string;
-    categories: string[]; // TO be change to array of strings
+    categories: string[];
     complexity: string;
 
     constructor(user_id: string, categories: string[], complexity: string) {
