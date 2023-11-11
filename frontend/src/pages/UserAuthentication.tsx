@@ -120,7 +120,7 @@ function LoginPage() {
 
   function redirectAuthenticated() {
     navigate('../home');
-    return;
+    return (<></>);
   }
 
   function renderLoginPage() {

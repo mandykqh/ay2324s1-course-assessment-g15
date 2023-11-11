@@ -1,6 +1,4 @@
-import {
-  createBrowserRouter,
-} from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import UserAuthentication from './pages/UserAuthentication.js';
 import QuestionPage from './pages/QuestionPage.js';
 import UserProfilePage from './pages/UserProfilePage.js';
