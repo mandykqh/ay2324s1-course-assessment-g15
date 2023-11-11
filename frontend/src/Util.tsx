@@ -9,15 +9,15 @@ function enumToString(e: unknown[]) {
   return e.slice(0, e.length / 2);
 }
 
-function getComplexityStrings() {
+export function getComplexityStrings() {
   return enumToString(Object.values(Complexity)) as string[];
 }
 
-function getCategoriesString() {
+export function getCategoriesString() {
   return enumToString(Object.values(Category)) as string[];
 }
 
-function stringToOptionsMapper(input: string) {
+export function stringToOptionsMapper(input: string) {
   if (input.length === 0) {
     return [];
   }
@@ -44,8 +44,6 @@ export function showSuccess(message: string, toast: (options: UseToastOptions) =
 export function showError(message: string, toast: (options: UseToastOptions) => {}) {
   showNotification({ message: message, type: 'error' }, toast);
 }
-
-export { getComplexityStrings, getCategoriesString, stringToOptionsMapper };
 
 export function authChecker(setIsAuthenticated: React.Dispatch<React.SetStateAction<null>>) {
   useEffect(() => {
