@@ -21,7 +21,12 @@ const theme = extendTheme({
       green: '#6DD7C4',
       blue1: '#0B1825',
       blue2: '#09121C',
+      blue3: '#0F2031',
       boxBorder: '#244153',
+    },
+    secondary: {
+      purple: '#656ADF',
+      blue1: '#90CDF4'
     },
     difficulty: {
       easy: '#76DD77',

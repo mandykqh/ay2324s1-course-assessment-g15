@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { getComplexityStrings, stringToOptionsMapper } from "../../../../../Util";
 import { Box } from '@chakra-ui/react';
-import { SECONDARY_COLOR } from '../../../../../CommonStyles';
-import { Select } from 'chakra-react-select';
+import { selectorStyles, singleSelectStyles } from '../../../../../CommonStyles';
+import Select from 'react-select'
 import { QuestionCacheContext } from '../../../../../contexts/QuestionCacheContext';
 
 interface SelectOption {
@@ -30,7 +30,7 @@ const SelectComplexityInput = () => {
 
   return (
     <>
-      <Box backgroundColor={SECONDARY_COLOR} borderRadius='5px'>
+      <Box borderRadius='5px'>
         <Select
           onChange={(e) => {
             setComplexity((e as SelectOption).value);
@@ -38,6 +38,13 @@ const SelectComplexityInput = () => {
           options={complexityOptions}
           placeholder="Select Complexity"
           value={stringToOptionsMapper(questionCache.complexity)}
+          styles={{
+            ...selectorStyles,
+            ...singleSelectStyles,
+          }}
+          components={{
+            IndicatorSeparator: () => null
+          }}
         />
       </Box>
     </>

@@ -62,7 +62,7 @@ const EditQuestionModal: React.FC<Props> = ({ isVisible, questionToEdit, closeHa
       blockScrollOnMount={true}
     >
       <ModalOverlay />
-      <ModalContent backgroundColor={PRIMARY_COLOR} maxW="50vw">
+      <ModalContent bg='primary.blue3' maxW="50vw" borderRadius='15px'>
         <ModalHeader color='white'>
           Edit Question
         </ModalHeader>
@@ -87,8 +87,8 @@ const EditQuestionModal: React.FC<Props> = ({ isVisible, questionToEdit, closeHa
           {page === 1 && <ModalButton label='Next' color='blue' onClick={() => setPage(2)} />}
           {page === 2 &&
             <>
-              <ModalButton label='Previous' color='blue' onClick={() => { setPage(1) }} />
-              <ModalButton label='Submit update' color='cyan'
+              <ModalButton label='Previous' color='red' onClick={() => { setPage(1) }} />
+              <ModalButton label='Submit' color='blue'
                 onClick={() => {
                   submitUpdateHandler(questionCache);
                   close();

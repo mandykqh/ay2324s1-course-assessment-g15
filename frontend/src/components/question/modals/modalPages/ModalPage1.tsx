@@ -17,13 +17,15 @@ const ModalPage1: React.FC<ModalPage1Props> = ({
   onTitleChange,
   onLinkChange,
 }) => {
+
   return (
     <Grid gap={4}>
       <Grid gap={1}>
         <Text as='b'>Title</Text>
         <Input
           placeholder={'Enter Question Title'}
-          backgroundColor={SECONDARY_COLOR}
+          bg='primary.blue1'
+          border='2px solid #244153'
           onChange={(e) => onTitleChange(e.target.value)} // Use the provided callback function
           value={title} // Use the provided prop
         />
@@ -32,7 +34,8 @@ const ModalPage1: React.FC<ModalPage1Props> = ({
         <Text as='b'>Link</Text>
         <Input
           placeholder={'Enter Question Link'}
-          backgroundColor={SECONDARY_COLOR}
+          bg='primary.blue1'
+          border='2px solid #244153'
           onChange={(e) => onLinkChange(e.target.value)} // Use the provided callback function
           value={link} // Use the provided prop
         />

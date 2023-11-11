@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import Select from 'react-select'
 import { getCategoriesString, getComplexityStrings, stringToOptionsMapper } from '../../Util';
 import { Flex, Box } from '@chakra-ui/react';
+import { selectorStyles, multiSelectStyles } from '../../CommonStyles';
+
 
 interface SelectOption {
     value: string;
@@ -30,30 +32,6 @@ const FilterBar: React.FC<FilterBarProps> = ({ onFilter }) => {
         onFilter({ categories: selectedCategories, complexity: selectedComplexity });
     }, [selectedCategories, selectedComplexity]);
 
-    const selectorStyles = {
-        control: (baseStyles) => ({
-            ...baseStyles,
-            // borderColor: '#244153',
-            border: '2px solid #244153',
-            borderRadius: '10px',
-            backgroundColor: '#0D1117',
-            overflow: 'hidden',
-        }),
-        option: (provided, state) => ({
-            ...provided,
-            backgroundColor: state.isSelected ? '#040B11' : state.isFocused ? '#0B1825' : '#0D1117', // Change the background color as needed
-            color: state.isSelected ? '#808080' : 'white',
-        }),
-        menu: (provided) => ({
-            ...provided,
-            backgroundColor: '#0D1117',
-            overflow: 'hidden',
-            borderRadius: '15px',
-            border: '2px solid #244153',
-        }),
-
-    }
-
     return (
         <>
             <Flex justifyContent="space-between" alignItems="center" my={5} w={1000}>
@@ -76,23 +54,7 @@ const FilterBar: React.FC<FilterBarProps> = ({ onFilter }) => {
                         value={stringToOptionsMapper(selectedCategories.join(', '))}
                         styles={{
                             ...selectorStyles,
-                            multiValue: (base) => {
-                                return { ...base, backgroundColor: '#0F2031', borderRadius: '7px', };
-                            },
-                            multiValueLabel: (base, state) => {
-                                return {
-                                    ...base, fontWeight: 'bold',
-                                    color: 'white',
-                                    paddingRight: 6,
-                                };
-                            },
-                            multiValueRemove: (base, state) => {
-                                return state.data.isFixed ? { ...base, display: 'none' } : base;
-                            },
-                            // placeholder: (provided) => ({
-                            //     ...provided,
-                            //     color: '#244153',
-                            // }),
+                            ...multiSelectStyles,
                         }}
                         components={{
                             IndicatorSeparator: () => null

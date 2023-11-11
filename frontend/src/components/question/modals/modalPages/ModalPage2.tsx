@@ -16,7 +16,8 @@ const ModalPage2: React.FC<ModalPage2Props> = ({ description, onDescriptionChang
         rows={15}
         placeholder='Enter Question Description'
         resize={'none'}
-        backgroundColor={SECONDARY_COLOR}
+        bg='primary.blue1'
+        border='2px solid #244153'
         onChange={(e) => onDescriptionChange(e.target.value)} // Use the provided callback function
         value={description} // Use the provided prop
       />
