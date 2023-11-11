@@ -1,10 +1,9 @@
-export const PRIMARY_COLOR = '#282c34';
-export const SECONDARY_COLOR = '#212224';
+export const PRIMARY_COLOR = '#0B1825';
+export const SECONDARY_COLOR = '#0B1825';
 
 export const selectorStyles = {
     control: (baseStyles) => ({
         ...baseStyles,
-        // borderColor: '#244153',
         border: '2px solid #244153',
         borderRadius: '10px',
         backgroundColor: '#0B1825',

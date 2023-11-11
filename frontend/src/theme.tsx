@@ -22,11 +22,16 @@ const theme = extendTheme({
       blue1: '#0B1825',
       blue2: '#09121C',
       blue3: '#0F2031',
+      blue4: '#DEFFFF',
       boxBorder: '#244153',
     },
     secondary: {
       purple: '#656ADF',
-      blue1: '#90CDF4'
+      blue1: '#90CDF4',
+    },
+    table: {
+      first: '#0B1725',
+      second: '#0F2031',
     },
     difficulty: {
       easy: '#76DD77',
