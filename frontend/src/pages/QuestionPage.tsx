@@ -130,7 +130,7 @@ const QuestionPage = () => {
             />
             {filteredQuestions.length > 0 && (
               <QuestionTable
-                data={filteredQuestions}
+                data={filteredQuestions.sort((a, b) => parseInt(a.id) - parseInt(b.id))}
                 viewDescriptionHandler={viewDescriptionHandler}
                 addBtnOnClick={() => {
                   setQuestionCache(emptyQuestionString)
