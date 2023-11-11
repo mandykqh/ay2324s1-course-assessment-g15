@@ -1,6 +1,5 @@
 import { Text, Box, Center, Image, Flex } from "@chakra-ui/react";
 import { PRIMARY_COLOR, SECONDARY_COLOR } from "../../../CommonStyles";
-import { useState } from "react";
 
 interface MenuItemProps {
   label: string;
@@ -11,14 +10,12 @@ interface MenuItemProps {
 }
 
 const MenuItem: React.FC<MenuItemProps> = ({ label, imageUrl, index, selectedIndex, onClick }) => {
-
+  let backgroundColor = index === selectedIndex ? SECONDARY_COLOR : PRIMARY_COLOR;
   return (
     <Box
       p={3}
-      backgroundColor={index === selectedIndex ? SECONDARY_COLOR : PRIMARY_COLOR}
-      style={{
-        cursor: 'pointer'
-      }}
+      backgroundColor={backgroundColor}
+      style={{ cursor: 'pointer' }}
       onClick={onClick}
     >
       <Flex marginLeft={5}>
@@ -31,7 +28,6 @@ const MenuItem: React.FC<MenuItemProps> = ({ label, imageUrl, index, selectedInd
           </Text>
         </Center>
       </Flex>
-
     </Box >
   );
 }
@@ -48,27 +44,21 @@ const UserProfileMenu: React.FC<MenuProps> =
         <MenuItem
           index={0}
           selectedIndex={currentMenuIndex}
-          label='Home'
-          imageUrl='src\assets\images\user.png'
+          label='Personal Info'
+          imageUrl='src\assets\images\personal_info.png'
           onClick={() => { setCurrentMenuIndex(0) }} />
         <MenuItem
           index={1}
           selectedIndex={currentMenuIndex}
-          label='Personal Info'
-          imageUrl='src\assets\images\personal_info.png'
+          label='Security'
+          imageUrl='src\assets\images\security.png'
           onClick={() => { setCurrentMenuIndex(1) }} />
         <MenuItem
           index={2}
           selectedIndex={currentMenuIndex}
-          label='Security'
-          imageUrl='src\assets\images\security.png'
-          onClick={() => { setCurrentMenuIndex(2) }} />
-        <MenuItem
-          index={3}
-          selectedIndex={currentMenuIndex}
           label='History'
           imageUrl='src\assets\images\history.png'
-          onClick={() => { setCurrentMenuIndex(3) }} />
+          onClick={() => { setCurrentMenuIndex(2) }} />
       </Box>
     );
   }

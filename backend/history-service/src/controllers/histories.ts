@@ -18,11 +18,6 @@ export const addHistory = async (req: express.Request, res: express.Response) =>
     try {
         const userId = req.body.data.userId;
         const attempt = req.body.data.attempt;
-        const complexity = req.body.data.complexity;
-        const easyCount = complexity == 'Easy' ? 1 : 0;
-        const mediumCount = complexity == 'Medium' ? 1 : 0;
-        const hardCount = complexity == 'Hard' ? 1 : 0;
-
 
         const entryExist = await HistoryModel.findOne({ userId: userId });
         if (!entryExist) {
@@ -30,9 +25,6 @@ export const addHistory = async (req: express.Request, res: express.Response) =>
                 userId: userId,
                 attempts: [attempt],
                 total: 1,
-                easy: easyCount,
-                medium: mediumCount,
-                hard: hardCount,
             })
             return;
         }
@@ -51,24 +43,6 @@ export const addHistory = async (req: express.Request, res: express.Response) =>
             { new: true }
         );
 
-        // update easy, medium, hard counts
-        await HistoryModel.findOneAndUpdate(
-            { userId: userId },
-            { $inc: { easy: easyCount } },
-            { new: true }
-        );
-
-        await HistoryModel.findOneAndUpdate(
-            { userId: req.params.userId },
-            { $inc: { medium: mediumCount } },
-            { new: true }
-        );
-
-        await HistoryModel.findOneAndUpdate(
-            { userId: req.params.userId },
-            { $inc: { hard: hardCount } },
-            { new: true }
-        );
     } catch (error) {
         console.error(error);
         return res.sendStatus(500).send("internal server error");

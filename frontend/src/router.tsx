@@ -32,10 +32,6 @@ const router = createBrowserRouter([
     path: "collaborate/code",
     element: <CodingPage />
   },
-  {
-    path: "more",
-    element: <MorePage />
-  }
 ]);
 
 export default router;

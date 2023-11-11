@@ -14,7 +14,7 @@ import MatchingSocketHandler from "../handlers/MatchingSocketHandler";
 import Match from "../models/match/Match";
 import { useNavigate } from "react-router-dom";
 import QuestionRequestHandler from '../handlers/QuestionRequestHandler';
-import { QuestionString } from '../Commons';
+import HistoryRequestHandler from '../handlers/HistoryRequestHandler';
 
 
 const CollaboratePage = () => {
@@ -66,6 +66,18 @@ const CollaboratePage = () => {
     }
   }
 
+  function updateHistory() {
+    let date = new Date();
+    HistoryRequestHandler.updateHistory({
+      userId: LocalStorageHandler.getUserData()?.id!,
+      attempt: {
+        questionId: LocalStorageHandler.getMatchData()?.question.id!,
+        timestamp: date.toISOString(),
+      },
+      complexity: LocalStorageHandler.getMatchData()?.question.complexity!
+    });
+  }
+
   async function findMatch(matchingCache: MatchingString) {
     setIsTimeout(false);
     setMatchMessage('');
@@ -111,6 +123,7 @@ const CollaboratePage = () => {
         setMatchMessage(data.msg);
         LocalStorageHandler.storeMatchData(data);
         matchingSocket.disconnect();
+        updateHistory();
         navigate('/collaborate/code');
       });
 
