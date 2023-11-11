@@ -1,7 +1,6 @@
-import { Card, CardBody, FormControl, FormLabel, Input, Center, Button } from "@chakra-ui/react";
+import { Box, Text, Card, CardBody, FormControl, FormLabel, Input, Center, Button } from "@chakra-ui/react";
 import PasswordInput from "../../common/PasswordInput";
 import { useState } from "react";
-import { PRIMARY_COLOR } from "../../../CommonStyles";
 
 interface Props {
   username: string;
@@ -15,17 +14,21 @@ const LoginCard: React.FC<Props> =
   ({ username, usernameSetter, password, passwordSetter, loginHandler }) => {
     const [passwordShowing, setPasswordShowing] = useState(false);
     return (
-      <Card maxW='600px'>
+      <Card maxW='550px' bg='transparent'>
         <CardBody>
-          <FormLabel htmlFor="email">Username:</FormLabel>
+          <Box mb='10px'>
+            <Text as='b'>
+              Username
+            </Text></Box>
           <Input
             required
             placeholder='Enter username'
             mb={5}
-            bg={PRIMARY_COLOR}
+            bg='primary.blue3'
+            border='2px solid #244153'
             value={username}
             onChange={(e) => usernameSetter(e.target.value)}
-          />
+            borderRadius={15} />
           <PasswordInput
             label={'Password'}
             passwordShowing={passwordShowing}

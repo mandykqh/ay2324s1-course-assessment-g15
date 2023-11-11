@@ -103,13 +103,14 @@ function LoginPage() {
   } else {
     return (
       <>
-        <Flex justify="center" align="center" minHeight="100vh">
+        <Flex justify="center" align="center" minHeight="100vh"
+        >
           <WelcomeLogo />
-          <Box w='100%'>
-            <Tabs w={'200px'} bg={'rgb(45, 55, 72)'} variant={'line'} borderRadius={5}>
+          <Box w='100%' flex='90%'>
+            <Tabs w={'200px'} mb='10px' variant={'line'} borderRadius={5}>
               <TabList>
                 {tabs.map((tab) =>
-                  <Tab w={'100px'} onClick={tab.onClick} key={tab.label}>
+                  <Tab w={'100px'} textStyle='h1' color='primary.green' onClick={tab.onClick} key={tab.label}>
                     {tab.label}
                   </Tab>
                 )}

@@ -1,4 +1,4 @@
-import { Card, CardHeader, Heading, CardBody, FormLabel, Input, Center, Button } from "@chakra-ui/react";
+import { Box, Text, Card, CardHeader, Heading, CardBody, FormLabel, Input, Center, Button } from "@chakra-ui/react";
 import { PRIMARY_COLOR } from "../../../CommonStyles";
 import PasswordInput from "../../common/PasswordInput";
 import { useState } from "react";
@@ -22,29 +22,36 @@ const SignUpCard: React.FC<Props>
     const [passwordShowing, setPasswordShowing] = useState(false);
     const [confirmPasswordShowing, setConfirmPasswordShowing] = useState(false);
     return (
-      <Card maxW='600px'>
-        <CardHeader>
-          <Heading size='24px' >Let's get started!</Heading>
-        </CardHeader>
+      <Card maxW='550px' bg='transparent'>
         <CardBody>
-          <FormLabel>Enter your email address:</FormLabel>
+          <Box mb='10px'>
+            <Text as='b'>
+              Email Address
+            </Text></Box>
           <Input
             type="email"
             id="email"
             value={email}
             onChange={(e) => emailSetter(e.target.value)}
             required
-            placeholder='Enter email'
-            bg={PRIMARY_COLOR}
+            placeholder='Enter email address'
+            bg='primary.blue3'
+            border='2px solid #244153'
+            borderRadius={15}
             mb={5}
           />
-          <FormLabel>Username</FormLabel>
+          <Box mb='10px'>
+            <Text as='b'>
+              Username
+            </Text></Box>
           <Input
             value={username}
             onChange={(e) => usernameSetter(e.target.value)}
             required
             placeholder='Enter username'
-            bg={PRIMARY_COLOR}
+            bg='primary.blue3'
+            border='2px solid #244153'
+            borderRadius={15}
             mb={5}
           />
           <PasswordInput
