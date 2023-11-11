@@ -52,11 +52,10 @@ server.listen(port, () => {
     try {
         await sequelize.sync();
         console.log('Database synchronized!');
+        initAdminProfile();
     } catch (error) {
         console.error('Error synchronizing database:', error);
     }
 })();
-
-initAdminProfile();
 
 app.use('/', router());
