@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useToast, Box, Button, Grid, VStack, GridItem, Select, HStack, Textarea, Center } from '@chakra-ui/react';
+import { Flex, useToast, Box, Button, Grid, VStack, GridItem, HStack, Textarea, Center } from '@chakra-ui/react';
 import { io, Socket } from 'socket.io-client';
 import NavigationBar from '../components/NavigationBar';
 import LocalStorageHandler from '../handlers/LocalStorageHandler';
@@ -15,6 +15,10 @@ import { cpp } from '@codemirror/lang-cpp';
 import { javascript } from '@codemirror/lang-javascript';
 import { okaidia } from '@uiw/codemirror-theme-okaidia';
 import HistoryRequestHandler from '../handlers/HistoryRequestHandler';
+import Select from 'react-select';
+import { selectorStyles, singleSelectStyles } from '../CommonStyles';
+
+
 
 const CodingPage = () => {
   const navigate = useNavigate();
@@ -171,6 +175,14 @@ const CodingPage = () => {
   }
 
   const questionString = LocalStorageHandler.getMatchData()?.question;
+
+
+  const languageOptions = [
+    { value: 'javascript', label: 'JavaScript' },
+    { value: 'python', label: 'Python' },
+    { value: 'java', label: 'Java' },
+    { value: 'cpp', label: 'C++' },
+  ];
   if (isAuthenticated) {
     const questionString = LocalStorageHandler.getMatchData()?.question;
     return (
@@ -189,18 +201,32 @@ const CodingPage = () => {
               onQuestionChange={handleQuestionChange}
             />
           </GridItem>
-          <GridItem colSpan={1}>
+          <GridItem colSpan={1} m='15px'>
             <VStack gap='1rem'>
               {/* // TODO: Add a chat box for messaging */}
-              <HStack width='100%' gap='1rem'>
-                <Select value={language} onChange={(e) => handleLanguageChange(e.target.value)}>
-                  <option value='javascript'>JavaScript</option>
-                  <option value='python'>Python</option>
-                  <option value='java'>Java</option>
-                  <option value='cpp'>C++</option>
-                </Select>
-                <Button onClick={() => handleDisconnect()}> Disconnect </Button>
-              </HStack>
+              <Flex width='100%' gap='1rem'>
+                <Box flex='80%'>
+                  <Select
+                    value={languageOptions.find(option => option.value === language)}
+                    onChange={handleLanguageChange}
+                    options={languageOptions}
+                    styles={{
+                      ...selectorStyles,
+                      ...singleSelectStyles,
+                    }}
+                    components={{
+                      IndicatorSeparator: () => null
+                    }}
+                  />
+                </Box>
+                <Button
+                  colorScheme='red'
+                  onClick={() => handleDisconnect()}
+                  flex="7" // The Button will take up 30% of the Flex container
+                >
+                  Disconnect
+                </Button>
+              </Flex>
               <CodeMirror
                 value={code}
                 height='80vh'
