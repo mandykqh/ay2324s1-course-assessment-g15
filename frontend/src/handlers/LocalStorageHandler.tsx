@@ -67,20 +67,20 @@ class LocalStorageHandler {
   }
 
   // Chat data
-  static storeChatData(key:string, chatData: any) {
+  static storeChatData(key: string, chatData: any) {
     localStorage.setItem(key, JSON.stringify(chatData));
   }
 
-  static getChatData(key:string) {
+  static getChatData(key: string) {
     return JSON.parse(localStorage.getItem(key) || '[]');
   }
 
   // Canvas data
-  static storeCanvasData(key:string, canvasData: any) {
+  static storeCanvasData(key: string, canvasData: any) {
     localStorage.setItem(key, canvasData);
   }
 
-  static getCanvasData(key:string) {
+  static getCanvasData(key: string) {
     return localStorage.getItem(key);
   }
 

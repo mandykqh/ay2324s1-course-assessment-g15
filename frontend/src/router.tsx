@@ -1,11 +1,9 @@
 import {
   createBrowserRouter,
-  RouterProvider,
 } from "react-router-dom";
 import UserAuthentication from './pages/UserAuthentication.js';
 import QuestionPage from './pages/QuestionPage.js';
 import UserProfilePage from './pages/UserProfilePage.js';
-import MorePage from "./pages/MorePage.js";
 import LoadingPage from "./pages/LoadingPage.js";
 import CollaboratePage from "./pages/CollaboratePage.js";
 import CodingPage from "./pages/CodingPage.js";
