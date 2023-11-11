@@ -26,7 +26,6 @@ const TimerModal: React.FC<TimerModalProps> = ({ isOpen, onClose, initialTime, s
 
   useEffect(() => {
     let timer: number;
-
     if (isOpen && time > 0) {
       timer = setInterval(() => {
         if (time > 0) {
@@ -36,7 +35,6 @@ const TimerModal: React.FC<TimerModalProps> = ({ isOpen, onClose, initialTime, s
         }
       }, 1000);
     }
-
     return () => {
       clearInterval(timer);
     };
@@ -66,35 +64,37 @@ const TimerModal: React.FC<TimerModalProps> = ({ isOpen, onClose, initialTime, s
   return (
     <Modal isOpen={isOpen} onClose={() => { onClose(); setTime(initialTime); }}>
       <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>
-          <Center>
-            <Text textAlign="center">Finding a match...</Text>
-          </Center>
-        </ModalHeader>
-        <ModalCloseButton />
-        <ModalBody>
-          <Center flexDirection="column">
-            {isTimeout ? (
-              <>
-                <Text>Sorry, no match found!</Text>
-                <Text>Please try again later.</Text>
-              </>
-            ) : (isMatchFound ? (
-              <>
-                <Text mt={2}>{status}</Text>
-              </>
-            ) : ( 
-              <>
-                <Spinner thickness='12px' speed='0.85s' color='blue.500' size="xl" />
-                <Text mt={2}>{status}</Text>
-                <Text mt={2}>Time Remaining: {time} seconds</Text>
-              </>
-            ))}
-          </Center>
-        </ModalBody>
-      </ModalContent>
-    </Modal>
+      <Center>
+        <ModalContent mt={'10%'} h={'30%'} w={'30%'}>
+          <ModalHeader>
+            <Center>
+              <Text textAlign="center">Finding a match...</Text>
+            </Center>
+          </ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Center flexDirection="column" h={'100%'}>
+              {time === 0 ? (
+                <>
+                  <Text>Sorry, no match found!</Text>
+                  <Text>Please try again later.</Text>
+                </>
+              ) : (isMatchFound ? (
+                <>
+                  <Text mt={2}>{status}</Text>
+                </>
+              ) : (
+                <>
+                  <Spinner thickness='12px' speed='0.85s' color='blue.500' size="xl" />
+                  <Text mt={2}>{status}</Text>
+                  <Text mt={2}>Time Remaining: {time} seconds</Text>
+                </>
+              ))}
+            </Center>
+          </ModalBody>
+        </ModalContent>
+      </Center>
+    </Modal >
   );
 };
 

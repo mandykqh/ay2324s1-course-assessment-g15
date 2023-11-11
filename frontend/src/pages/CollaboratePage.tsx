@@ -1,11 +1,9 @@
-import React from 'react'
 import { Box, Grid, Button, Center, useToast } from "@chakra-ui/react";
 import NavigationBar from "../components/NavigationBar";
 import { useEffect, useState } from "react";
 import { MatchingCacheContext } from "../contexts/MatchingCacheContext";
-import AuthRequestHandler from "../handlers/AuthRequestHandler";
 import LoadingPage from "./LoadingPage";
-import { showError, showSuccess } from "../Util";
+import { authChecker, showError } from "../Util";
 import MatchingForm from "../components/matching/MatchingForm";
 import { MatchingString, emptyMatchingString } from "../Commons";
 import TimerModal from "../components/matching/modals/TimerModal";
@@ -16,10 +14,8 @@ import { useNavigate } from "react-router-dom";
 import QuestionRequestHandler from '../handlers/QuestionRequestHandler';
 import HistoryRequestHandler from '../handlers/HistoryRequestHandler';
 
-
 const CollaboratePage = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
-  const toast = useToast();
   const matchingSocket = MatchingSocketHandler.getSocket();
   const [matchingCache, setMatchingCache] = useState<MatchingString>(emptyMatchingString);
   const ctxValue = { matchingCache: matchingCache, setMatchingCache: setMatchingCache };
@@ -27,30 +23,15 @@ const CollaboratePage = () => {
   const [matchMessage, setMatchMessage] = useState<string>('');
   const [isMatchFound, setIsMatchFound] = useState<boolean>(false);
   const [isTimeout, setIsTimeout] = useState<boolean>(false);
+  const toast = useToast();
   const navigate = useNavigate();
 
   useEffect(() => {
-    AuthRequestHandler.isAuth()
-      .then(res => {
-        setIsAuthenticated(res.isAuth);
-      })
-      .catch(e => {
-        console.log(e);
-      });
-
     // Redirect to collaboration room if matched
     if (LocalStorageHandler.isMatched()) {
       navigate('/collaborate/code');
     }
   }, []);
-
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
 
   async function cancelMatch(matchingCache: MatchingString) {
     try {
@@ -60,13 +41,13 @@ const CollaboratePage = () => {
         matchingCache.complexity
       );
       await MatchingSocketHandler.cancelMatch(matchData);
-      handleCloseModal();
+      setIsModalOpen(false);
     } catch (e) {
-      console.error(e)
+      showError((e as Error).message, toast)
     }
   }
 
-  function updateHistory() {
+  async function updateHistory() {
     let date = new Date();
     HistoryRequestHandler.updateHistory({
       userId: LocalStorageHandler.getUserData()?.id!,
@@ -105,7 +86,7 @@ const CollaboratePage = () => {
 
     // Attempt matching with collaboration service
     try {
-      handleOpenModal();
+      setIsModalOpen(true);
       const matchData = new Match(
         LocalStorageHandler.getUserData()!.id.toString(),
         matchingCache.categories,
@@ -118,7 +99,6 @@ const CollaboratePage = () => {
       });
 
       matchingSocket.on('match_found', (data: any) => {
-        console.log(data);
         setIsMatchFound(true);
         setMatchMessage(data.msg);
         LocalStorageHandler.storeMatchData(data);
@@ -135,10 +115,11 @@ const CollaboratePage = () => {
 
       await MatchingSocketHandler.findMatch(matchData);
     } catch (e) {
-      console.log(e);
+      showError((e as Error).message, toast)
     }
   }
 
+  authChecker(setIsAuthenticated);
   if (isAuthenticated) {
     return (
       <MatchingCacheContext.Provider value={ctxValue}>
@@ -157,7 +138,7 @@ const CollaboratePage = () => {
             <TimerModal
               isOpen={isModalOpen}
               onClose={() => cancelMatch(matchingCache)}
-              initialTime={30}
+              initialTime={3}
               status={matchMessage.toString()}
               isTimeout={isTimeout}
               isMatchFound={isMatchFound}

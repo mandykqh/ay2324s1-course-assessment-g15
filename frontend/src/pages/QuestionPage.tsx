@@ -128,7 +128,7 @@ const QuestionPage = () => {
               closeHandler={() => setEditModalIsVisible(false)}
               submitUpdateHandler={submitUpdateHandler}
             />
-            {filteredQuestions.length > 0 ? (
+            {filteredQuestions.length > 0 && (
               <QuestionTable
                 data={filteredQuestions}
                 viewDescriptionHandler={viewDescriptionHandler}
@@ -137,10 +137,8 @@ const QuestionPage = () => {
                   setAddModalIsVisible(true);
                 }}
               />
-            ) : (
-              <p>No results found</p>
             )}
-
+            {filteredQuestions.length == 0 && <p>No results found</p>}
           </Flex>
         </Center>
       </QuestionCacheContext.Provider>

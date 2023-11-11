@@ -50,7 +50,7 @@ export { getComplexityStrings, getCategoriesString, stringToOptionsMapper };
 export function authChecker(setIsAuthenticated: React.Dispatch<React.SetStateAction<null>>) {
   useEffect(() => {
     AuthRequestHandler.isAuth()
-      .then(res => { setIsAuthenticated(res.isAuth); console.log(res) })
+      .then(res => { setIsAuthenticated(res.isAuth); })
       .catch(e => { console.log("Error: " + e.message); });
   }, []);
 }
