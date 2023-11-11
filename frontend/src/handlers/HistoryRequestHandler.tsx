@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { HistoryDataString, HistoryResponseString } from '../Commons';
 import { HISTORY_SERVICE_URL } from '../configs';
 import LocalStorageHandler from './LocalStorageHandler';

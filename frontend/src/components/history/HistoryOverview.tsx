@@ -22,6 +22,9 @@ interface Props {
 const HistoryOverview: React.FC<Props> =
   ({ total, attempted, easy, medium, hard }) => {
     let completed = (Math.round(attempted / total * 100) / 100) * 100;
+    if (attempted == 0) {
+      completed = 0;
+    }
     return (
       <Card width={'600px'}>
         <CardBody>

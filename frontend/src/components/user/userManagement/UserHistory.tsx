@@ -24,6 +24,7 @@ const UserHistory = () => {
   useEffect(() => {
     HistoryRequestHandler.getHistory()
       .then((r) => {
+        console.log(r);
         QuestionRequestHandler.getQuestionsCount().then(total => setTotal(total));
         let uniqueQuestions = getUniqueQuestions(r)
         setAttempted(uniqueQuestions.length);
@@ -50,6 +51,8 @@ const UserHistory = () => {
           });
           setAttempts(updatedAttempts);
         });
+      }).catch(e => {
+        console.log(e);
       });
   }, []);
 
