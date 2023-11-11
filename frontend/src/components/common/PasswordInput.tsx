@@ -24,7 +24,7 @@ const PasswordInput: React.FC<PasswordInputProps> =
             onChange={(e) => valueSetter(e.target.value)}
             value={value}
             borderRadius={15}
-            bg='primary.blue3'
+            bg='primary.blue1'
             border='2px solid #244153'
           />
           <InputRightElement width='4.5rem'>

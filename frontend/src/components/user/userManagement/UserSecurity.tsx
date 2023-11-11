@@ -100,7 +100,6 @@ const UserSecurity = () => {
         <Button
           colorScheme={'blue'}
           float={'right'}
-          marginTop={10}
           onClick={changePasswordHandler}
         >
           Save
@@ -122,7 +121,7 @@ const UserSecurity = () => {
           </Box>
           <Center height={50}>
             <Input bg='primary.blue1'
-              border='2px solid #244153' onChange={(e) => { setDeleteInput(e.target.value) }}></Input>
+              border='2px solid #244153' borderRadius={15} onChange={(e) => { setDeleteInput(e.target.value) }}></Input>
           </Center>
           <Button
             colorScheme={'red'}

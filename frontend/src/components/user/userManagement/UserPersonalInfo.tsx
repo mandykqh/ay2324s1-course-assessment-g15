@@ -93,7 +93,7 @@ const UserPersonalInfo = ({ user }: { user: UserDataString }) => {
       width={'50%'}
       bg='primary.blue3'
     >
-      <Text as='b' fontSize={25}>Personal Information</Text>
+      <Text as='b' fontSize={25} color='primary.blue4'>Personal Information</Text>
       <Box>
         <Label value={'Name'} />
         <Flex>
