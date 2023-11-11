@@ -84,9 +84,9 @@ const NavigationBar: React.FC<Props> = ({ index }) => {
             <Image h={30} src='src\assets\images\user.png' />
           </Center>
         </MenuButton>
-        <MenuList bg='primary.blue2'>
-          <MenuItem onClick={() => navigate('../profile')}>Edit profile</MenuItem>
-          <MenuItem onClick={signoutHandler}>Sign out</MenuItem>
+        <MenuList bg='primary.blue2' border='2px solid #244153'>
+          <MenuItem bg='transparent' _hover={{ bg: 'primary.blue3', color: 'white' }} onClick={() => navigate('../profile')}>Your profile</MenuItem>
+          <MenuItem bg='transparent' _hover={{ bg: 'primary.blue3', color: 'white' }} onClick={signoutHandler}>Sign out</MenuItem>
         </MenuList>
       </Menu>
     </Flex >
