@@ -124,7 +124,7 @@ const CollaboratePage = () => {
         setMatchMessage(data.msg);
         LocalStorageHandler.storeMatchData(data);
         matchingSocket.disconnect();
-        updateHistory();
+        //updateHistory();
         navigate('/collaborate/code');
       });
 
