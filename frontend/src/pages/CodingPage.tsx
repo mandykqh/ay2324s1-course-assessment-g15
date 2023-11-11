@@ -204,7 +204,7 @@ const CodingPage = () => {
           <GridItem colSpan={1} m='15px'>
             <VStack gap='1rem'>
               {/* // TODO: Add a chat box for messaging */}
-              <Flex width='100%' gap='1rem'>
+              <Flex width='100%' gap='1rem' mb='8px'>
                 <Box flex='80%'>
                   <Select
                     value={languageOptions.find(option => option.value === language)}
@@ -231,6 +231,7 @@ const CodingPage = () => {
                 value={code}
                 height='80vh'
                 width='50vw'
+
                 extensions={[
                   language === 'java'
                     ? java()
