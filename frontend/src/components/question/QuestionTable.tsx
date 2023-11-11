@@ -41,7 +41,7 @@ const QuestionTable: React.FC<Props> =
 
 
     return (
-      <TableContainer mb='40px'>
+      <TableContainer mb='40px' height="calc(100vh - 190px)" overflowY="scroll">
         <Box border="1.5px solid #244153" borderRadius="xl" overflow="hidden">
           <Table variant='simple' borderRadius="full" className='question-table' width={'50vw'}>
             <Thead>
