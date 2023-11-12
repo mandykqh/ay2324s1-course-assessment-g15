@@ -1,7 +1,7 @@
 import { Server, Socket } from 'socket.io';
 import { RoomEvents } from '../types/enums/RoomEvents';
 import { getFilteredQuestion, getQuestions } from '../api/Questions';
-import {DrawLineProps} from '../types/drawtypes/drawtypes';
+import { DrawLineProps } from '../types/drawtypes/drawtypes';
 
 export function setupSockets(io: Server) {
   io.on('connection', (socket: Socket) => {
@@ -59,9 +59,9 @@ function handleSocketEvents(socket: Socket) {
       console.log(`question data propogated: ${data.categories}, ${data.complexity}`);
       socket.to(room).emit('changeQuestion', data);
       // const question = await getQuestions(data.qnCategory, data.qnComplexity);
-      const question = await getFilteredQuestion(data.id, data.categories, data.complexity);
+      const question = await getFilteredQuestion(data.id, data.categories, data.complexity); //PROBLEM HERE
 
-      console.log(`Question changed`);
+      console.log(`Question changed: ${question.id} | ${question.complexity} | ${question.categories} | ${question.title}`);
       socket.to(room).emit('newQuestion', question);
       socket.emit('newQuestion', question);
     });

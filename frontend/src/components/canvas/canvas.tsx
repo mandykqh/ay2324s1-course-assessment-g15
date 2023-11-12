@@ -1,5 +1,5 @@
 import { HStack, VStack, Box, Text, Flex, Button, Slider, SliderTrack, SliderFilledTrack, SliderThumb, Switch } from "@chakra-ui/react";
-import { ChromePicker } from "react-color";
+// import { ChromePicker } from "react-color";
 import React, { useEffect, useState, useRef } from "react";
 import { useDraw } from "./hooks/useDraw";
 import { drawLine } from "./utils/drawLine";

@@ -77,7 +77,7 @@ const CodingPage = () => {
     });
 
     socket.on('newQuestion', (question) => {
-      // console.log(`new question: ${question.title} | ${question.categories} | ${question.complexity} | ${question.description}`);
+      console.log(`new question: ${question.title} | ${question.categories} | ${question.complexity} | ${question.description}`);
       if (!question) {
         toast({
           title: "Error",
@@ -204,11 +204,14 @@ const CodingPage = () => {
     }
 
     if (socket) {
+
       socket.on('newQuestion', (question) => {
         if (question) {
+          console.log(`new qn generated: ${question.title}`);
           setQuestion(question);
           LocalStorageHandler.updateMatchDataQuestion(question);
         }
+        console.log('in socket');
         setCategoryFilter(categoryFilter);
         setComplexityFilter(complexityFilter);
       })
@@ -302,8 +305,8 @@ const CodingPage = () => {
               />
               <IconButton
                 aria-label="Chat"
-                icon={<ChatIcon />}
-                // bg='white'
+                // icon={<ChatIcon />}
+                bg='white'
                 position="absolute"
                 bottom="0px"
                 right="20px"
@@ -312,7 +315,7 @@ const CodingPage = () => {
               />
               <IconButton
                 aria-label="Canvas"
-                icon={<EditIcon />}
+                // icon={<EditIcon />}
                 position="absolute"
                 bottom="0px"
                 right="70px"
