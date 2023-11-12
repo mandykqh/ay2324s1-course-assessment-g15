@@ -92,6 +92,10 @@ class LocalStorageHandler {
     };
     localStorage.setItem(FILTER_DATA_KEY, JSON.stringify(filterData));
   }
+
+  static clearAll() {
+    localStorage.clear();
+  }
 }
 
 export default LocalStorageHandler;
