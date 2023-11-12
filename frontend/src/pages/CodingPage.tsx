@@ -81,7 +81,7 @@ const CodingPage = () => {
       if (!question) {
         toast({
           title: "Error",
-          description: `Change question request by User ${LocalStorageHandler.getUserData()?.username}: No question found.`,
+          description: `Change question requested: No question found`,
           status: "error",
           duration: 3000,
         });
