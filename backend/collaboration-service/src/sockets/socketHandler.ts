@@ -56,7 +56,7 @@ function handleSocketEvents(socket: Socket) {
 
     socket.on('changeQuestion', async (data) => {
       // Listen for code changes from a client and broadcast them to others in the room
-      console.log(`question data propogated: ${data.categories}, ${data.complexity}`);
+      // console.log(`question data propogated: ${data.categories}, ${data.complexity}`);
       socket.to(room).emit('changeQuestion', data);
       // const question = await getQuestions(data.qnCategory, data.qnComplexity);
       const question = await getFilteredQuestion(data.id, data.categories, data.complexity); //PROBLEM HERE
