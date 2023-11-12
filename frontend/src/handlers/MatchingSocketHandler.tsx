@@ -18,7 +18,6 @@ class MatchingSocketHandler {
     public static getSocket() {
         return this.socket;
     }
-
 }
 
 export default MatchingSocketHandler;

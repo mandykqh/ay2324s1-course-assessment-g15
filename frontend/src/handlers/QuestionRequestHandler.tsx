@@ -13,14 +13,12 @@ class QuestionRequestHandler {
       const questions = response.data as QuestionString[];
       return questions;
     } catch (error) {
-      console.log(error);
       throw error;
     }
   }
 
   static async createQuestionAndGetID(question: QuestionString): Promise<string> {
     const response = await this.client.post(`/`, question, { withCredentials: true }).catch(e => {
-      console.log(e);
       throw (e)
     });
     return response.data.id;
@@ -28,7 +26,6 @@ class QuestionRequestHandler {
 
   static async deleteQuestion(id: string): Promise<void> {
     const response = await this.client.delete(`/${id}`, { withCredentials: true }).catch(e => {
-      console.log(e);
       throw e;
     });
     return response.data;
@@ -56,7 +53,6 @@ class QuestionRequestHandler {
       });
       return response.data;
     } catch (error) {
-      console.log(error);
       throw error;
     }
   }

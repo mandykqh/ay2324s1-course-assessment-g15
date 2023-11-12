@@ -8,11 +8,11 @@ class LocalStorageHandler {
   }
 
   static getUserData(): UserDataString | null {
-    if (localStorage.getItem("userData") === null) {
-      return null;
+    const storedData = localStorage.getItem("userData");
+    if (storedData === null) {
+      return null
     }
-    const data = localStorage.getItem("userData")!;
-    return JSON.parse(data);
+    return JSON.parse(storedData);
   }
 
   static clearUserData() {
@@ -20,23 +20,21 @@ class LocalStorageHandler {
   }
 
   /*--- Match Data ---*/
-
   static storeMatchData(matchData: any) {
-    const obj: { [key: string]: any } = {}; // define obj as a dictionary with string keys and any values
-    obj["user_id"] = matchData.user_id;
-    obj["other_user"] = matchData.other_user;
-    obj["room_id"] = matchData.room_id;
-    obj["question"] = matchData.question;
+    const { user_id, other_user, room_id, question } = matchData;
+    const obj: { [key: string]: any } = {
+      user_id,
+      other_user,
+      room_id,
+      question
+    }
     localStorage.setItem("matchData", JSON.stringify(obj));
   }
 
   static getMatchData(): MatchDataString | null {
     try {
-      if (localStorage.getItem("matchData") === null) {
-        return null;
-      }
-      const data = localStorage.getItem("matchData")!;
-      return JSON.parse(data);
+      const storedData = localStorage.getItem("matchData");
+      return storedData ? JSON.parse(storedData) : null;
     } catch (e) {
       return null;
     }
@@ -44,10 +42,7 @@ class LocalStorageHandler {
 
   static isMatched(): boolean {
     try {
-      if (localStorage.getItem("matchData") === null) {
-        return false;
-      }
-      return true;
+      return localStorage.getItem("matchData") !== null;
     } catch (e) {
       return false;
     }
