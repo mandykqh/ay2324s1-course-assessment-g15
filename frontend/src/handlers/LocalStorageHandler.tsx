@@ -1,25 +1,35 @@
 import { MatchDataString, QuestionString, UserDataString } from "../Commons";
 
+const USER_DATA_KEY = "userData";
+const MATCH_DATA_KEY = "matchData";
+const FILTER_DATA_KEY = "filterData";
+
 class LocalStorageHandler {
 
-  /*--- User Data ---*/
+  // Commons
+  private static getData<T>(key: string): T | null {
+    try {
+      const storedData = localStorage.getItem(USER_DATA_KEY);
+      return storedData ? JSON.parse(storedData) : null;
+    } catch (error) {
+      return null
+    }
+  }
+
+  // User Data
   static storeUserData(userData: UserDataString) {
-    localStorage.setItem("userData", JSON.stringify(userData));
+    localStorage.setItem(USER_DATA_KEY, JSON.stringify(userData));
   }
 
   static getUserData(): UserDataString | null {
-    const storedData = localStorage.getItem("userData");
-    if (storedData === null) {
-      return null
-    }
-    return JSON.parse(storedData);
+    return LocalStorageHandler.getData<UserDataString>(USER_DATA_KEY);
   }
 
   static clearUserData() {
-    localStorage.removeItem('userData');
+    localStorage.removeItem(USER_DATA_KEY);
   }
 
-  /*--- Match Data ---*/
+  // Match Data
   static storeMatchData(matchData: any) {
     const { user_id, other_user, room_id, question } = matchData;
     const obj: { [key: string]: any } = {
@@ -28,33 +38,27 @@ class LocalStorageHandler {
       room_id,
       question
     }
-    localStorage.setItem("matchData", JSON.stringify(obj));
+    localStorage.setItem(MATCH_DATA_KEY, JSON.stringify(obj));
   }
 
   static getMatchData(): MatchDataString | null {
-    try {
-      const storedData = localStorage.getItem("matchData");
-      return storedData ? JSON.parse(storedData) : null;
-    } catch (e) {
-      return null;
-    }
+    return LocalStorageHandler.getData<MatchDataString>(MATCH_DATA_KEY);
   }
 
   static isMatched(): boolean {
     try {
-      return localStorage.getItem("matchData") !== null;
+      return localStorage.getItem(MATCH_DATA_KEY) !== null;
     } catch (e) {
       return false;
     }
   }
 
   static deleteMatchData() {
-    localStorage.removeItem('matchData');
+    localStorage.removeItem(MATCH_DATA_KEY);
   }
 
   static updateMatchDataQuestion(newQuestion: QuestionString) {
     const matchData = this.getMatchData();
-
     if (matchData) {
       matchData.question = newQuestion;
       this.storeMatchData(matchData);
@@ -86,7 +90,7 @@ class LocalStorageHandler {
       complexityFilter,
       filteredQuestions,
     };
-    localStorage.setItem('filterData', JSON.stringify(filterData));
+    localStorage.setItem(FILTER_DATA_KEY, JSON.stringify(filterData));
   }
 }
 
