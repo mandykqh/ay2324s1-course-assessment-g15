@@ -1,8 +1,6 @@
-import { Table, Thead, Td, Tbody, Tr, Th, Card, CardBody, List, ListItem, Text, Spacer, Flex, Box } from '@chakra-ui/react'
-import { PRIMARY_COLOR, SECONDARY_COLOR } from '../../CommonStyles';
-import React from 'react';
+import { Table, Thead, Td, Tbody, Tr, Th, Card, List, ListItem, Text, Spacer, Flex, Box } from '@chakra-ui/react'
+import { SECONDARY_COLOR } from '../../CommonStyles';
 import { Attempt } from '../../Commons';
-import QuestionRequestHandler from '../../handlers/QuestionRequestHandler';
 
 const AttemptEntry = ({ title, date }: { title: string, date: string }) => {
   return (
@@ -12,6 +10,22 @@ const AttemptEntry = ({ title, date }: { title: string, date: string }) => {
     </Tr>
   );
 }
+
+// const AttemptEntry = ({ title, date }: { title: string, date: string }) => {
+//   return (
+//     <Card
+//       borderRadius={0}
+//       border={'1px solid #999'}
+//       mb={-1}
+//       p={3}
+//       direction={{ base: 'column', sm: 'row' }}
+//       width={'100%'}>
+//       <Text>{title}</Text>
+//       <Spacer />
+//       <Text color={'#BBBBBB'} fontSize={13}>{date}</Text>
+//     </Card>
+//   );
+// }
 const PastAttempts = ({ attempts }: { attempts: Attempt[] }) => {
   return (
     <Box border="1.5px solid #244153" overflow="hidden" borderRadius="xl" width={'520px'}>
@@ -25,6 +39,8 @@ const PastAttempts = ({ attempts }: { attempts: Attempt[] }) => {
         <Tbody bg='primary.blue3'>
           {attempts.map((entry, index) => (
             <AttemptEntry key={index} title={entry.questionId} date={entry.timestamp.substring(0, 10)} />
+
+            // <AttemptEntry title={entry.questionId} date={entry.timestamp.substring(0, 10)} />
           ))}
         </Tbody>
       </Table>

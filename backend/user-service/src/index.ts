@@ -8,6 +8,7 @@ import session from 'express-session';
 import { sequelize } from './db/dbConfig';
 import router from './router';
 import cookieParser from 'cookie-parser';
+import { initAdminProfile } from './utils/initAdmin';
 
 const MongoDBStore = require('connect-mongodb-session')(session);
 
@@ -29,7 +30,6 @@ app.use(session({
     cookie: {
         secure: false,
         maxAge: 1000 * 60 * 60 * 24,
-        sameSite: "none"
     },
     store: store,
 }));
@@ -52,6 +52,7 @@ server.listen(port, () => {
     try {
         await sequelize.sync();
         console.log('Database synchronized!');
+        initAdminProfile();
     } catch (error) {
         console.error('Error synchronizing database:', error);
     }

@@ -1,3 +1,4 @@
+import { Socket } from 'socket.io-client';
 export interface QuestionString {
   id: string,
   title: string,
@@ -58,3 +59,28 @@ export interface Attempt {
   questionId: string;
   timestamp: string;
 };
+
+export interface ChatMessage {
+  sender: string;
+  text: string;
+};
+
+export interface ChatProps {
+  messages: ChatMessage[];
+  newMessage: string;
+  onNewMessageChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onSendMessage: () => void;
+};
+
+export interface CanvasProps {
+  socket?: Socket;
+}
+
+export interface HistoryResponseString {
+  userId: string;
+  total: string;
+  attempts: [{
+    questionId: string,
+    timestamp: string
+  }]
+}
