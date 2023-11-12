@@ -86,16 +86,19 @@ const CodingPage = () => {
           duration: 3000,
         });
         return;
+      } else {
+        toast({
+          title: "Question Changed",
+          description: "The question has been successfully changed.",
+          status: "success",
+          duration: 3000,
+        });
+        setQuestion(question);
+        LocalStorageHandler.updateMatchDataQuestion(question);
+        setCategoryFilter(categoryFilter);
+        setComplexityFilter(complexityFilter);
       }
-      toast({
-        title: "Question Changed",
-        description: "The question has been successfully changed.",
-        status: "success",
-        duration: 3000,
-      });
-      setQuestion(question);
-      setCategoryFilter(categoryFilter);
-      setComplexityFilter(complexityFilter);
+
     })
 
     socket.on('messageChange', (message, user) => {
@@ -281,7 +284,7 @@ const CodingPage = () => {
                 <Button
                   colorScheme='red'
                   onClick={() => handleDisconnect()}
-                  flex="7" // The Button will take up 30% of the Flex container
+                  flex="7"
                 >
                   Disconnect
                 </Button>
