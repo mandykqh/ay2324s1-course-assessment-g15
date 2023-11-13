@@ -1,4 +1,4 @@
-import { QuestionString } from "../Commons"
+import { QuestionString } from "../../Commons"
 
 class QuestionValidator {
   public validateEmptyFields(input: QuestionString): void {

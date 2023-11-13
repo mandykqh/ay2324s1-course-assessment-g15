@@ -1,7 +1,4 @@
-//Can implement further logic here if needed e.g. redirect to login page after x amount of time
-
-import { Spinner } from "@chakra-ui/react";
-import { Text } from "@chakra-ui/react";
+import { Spinner, Text } from "@chakra-ui/react";
 
 const LoadingPage = () => {
   return (
@@ -22,6 +19,5 @@ const LoadingPage = () => {
     </div>
   );
 }
-
 
 export default LoadingPage;

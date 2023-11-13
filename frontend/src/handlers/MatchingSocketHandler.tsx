@@ -8,19 +8,16 @@ class MatchingSocketHandler {
     });
 
     static async findMatch(matchData: Match): Promise<void> {
-        console.log(Object.assign({}, matchData));
         this.socket.emit('find_match', Object.assign({}, matchData));
     }
 
     static async cancelMatch(matchData: Match): Promise<void> {
-        console.log(Object.assign({}, matchData));
         this.socket.emit('cancel_match', Object.assign({}, matchData));
     }
 
     public static getSocket() {
         return this.socket;
     }
-
 }
 
 export default MatchingSocketHandler;

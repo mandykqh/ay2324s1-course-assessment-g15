@@ -94,5 +94,4 @@ const QuestionDetailsModal: React.FC<Props> =
     );
   }
 
-
 export default QuestionDetailsModal;
