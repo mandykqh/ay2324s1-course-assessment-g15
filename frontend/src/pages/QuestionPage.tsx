@@ -24,15 +24,18 @@ const QuestionPage = () => {
   const [questions, setQuestions] = useState<QuestionString[]>([]);
   const [questionCache, setQuestionCache] = useState<QuestionString>(emptyQuestionString);
   const ctxValue = { questionCache: questionCache, setQuestionCache: setQuestionCache };
-  const toast = useToast();
   const [isAuthenticated, setIsAuthenticated] = useState(null);
   const [filteredQuestions, setFilteredQuestions] = useState(questions);
-
   const userData = LocalStorageHandler.getUserData();
   const userRole = userData ? userData.role : null;
+  const toast = useToast();
 
   function renderFilterBar() {
     function onFilter({ categories, complexity }: { categories: string[]; complexity: string }) {
+      if (questions.length === 0) {
+        return;
+      }
+
       const filtered = questions.filter((question) => {
         const categoryFilter = !categories || categories.every(c => question.categories.includes(c));
         const complexityFilter = !complexity || question.complexity === complexity;
@@ -202,6 +205,7 @@ const QuestionPage = () => {
   useEffect(() => {
     try {
       QuestionRequestHandler.loadQuestions().then((questions: QuestionString[]) => {
+        console.log(questions);
         setQuestions(questions);
         setFilteredQuestions(questions);
       });
