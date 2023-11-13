@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Flex,
+  Flex, Slide, useDisclosure,
   Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, IconButton,
   useToast, Box, Button, Grid, VStack, GridItem, HStack, Textarea, Center, SimpleGrid
 } from '@chakra-ui/react';
@@ -42,6 +42,8 @@ const CodingPage = () => {
   const [newMessage, setNewMessage] = useState('');
   const [isChatDrawerOpen, setIsChatDrawerOpen] = useState(false);
   const [isCanvasDrawerOpen, setIsCanvasDrawerOpen] = useState(false);
+  const { isOpen: isChatOpen, onToggle: toggleChat } = useDisclosure();
+  const { isOpen: isCanvasOpen, onToggle: toggleCanvas } = useDisclosure();
 
   useEffect(() => {
     AuthRequestHandler.isAuth()
@@ -280,15 +282,26 @@ const CodingPage = () => {
                   aria-label="Chat"
                   icon={<ChatIcon />}
                   // bg='white'
-                  onClick={toggleChatDrawer}
-                  zIndex="1"
+                  // onClick={toggleChatDrawer}
+                  onClick={() => {
+                    if (isCanvasOpen) {
+                      toggleCanvas();
+                    }
+                    toggleChat();
+                  }}
                 /></Box>
               <Box>
                 <IconButton
                   aria-label="Canvas"
                   icon={<EditIcon />}
-                  onClick={toggleCanvasDrawer}
-                  zIndex="1"
+                  // onClick={toggleCanvasDrawer}
+                  // onClick={toggleCanvas}
+                  onClick={() => {
+                    if (isChatOpen) {
+                      toggleChat();
+                    }
+                    toggleCanvas();
+                  }}
                 /></Box>
               <Box>
                 <Button
@@ -324,7 +337,7 @@ const CodingPage = () => {
             </VStack>
           </GridItem>
         </Grid>
-        <Drawer placement="left" isOpen={isChatDrawerOpen} onClose={toggleChatDrawer}>
+        {/* <Drawer placement="left" isOpen={isChatDrawerOpen} onClose={toggleChatDrawer}>
           <DrawerOverlay />
           <DrawerContent>
             <DrawerCloseButton />
@@ -338,8 +351,53 @@ const CodingPage = () => {
               />
             </DrawerBody>
           </DrawerContent>
-        </Drawer>
-        <Drawer placement="left" isOpen={isCanvasDrawerOpen} onClose={toggleCanvasDrawer} size={'xl'}>
+        </Drawer> */}
+
+        {/* <Slide direction="left" in={isOpen} style={{ zIndex: 10 }}>
+          <Box
+            p="40px"
+            color="white"
+            bg="teal.500"
+            rounded="md"
+            shadow="md"
+            h="100vh"
+            w="30vw"
+            position="fixed"
+            left='100vw' // This will slide in from the left
+            top="0"
+          >
+            <Chat
+              messages={chatHistory}
+              newMessage={newMessage}
+              onNewMessageChange={handleNewMessageChange}
+              onSendMessage={handleSendMessage}
+            />
+          </Box>
+        </Slide> */}
+
+        <Slide direction='left' in={isChatOpen} style={{
+          zIndex: 10, height: "100vh",
+          width: "30vw",
+        }}>
+          <Box
+            p="40px"
+            color="white"
+            bg="primary.boxBorder"
+            rounded="md"
+            shadow="md"
+            h='calc(100vh)'
+            w='30vw'
+          >
+            <Chat
+              messages={chatHistory}
+              newMessage={newMessage}
+              onNewMessageChange={handleNewMessageChange}
+              onSendMessage={handleSendMessage}
+            />
+          </Box>
+        </Slide>
+
+        {/* <Drawer placement="left" isOpen={isCanvasDrawerOpen} onClose={toggleCanvasDrawer} size={'xl'}>
           <DrawerOverlay />
           <DrawerContent>
             <DrawerCloseButton />
@@ -350,7 +408,29 @@ const CodingPage = () => {
               />
             </DrawerBody>
           </DrawerContent>
-        </Drawer>
+        </Drawer> */}
+
+
+        <Slide direction='left' in={isCanvasOpen} style={{
+          zIndex: 10, height: "100vh",
+          width: "70vw",
+        }}>
+          <Box
+            p="40px"
+            color="white"
+            bg="primary.boxBorder"
+            rounded="md"
+            shadow="md"
+            h='calc(100vh)'
+            w='70vw'
+          >
+            <Canvas
+              socket={socket}
+            />
+          </Box>
+        </Slide>
+
+
       </Box>
     );
   } else {
