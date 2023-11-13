@@ -12,8 +12,8 @@ const AttemptEntry = ({ title, date }: { title: string, date: string }) => {
 
 const PastAttempts = ({ attempts }: { attempts: Attempt[] }) => {
   return (
-    <Box border="1.5px solid #244153" overflow="hidden" borderRadius="xl" width={'520px'}>
-      <Table variant="simple" borderRadius="full" width={'520px'}>
+    <Box border="1.5px solid #244153" overflowX={'hidden'} borderRadius="xl" width={'520px'} overflowY="auto">
+      <Table variant="simple" borderRadius="full" width={'500px'}>
         <Thead bg='primary.blue2'>
           <Tr >
             <Th color='primary.green' borderTopLeftRadius={15}>Question Title</Th>
