@@ -29,6 +29,9 @@ const UserHistory = () => {
         let uniqueQuestions = getUniqueQuestions(r)
         setAttempted(uniqueQuestions.length);
         QuestionRequestHandler.loadQuestions().then((qns) => {
+          if (qns.length === 0) {
+            return;
+          }
           setEasy(qns.filter(x => x.complexity === 'Easy')
             .map(value => uniqueQuestions.includes(value.id))
             .filter(x => x).length)
