@@ -39,7 +39,7 @@ const NavigationBar: React.FC<Props> = ({ index }) => {
       <Center h={HEIGHT} ml={150}>
         <HStack>
           <Box onClick={() => navigate('../home')} cursor={'pointer'}>
-            <Image h={30} src='src\assets\logo.svg' />
+            <Image h={30} src='/src/assets/logo.svg' />
           </Box>
           <Box onClick={() => navigate('../home')} cursor={'pointer'}>
             <Text as='b' color='primary.green' fontSize={25} mr={50}>PeerPrep</Text>
@@ -66,7 +66,7 @@ const NavigationBar: React.FC<Props> = ({ index }) => {
               </>
             )}
             <Text textStyle='h1' px='15px'>{LocalStorageHandler.getUserData()?.username}</Text>
-            <Image h={30} src='src\assets\images\user.png' />
+            <Image h={30} src='/src/assets/images/user.png' />
           </Center>
         </MenuButton>
         <MenuList bg='primary.blue2' border='2px solid #244153'>
