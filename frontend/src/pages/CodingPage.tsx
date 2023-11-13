@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Flex, Slide, useDisclosure,
+  Flex, Slide, useDisclosure, Text,
   Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, IconButton,
   useToast, Box, Button, Grid, VStack, GridItem, HStack, Textarea, Center, SimpleGrid
 } from '@chakra-ui/react';
@@ -357,11 +357,12 @@ const CodingPage = () => {
           zIndex: 10, height: "100vh",
           width: "30vw",
         }}>
+
           <Box
-            p="40px"
+            p="00px"
             color="white"
-            bg="primary.boxBorder"
-            rounded="md"
+            bg="primary.blue1"
+            // rounded="md"
             shadow="md"
             h='calc(100vh)'
             w='30vw'
