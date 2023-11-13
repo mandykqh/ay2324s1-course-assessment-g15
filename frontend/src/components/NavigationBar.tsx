@@ -12,7 +12,8 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
-  useToast
+  useToast,
+  HStack
 } from "@chakra-ui/react";
 import { SECONDARY_COLOR } from "../CommonStyles";
 import { useNavigate } from "react-router-dom";
