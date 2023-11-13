@@ -1,7 +1,7 @@
 import QuestionRequestHandler from '../handlers/QuestionRequestHandler';
 import { QuestionString, emptyQuestionString } from '../Commons';
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Center, Flex, HStack, useToast } from '@chakra-ui/react';
+import { Text, VStack, Box, Button, Center, Flex, HStack, useToast } from '@chakra-ui/react';
 import { QuestionCacheContext } from '../contexts/QuestionCacheContext';
 import QuestionDetailsModal from '../components/question/modals/QuestionDetailsModal';
 import AddQuestionModal from '../components/question/modals/AddQuestionModal';
@@ -135,77 +135,235 @@ const QuestionPage: React.FC<Props> = ({ addBtnOnClick }) => {
   }
 
   if (isAuthenticated) {
+    //   return (
+    //     <QuestionCacheContext.Provider value={ctxValue}>
+    //       <NavigationBar index={0} />
+    //       <Flex direction="row" align="start" pt={50} wrap="nowrap">
+    //         {/* Left content - QuestionTable */}
+    //         <Flex flexDirection="column" alignItems="center" flex="6" overflowY="auto" >
+    //           <Box maxWidth={'50vw'} >
+    //             <HStack mt='20px'>
+    //               <FilterBar onFilter={onFilter} />
+    //               {userRole === 'ADMIN' && (
+    //                 <Button colorScheme='blue'
+    //                   borderRadius='10px'
+    //                   w='120px'
+    //                   ml='5px'
+    //                   onClick={() => {
+    //                     clearQuestionCache();
+    //                     setAddModalIsVisible(true);
+    //                   }}
+    //                   my={5}
+    //                   float='right'>
+    //                   Add
+    //                 </Button>
+    //               )}
+    //             </HStack>
+    //           </Box>
+    //           <AddQuestionModal
+    //             isVisible={addModalIsVisible}
+    //             closeHandler={() => setAddModalIsVisible(false)}
+    //             submitHandler={submitHandler}
+    //           />
+    //           <QuestionDetailsModal
+    //             isVisible={viewModalIsVisible}
+    //             data={questionCache}
+    //             closeHandler={() => { setViewModalIsVisible(false); }}
+    //             editModalHandler={() => {
+    //               setViewModalIsVisible(false);
+    //               setEditModalIsVisible(true);
+    //             }}
+    //             deleteHandler={(id: string) => {
+    //               try {
+    //                 QuestionRequestHandler.deleteQuestion(id);
+    //                 showSuccess('Question deleted!', toast);
+    //                 setQuestions(questions.filter(i => i.id !== id));
+    //                 setViewModalIsVisible(false);
+    //               } catch (error) {
+    //                 showError('delete fail', toast);
+    //               }
+    //             }}
+    //           />
+    //           <EditQuestionModal
+    //             isVisible={editModalIsVisible}
+    //             questionToEdit={currentQuestion}
+    //             closeHandler={() => setEditModalIsVisible(false)}
+    //             submitUpdateHandler={submitUpdateHandler}
+    //           />
+    //           {filteredQuestions.length > 0 ? (
+    //             <QuestionTable
+    //               data={filteredQuestions}
+    //               viewDescriptionHandler={viewDescriptionHandler}
+    //             />
+    //           ) : (
+    //             <p>No results found</p>
+    //           )}
+    //         </Flex>
+
+    //         {/* Right content - UserHistory */}
+    //         <Flex direction="column" flex="4" overflowY="auto" pt={50}>
+    //           <UserHistory />
+    //         </Flex>
+    //       </Flex>
+    //     </QuestionCacheContext.Provider>
+    //   )
+    // } else {
+    //   return <LoadingPage />
+    // }
+
+
+    // STATS BOX NOT FLUSH  
+    //   return (
+    //     <QuestionCacheContext.Provider value={ctxValue}>
+    //       <NavigationBar index={0} />
+    //       <Flex direction="column" pt={50} h="100vh">
+    //         <Flex justify="space-between" gap='10px' align="center" width="50vw">
+    //           <Box flex={1}>
+    //             <FilterBar onFilter={onFilter} />
+    //           </Box>
+    //           {userRole === 'ADMIN' && (
+    //             <Box width="auto" minWidth="120px"> {/* Ensure the button has a minimum width */}
+    //               <Button colorScheme='blue'
+    //                 borderRadius='10px'
+    //                 width="full" // The button will take up the full width of this Box
+    //                 onClick={() => {
+    //                   clearQuestionCache();
+    //                   setAddModalIsVisible(true);
+    //                 }}
+    //               >
+    //                 Add
+    //               </Button>
+    //             </Box>
+    //           )}
+    //         </Flex>
+    //         <Flex flexGrow={1} overflow="hidden">
+
+    //           <Box flex="6" pr="20px">
+    //             <AddQuestionModal
+    //               isVisible={addModalIsVisible}
+    //               closeHandler={() => setAddModalIsVisible(false)}
+    //               submitHandler={submitHandler}
+    //             />
+    //             <QuestionDetailsModal
+    //               isVisible={viewModalIsVisible}
+    //               data={questionCache}
+    //               closeHandler={() => { setViewModalIsVisible(false); }}
+    //               editModalHandler={() => {
+    //                 setViewModalIsVisible(false);
+    //                 setEditModalIsVisible(true);
+    //               }}
+    //               deleteHandler={(id: string) => {
+    //                 try {
+    //                   QuestionRequestHandler.deleteQuestion(id);
+    //                   showSuccess('Question deleted!', toast);
+    //                   setQuestions(questions.filter(i => i.id !== id));
+    //                   setViewModalIsVisible(false);
+    //                 } catch (error) {
+    //                   showError('delete fail', toast);
+    //                 }
+    //               }}
+    //             />
+    //             <EditQuestionModal
+    //               isVisible={editModalIsVisible}
+    //               questionToEdit={currentQuestion}
+    //               closeHandler={() => setEditModalIsVisible(false)}
+    //               submitUpdateHandler={submitUpdateHandler}
+    //             />
+    //             {filteredQuestions.length > 0 ? (
+    //               <QuestionTable
+    //                 data={filteredQuestions}
+    //                 viewDescriptionHandler={viewDescriptionHandler}
+    //               />
+    //             ) : (
+    //               <Center as='b'>No results found</Center>
+    //             )}
+    //           </Box>
+    //           <VStack flex="4" px="20px">
+    //             <UserHistory />
+    //           </VStack>
+    //         </Flex>
+
+    //       </Flex >
+    //     </QuestionCacheContext.Provider >
+    //   )
+    // } else {
+    //   return <LoadingPage />
+    // }
+
+
+    // RLATEST
     return (
       <QuestionCacheContext.Provider value={ctxValue}>
         <NavigationBar index={0} />
-        <Flex direction="row" align="start" pt={50} wrap="nowrap">
-          {/* Left content - QuestionTable */}
-          <Flex flexDirection="column" alignItems="center" flex="6" overflowY="auto" >
-            <Box maxWidth={'50vw'} >
-              <HStack mt='20px'>
+        <Flex direction="row" pt={58} h="100vh">
+          <VStack >
+            <Flex justify="space-between" gap='10px' align="center" width="50vw">
+              <Box flex={1}>
                 <FilterBar onFilter={onFilter} />
-                {userRole === 'ADMIN' && (
+              </Box>
+              {userRole === 'ADMIN' && (
+                <Box width="auto" minWidth="120px">
                   <Button colorScheme='blue'
                     borderRadius='10px'
-                    w='120px'
-                    ml='5px'
+                    width="full"
                     onClick={() => {
                       clearQuestionCache();
                       setAddModalIsVisible(true);
                     }}
-                    my={5}
-                    float='right'>
+                  >
                     Add
                   </Button>
-                )}
-              </HStack>
-            </Box>
-            <AddQuestionModal
-              isVisible={addModalIsVisible}
-              closeHandler={() => setAddModalIsVisible(false)}
-              submitHandler={submitHandler}
-            />
-            <QuestionDetailsModal
-              isVisible={viewModalIsVisible}
-              data={questionCache}
-              closeHandler={() => { setViewModalIsVisible(false); }}
-              editModalHandler={() => {
-                setViewModalIsVisible(false);
-                setEditModalIsVisible(true);
-              }}
-              deleteHandler={(id: string) => {
-                try {
-                  QuestionRequestHandler.deleteQuestion(id);
-                  showSuccess('Question deleted!', toast);
-                  setQuestions(questions.filter(i => i.id !== id));
-                  setViewModalIsVisible(false);
-                } catch (error) {
-                  showError('delete fail', toast);
-                }
-              }}
-            />
-            <EditQuestionModal
-              isVisible={editModalIsVisible}
-              questionToEdit={currentQuestion}
-              closeHandler={() => setEditModalIsVisible(false)}
-              submitUpdateHandler={submitUpdateHandler}
-            />
-            {filteredQuestions.length > 0 ? (
-              <QuestionTable
-                data={filteredQuestions}
-                viewDescriptionHandler={viewDescriptionHandler}
-              />
-            ) : (
-              <p>No results found</p>
-            )}
-          </Flex>
+                </Box>
+              )}
+            </Flex>
 
-          {/* Right content - UserHistory */}
-          <Flex direction="column" flex="4" overflowY="auto" pt={50}>
+            <Box flex="6" mx="65px">
+              <AddQuestionModal
+                isVisible={addModalIsVisible}
+                closeHandler={() => setAddModalIsVisible(false)}
+                submitHandler={submitHandler}
+              />
+              <QuestionDetailsModal
+                isVisible={viewModalIsVisible}
+                data={questionCache}
+                closeHandler={() => { setViewModalIsVisible(false); }}
+                editModalHandler={() => {
+                  setViewModalIsVisible(false);
+                  setEditModalIsVisible(true);
+                }}
+                deleteHandler={(id: string) => {
+                  try {
+                    QuestionRequestHandler.deleteQuestion(id);
+                    showSuccess('Question deleted!', toast);
+                    setQuestions(questions.filter(i => i.id !== id));
+                    setViewModalIsVisible(false);
+                  } catch (error) {
+                    showError('delete fail', toast);
+                  }
+                }}
+              />
+              <EditQuestionModal
+                isVisible={editModalIsVisible}
+                questionToEdit={currentQuestion}
+                closeHandler={() => setEditModalIsVisible(false)}
+                submitUpdateHandler={submitUpdateHandler}
+              />
+              {filteredQuestions.length > 0 ? (
+                <QuestionTable
+                  data={filteredQuestions}
+                  viewDescriptionHandler={viewDescriptionHandler}
+                />
+              ) : (
+                <Center as='b'>No results found</Center>
+              )}
+            </Box>
+          </VStack>
+          <Box pt={5}>
             <UserHistory />
-          </Flex>
-        </Flex>
-      </QuestionCacheContext.Provider>
+          </Box>
+        </Flex >
+
+      </QuestionCacheContext.Provider >
     )
   } else {
     return <LoadingPage />

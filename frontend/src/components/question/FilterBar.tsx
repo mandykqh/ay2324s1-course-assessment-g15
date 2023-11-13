@@ -34,10 +34,10 @@ const FilterBar: React.FC<FilterBarProps> = ({ onFilter }) => {
 
     return (
         <>
-            <Flex justifyContent="space-between" alignItems="center" my={5} w={'50vw'}>
+            <Flex justifyContent="space-between" alignItems="center" my={5} minW={'40vw'}>
                 <Box
                     borderRadius="5px"
-                    flex="70%"
+                    flex="60%"
                     mr={3}
                 >
                     <Select
@@ -61,7 +61,7 @@ const FilterBar: React.FC<FilterBarProps> = ({ onFilter }) => {
                         }}
                     />
                 </Box>
-                <Box borderRadius='5px' flex="35%"
+                <Box borderRadius='5px' flex="40%"
                 >
                     <Select
                         onChange={(e) => {

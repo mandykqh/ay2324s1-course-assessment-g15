@@ -58,6 +58,32 @@ const UserHistory = () => {
 
 
   return (
+    // <Box>
+    //   <Stack>
+    //     <Box pb={2} >
+    //       <Text textStyle='h1' color='primary.blue4'>
+    //         Your Statistics
+    //       </Text>
+    //     </Box>
+    //     <HistoryOverview
+    //       total={total}
+    //       attempted={attempted}
+    //       easy={easy}
+    //       medium={medium}
+    //       hard={hard}
+    //     />
+    //     <Stack>
+    //       <Box pb={2} pt={5} >
+    //         <Text textStyle='h1' color='primary.blue4'>
+    //           Your Attempts
+    //         </Text>
+    //       </Box>
+    //       {attempted > 0 && <PastAttempts attempts={attempts} />}
+    //       {attempted === 0 && <Text>No Past attempts!</Text>}
+    //     </Stack>
+    //   </Stack>
+    // </Box >
+
     <Box>
       <Stack>
         <Box pb={2} >
@@ -78,11 +104,14 @@ const UserHistory = () => {
               Your Attempts
             </Text>
           </Box>
-          {attempted > 0 && <PastAttempts attempts={attempts} />}
-          {attempted === 0 && <Text>No Past attempts!</Text>}
+          <Box maxHeight="365" overflowY="auto" w="full" borderRadius="xl" boxShadow="md">
+            {attempted > 0 && <PastAttempts attempts={attempts} />}
+            {attempted === 0 && <Text>No Past attempts!</Text>}
+          </Box>
         </Stack>
       </Stack>
     </Box >
+
   );
 }
 

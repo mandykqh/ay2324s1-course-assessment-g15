@@ -28,7 +28,7 @@ const AttemptEntry = ({ title, date }: { title: string, date: string }) => {
 // }
 const PastAttempts = ({ attempts }: { attempts: Attempt[] }) => {
   return (
-    <Box border="1.5px solid #244153" overflow="hidden" borderRadius="xl" width={'520px'}>
+    <Box border="1.5px solid #244153" overflow="hidden" borderRadius="xl" width={'35vw'}>
       <Table variant="simple" borderRadius="full" width={'520px'}>
         <Thead bg='primary.blue2'>
           <Tr >
