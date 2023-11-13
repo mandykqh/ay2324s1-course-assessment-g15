@@ -90,7 +90,6 @@ const QuestionPage: React.FC<Props> = ({ addBtnOnClick }) => {
       await QuestionRequestHandler.createQuestionAndGetID(questionCache).then((id) => {
         setQuestions([...questions, { ...questionCache, id: id }]);
         setFilteredQuestions([...filteredQuestions, { ...questionCache, id: id }]);
-        setFilteredQuestions([...filteredQuestions, { ...questionCache, id: id }]);
       }
       );
       setAddModalIsVisible(false);
@@ -105,7 +104,7 @@ const QuestionPage: React.FC<Props> = ({ addBtnOnClick }) => {
       let validator = new QuestionValidator();
       validator.validateEmptyFields(questionCache);
       await QuestionRequestHandler.updateQuestion(questionCache).then(() => {
-        setQuestions(questions.map((q) => (q.id === questionCache.id ? questionCache : q)!));
+        setFilteredQuestions(questions.map((q) => (q.id === questionCache.id ? questionCache : q)!));
         setEditModalIsVisible(false);
         showSuccess(`Question ${question.id} updated!`, toast)
       });
@@ -177,7 +176,7 @@ const QuestionPage: React.FC<Props> = ({ addBtnOnClick }) => {
                 try {
                   QuestionRequestHandler.deleteQuestion(id);
                   showSuccess('Question deleted!', toast);
-                  setQuestions(questions.filter(i => i.id !== id));
+                  setFilteredQuestions(questions.filter(i => i.id !== id));
                   setViewModalIsVisible(false);
                 } catch (error) {
                   showError('delete fail', toast);
