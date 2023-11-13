@@ -1,6 +1,6 @@
 enum Category {
-  'Arrays',
-  'Strings',
+  'Array',
+  'String',
   'Algorithms',
   'Linked List',
   'Tree',
@@ -19,7 +19,15 @@ enum Category {
   'Divide and Conquer',
   'Design',
   'Topological Sort',
-  'Data Structures'
+  'Data Structures',
+  'Sliding Window',
+  'Recursion',
+  'Two Pointers',
+  'Trie',
+  'Sorting',
+  "Heap (Priority Queue)",
+  "Merge Sort",
+  "String Matching"
 }
 
 export default Category;

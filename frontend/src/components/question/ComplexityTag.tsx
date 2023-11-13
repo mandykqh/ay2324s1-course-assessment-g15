@@ -1,6 +1,7 @@
 import React from 'react';
-import { complexityColorMap, ComplexityColorMap } from "./utils/colorMap";
-import { Tag } from '@chakra-ui/react';
+import { complexityColorMap } from "./utils/colorMap";
+import { Card, Tag } from '@chakra-ui/react';
+import Complexity from '../../models/enums/Complexity';
 
 interface ComplexityTagProps {
     complexity: string;
@@ -8,7 +9,7 @@ interface ComplexityTagProps {
 
 const ComplexityTag: React.FC<ComplexityTagProps> = ({ complexity }) => {
     return (
-        <Tag colorScheme={complexityColorMap[complexity]}
+        <Tag colorScheme={complexityColorMap(complexity)}
             w='70px'
             // m='auto'
             // mt='18px'

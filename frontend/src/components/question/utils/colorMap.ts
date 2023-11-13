@@ -1,12 +1,14 @@
+import Complexity from "../../../models/enums/Complexity";
 
-export type ComplexityColorMap = {
-    Easy: string;
-    Medium: string;
-    Hard: string;
-};
-
-export const complexityColorMap: ComplexityColorMap = {
-    Easy: 'green',
-    Medium: 'orange',
-    Hard: 'red',
-}; 
+export function complexityColorMap(complexity: string): string {
+  switch (complexity) {
+    case 'Easy':
+      return 'green';
+    case 'Medium':
+      return 'orange';
+    case 'Hard':
+      return 'red';
+    default:
+      return 'white';
+  }
+}
