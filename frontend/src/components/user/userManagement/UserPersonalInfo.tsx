@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { Input, Box, Text, Flex, Spacer, Image, Center, Button, Circle, useToast } from "@chakra-ui/react";
-import { PRIMARY_COLOR, SECONDARY_COLOR } from "../../../CommonStyles";
-import { UserDataString } from "../../../Commons";
+import { Input, Box, Text, Flex, Spacer, Image, Center, Button, useToast } from "@chakra-ui/react";
 import UserRequestHandler from "../../../handlers/UserRequestHandler";
 import LocalStorageHandler from "../../../handlers/LocalStorageHandler";
 import { showSuccess, showError } from "../../../Util";
+import { UserDataString } from "../../../Commons";
 
 const ValueLabel = ({ value }: { value: string }) => {
   return (
@@ -53,14 +52,11 @@ const EditButton = ({ isEditing, setter }:
   );
 }
 
-
-// TODO: Authorization before page access
 const UserPersonalInfo = ({ user }: { user: UserDataString }) => {
   const [isEditingName, setIsEditingName] = useState(false);
   const [isEditingEmail, setIsEditingEmail] = useState(false);
   const [name, setName] = useState(LocalStorageHandler.getUserData()!.username);
   const [email, setEmail] = useState(LocalStorageHandler.getUserData()!.email);
-  const userRequestHandler = new UserRequestHandler();
   const toast = useToast();
   const [currentName, setCurrentName] = useState(LocalStorageHandler.getUserData()!.username);
 
@@ -70,10 +66,12 @@ const UserPersonalInfo = ({ user }: { user: UserDataString }) => {
   }
 
   function handleSave() {
+    const userData = LocalStorageHandler.getUserData()!;
     const newData = {
-      id: LocalStorageHandler.getUserData()!.id,
+      id: userData.id,
       username: name,
-      email: email
+      email: email,
+      role: userData.role
     }
 
     UserRequestHandler.updatePersonalInfo(newData, currentName).then(() => {

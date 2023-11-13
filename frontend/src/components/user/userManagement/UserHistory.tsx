@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { Box, Stack, Text, filter } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { Box, Stack, Text, useToast } from "@chakra-ui/react";
 import HistoryOverview from "../../history/HistoryOverview";
 import PastAttempts from "../../history/PastAttempts";
 import HistoryRequestHandler from "../../../handlers/HistoryRequestHandler";
-import { Attempt, HistoryDataString, HistoryResponseString, QuestionString } from "../../../Commons";
+import { Attempt, HistoryResponseString, QuestionString } from "../../../Commons";
 import QuestionRequestHandler from "../../../handlers/QuestionRequestHandler";
+import { showError } from "../../../Util";
 
 const UserHistory = () => {
-
   const [total, setTotal] = useState(0);
   const [attempted, setAttempted] = useState(0);
   const [easy, setEasy] = useState(0);
@@ -24,7 +24,6 @@ const UserHistory = () => {
   useEffect(() => {
     HistoryRequestHandler.getHistory()
       .then((r) => {
-        console.log(r);
         QuestionRequestHandler.getQuestionsCount().then(total => setTotal(total));
         let uniqueQuestions = getUniqueQuestions(r)
         setAttempted(uniqueQuestions.length);
@@ -32,15 +31,17 @@ const UserHistory = () => {
           if (qns.length === 0) {
             return;
           }
-          setEasy(qns.filter(x => x.complexity === 'Easy')
-            .map(value => uniqueQuestions.includes(value.id))
-            .filter(x => x).length)
-          setMedium(qns.filter(x => x.complexity === 'Medium')
-            .map(value => uniqueQuestions.includes(value.id))
-            .filter(x => x).length)
-          setHard(qns.filter(x => x.complexity === 'Hard')
-            .map(value => uniqueQuestions.includes(value.id))
-            .filter(x => x).length)
+
+          function setComplexity(setter: React.Dispatch<React.SetStateAction<number>>,
+            complexity: string) {
+            setter(qns.filter(x => x.complexity === complexity)
+              .map(value => uniqueQuestions.includes(value.id))
+              .filter(x => x).length)
+          }
+          setComplexity(setEasy, 'Easy');
+          setComplexity(setMedium, 'Medium');
+          setComplexity(setHard, 'Hard');
+
           let updatedAttempts = r.attempts.map((entry) => {
             let title = "Question does not exist anymore";
             let filtered = qns.filter((q) => q.id === entry.questionId)[0];
@@ -55,7 +56,8 @@ const UserHistory = () => {
           setAttempts(updatedAttempts);
         });
       }).catch(e => {
-        console.log(e);
+        const toast = useToast();
+        showError((e as Error).message, toast)
       });
   }, []);
 
