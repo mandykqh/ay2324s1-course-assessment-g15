@@ -1,7 +1,10 @@
 import { Server, Socket } from 'socket.io';
 import { RoomEvents } from '../types/enums/RoomEvents';
 import { getFilteredQuestion, getQuestions } from '../api/Questions';
-import {DrawLineProps} from '../types/drawtypes/drawtypes';
+import { DrawLineProps } from '../types/drawtypes/drawtypes';
+
+// Store for the code in each room
+const roomCodes: Record<number, string> = {};
 
 export function setupSockets(io: Server) {
   io.on('connection', (socket: Socket) => {
@@ -17,6 +20,10 @@ function handleSocketEvents(socket: Socket) {
     // Broadcast a message to all clients in the room when a user joins
     socket.to(room).emit(RoomEvents.userJoined, socket.id);
 
+    // Emit the current code to the user who joined
+    const currentCode = roomCodes[room] || ''; // Default to an empty string if no code is stored
+    socket.emit(RoomEvents.codeChange, currentCode);
+
     socket.on(RoomEvents.languageChange, (language) => {
       // Listen for language changes from a client and broadcast them to others in the room
       socket.to(room).emit(RoomEvents.languageChange, language);
@@ -24,13 +31,12 @@ function handleSocketEvents(socket: Socket) {
     });
 
     socket.on(RoomEvents.codeChange, (code) => {
-      // Listen for code changes from a client and broadcast them to others in the room
+      roomCodes[room] = code;
+
       socket.to(room).emit(RoomEvents.codeChange, code);
-      console.log(`User ${socket.id} changed code: ${code}`);
     });
 
     socket.on(RoomEvents.disconnect, () => {
-      // Listen for disconnects and inform others in the room
       socket.to(room).emit(RoomEvents.userLeft, socket.id);
     });
 
@@ -40,11 +46,11 @@ function handleSocketEvents(socket: Socket) {
     });
 
     socket.on(RoomEvents.clientReady, () => {
-      socket.to(room).emit('get-canvas-state')
+      socket.to(room).emit('get-canvas-state');
     })
 
     socket.on(RoomEvents.canvasState, (state) => {
-      console.log('received canvas state')
+      console.log('received canvas state');
       socket.to(room).emit('canvas-state-from-server', state)
     })
 
@@ -54,7 +60,7 @@ function handleSocketEvents(socket: Socket) {
 
     socket.on(RoomEvents.canvasClear, () => socket.to(room).emit('canvas-clear'))
 
-    socket.on('changeQuestion', async (data) => {
+    socket.on(RoomEvents.changeQuestion, async (data) => {
       // Listen for code changes from a client and broadcast them to others in the room
       console.log(`question data propogated: ${data.categories}, ${data.complexity}`);
       socket.to(room).emit('changeQuestion', data);

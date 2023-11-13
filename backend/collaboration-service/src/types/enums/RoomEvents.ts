@@ -9,5 +9,6 @@ export enum RoomEvents {
     clientReady = 'client-ready',
     canvasState = 'canvas-state',
     drawLine = 'draw-line',
-    canvasClear = 'canvas-clear'
+    canvasClear = 'canvas-clear',
+    changeQuestion = 'changeQuestion'
 }
