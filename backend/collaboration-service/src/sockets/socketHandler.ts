@@ -60,7 +60,7 @@ function handleSocketEvents(socket: Socket) {
 
     socket.on(RoomEvents.canvasClear, () => socket.to(room).emit('canvas-clear'))
 
-    socket.on('changeQuestion', async (data) => {
+    socket.on(RoomEvents.changeQuestion, async (data) => {
       // Listen for code changes from a client and broadcast them to others in the room
       console.log(`question data propogated: ${data.categories}, ${data.complexity}`);
       socket.to(room).emit('changeQuestion', data);
