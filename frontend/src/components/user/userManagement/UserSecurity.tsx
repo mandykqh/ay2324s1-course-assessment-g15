@@ -106,7 +106,7 @@ const UserSecurity = () => {
         </Button>
       </Box >
 
-      <Box borderRadius={15} p={5} w={'60%'} bg='primary.blue3' p={5} mt={10} w={'60%'} border='2px solid #244153'>
+      <Box borderRadius={15} p={5} w={'60%'} bg='primary.blue3' mt={10} border='2px solid #244153'>
         <Box marginBottom={10} >
           <Text as='b' fontSize={25}>
             Delete Account

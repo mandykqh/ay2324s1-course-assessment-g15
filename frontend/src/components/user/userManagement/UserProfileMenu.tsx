@@ -44,17 +44,17 @@ const UserProfileMenu: React.FC<MenuProps> =
       <Box width='20vw' height={'100vh'} pb={10} pt={10} mt={10}>
 
         <MenuItem
-          index={1}
+          index={0}
           selectedIndex={currentMenuIndex}
           label='Personal Information'
           imageUrl='src\assets\images\personal_info.png'
-          onClick={() => { setCurrentMenuIndex(1) }} />
+          onClick={() => { setCurrentMenuIndex(0) }} />
         <MenuItem
-          index={2}
+          index={1}
           selectedIndex={currentMenuIndex}
           label='Security'
           imageUrl='src\assets\images\security.png'
-          onClick={() => { setCurrentMenuIndex(2) }} />
+          onClick={() => { setCurrentMenuIndex(1) }} />
 
       </Box>
     );
