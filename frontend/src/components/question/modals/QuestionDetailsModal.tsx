@@ -10,7 +10,6 @@ import {
   Text,
   Flex,
   Spacer,
-  Textarea,
   Grid
 } from '@chakra-ui/react'
 import { Button } from '@chakra-ui/button';
@@ -44,8 +43,8 @@ const QuestionDetailsModal: React.FC<Props> =
           <ModalContent
             bg='primary.blue3'
             borderRadius='15px'
-            minWidth="2xl" // This sets the minimum width of the modal
-            maxWidth="70%" // This allows the modal to expand up to 95% of the viewport width
+            minWidth="2xl"
+            maxWidth="70%"
           >
             <ModalHeader color={'white'}>{data.title}</ModalHeader>
             <ModalCloseButton />
@@ -66,18 +65,9 @@ const QuestionDetailsModal: React.FC<Props> =
                   </Box>
                 </Flex>
                 <Text color='white' as='b' marginRight={'3px'}>
-                      Description
+                  Description
                 </Text>
                 <div dangerouslySetInnerHTML={{ __html: data.description }} />
-                
-                {/* <Textarea
-                  isReadOnly
-                  rows={20}
-                  resize={'none'}
-                  value={data.description}
-                  bg='primary.blue1'
-                  border='2px solid #244153'
-                /> */}
               </Grid>
             </ModalBody>
             <ModalFooter>

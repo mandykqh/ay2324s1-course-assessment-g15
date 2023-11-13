@@ -1,15 +1,10 @@
-import { Grid, Text } from "@chakra-ui/react";
-import { useContext, useEffect, useState } from 'react';
-import { SECONDARY_COLOR } from "../../CommonStyles";
-import { getCategoriesString, getComplexityStrings, stringToOptionsMapper } from '../../Util';
-import { Box } from '@chakra-ui/react';
+import React, { useContext, useEffect, useState } from 'react';
 import Select from 'react-select'
-import { selectorStyles, singleSelectStyles, multiSelectStyles } from '../../CommonStyles';
-
-
-import React from "react";
+import { Box, Grid, Text } from "@chakra-ui/react";
 import { MatchingCacheContext } from "../../contexts/MatchingCacheContext";
-import QuestionRequestHandler from "../../handlers/QuestionRequestHandler";
+import { getCategoriesString, getComplexityStrings, stringToOptionsMapper } from '../../Util';
+import { selectorStyles, singleSelectStyles, multiSelectStyles, SECONDARY_COLOR } from '../../CommonStyles';
+import { MultiValue } from 'chakra-react-select';
 
 interface SelectOption {
   value: string;

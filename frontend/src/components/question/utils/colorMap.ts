@@ -1,5 +1,3 @@
-import Complexity from "../../../models/enums/Complexity";
-
 export function complexityColorMap(complexity: string): string {
   switch (complexity) {
     case 'Easy':
