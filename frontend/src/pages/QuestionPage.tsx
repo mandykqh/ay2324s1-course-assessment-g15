@@ -205,7 +205,6 @@ const QuestionPage = () => {
   useEffect(() => {
     try {
       QuestionRequestHandler.loadQuestions().then((questions: QuestionString[]) => {
-        console.log(questions);
         setQuestions(questions);
         setFilteredQuestions(questions);
       });

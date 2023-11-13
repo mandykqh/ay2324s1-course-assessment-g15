@@ -1,5 +1,4 @@
 import { Text, Box, Center, Image, Flex } from "@chakra-ui/react";
-import { PRIMARY_COLOR, SECONDARY_COLOR } from "../../../CommonStyles";
 
 interface MenuItemProps {
   label: string;
@@ -10,7 +9,6 @@ interface MenuItemProps {
 }
 
 const MenuItem: React.FC<MenuItemProps> = ({ label, imageUrl, index, selectedIndex, onClick }) => {
-  let backgroundColor = index === selectedIndex ? SECONDARY_COLOR : PRIMARY_COLOR;
   return (
     <Box
       p={3}
@@ -42,7 +40,6 @@ const UserProfileMenu: React.FC<MenuProps> =
   ({ currentMenuIndex, setCurrentMenuIndex }) => {
     return (
       <Box width='20vw' height={'100vh'} pb={10} pt={10} mt={10}>
-
         <MenuItem
           index={0}
           selectedIndex={currentMenuIndex}
@@ -55,7 +52,6 @@ const UserProfileMenu: React.FC<MenuProps> =
           label='Security'
           imageUrl='src\assets\images\security.png'
           onClick={() => { setCurrentMenuIndex(1) }} />
-
       </Box>
     );
   }

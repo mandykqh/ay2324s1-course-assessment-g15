@@ -41,7 +41,7 @@ export interface MatchingString {
 
 export const emptyMatchingString: MatchingString = {
   complexity: '',
-  categories: [], // To be changed into [] after assignment 5
+  categories: [],
 }
 
 export interface MatchDataString {
