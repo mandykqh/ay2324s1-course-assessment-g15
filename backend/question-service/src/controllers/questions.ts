@@ -28,13 +28,6 @@ export const getFilteredQuestion = async (req: express.Request, res: express.Res
                 { id: { $ne: excludedQuestionId } }, // Exclude the specified question ID
             ],
         });
-        // const filteredQuestions = await QuestionModel.find({
-        //     $and: [
-        //         { categories: req.query.categories },
-        //         { complexity: req.query.complexity },
-        //         { id: { $ne: excludedQuestionId } }, // Exclude the specified question ID
-        //     ],
-        // });
 
         if (!filteredQuestions) { // Query failed
             return res.sendStatus(404).send("question not found");
