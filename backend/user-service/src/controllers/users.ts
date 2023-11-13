@@ -31,6 +31,9 @@ export const getUserByName = async (req: express.Request, res: express.Response)
 export const addUser = async (req: express.Request, res: express.Response) => {
   try {
     const user = await User.create(req.body);
+    if (req.body.role == 'ADMIN') {
+      return res.status(403).send('Cannot create an admin user!');
+    }
     return res.status(201).json(user);
   } catch (error) {
     console.error('Error adding user:', error);
