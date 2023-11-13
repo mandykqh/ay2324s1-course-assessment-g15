@@ -47,6 +47,7 @@ const QuestionProgress = ({ completed }: { completed: number }) => {
 const HistoryOverview: React.FC<Props> =
   ({ total, attempted, easy, medium, hard }) => {
     let completed = (Math.round(attempted / total * 100) / 100) * 100;
+    console.log(completed);
     if (attempted == 0) {
       completed = 0;
     }
@@ -81,7 +82,7 @@ const HistoryOverview: React.FC<Props> =
                 </Flex>
               </Stack>
               <Spacer />
-              <QuestionProgress completed={completed} />
+              <QuestionProgress completed={parseInt(completed.toFixed(2))} />
             </Flex>
           </Stack>
         </CardBody>
