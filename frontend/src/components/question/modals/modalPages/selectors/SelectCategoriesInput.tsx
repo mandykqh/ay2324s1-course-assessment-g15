@@ -1,9 +1,10 @@
 import { useContext, useEffect, useState } from 'react';
-import { getCategoriesString, stringToOptionsMapper } from '../../../../../Util';
 import Select from 'react-select'
 import { Box } from '@chakra-ui/react';
+import { getCategoriesString, stringToOptionsMapper } from '../../../../../Util';
 import { QuestionCacheContext } from '../../../../../contexts/QuestionCacheContext';
 import { selectorStyles, multiSelectStyles } from '../../../../../CommonStyles';
+import { MultiValue } from 'chakra-react-select';
 
 interface SelectOption {
   value: string;

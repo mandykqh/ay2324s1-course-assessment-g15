@@ -167,7 +167,7 @@ const QuestionPage = () => {
 
   function renderLeftPanel() {
     return (
-      <Flex flexDirection="column" alignItems="center" flex="6" overflowY="auto" >
+      <Flex flexDirection="column" alignItems="center" flex="6" overflowY="auto" minH={500}>
         <Box maxWidth={'50vw'} >
           <HStack mt='20px'>
             {renderFilterBar()}

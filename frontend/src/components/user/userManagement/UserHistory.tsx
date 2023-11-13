@@ -77,7 +77,7 @@ const UserHistory = () => {
           medium={medium}
           hard={hard}
         />
-        <Stack>
+        <Stack maxH={400} overflowY={'auto'}>
           <Box pb={2} pt={5} >
             <Text textStyle='h1' color='primary.blue4'>
               Your Attempts
