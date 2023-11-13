@@ -30,12 +30,12 @@ const Chat: React.FC<ChatProps> = ({ messages, newMessage, onNewMessageChange, o
 
   return (
     <VStack spacing={4} width="100%" height="100%">
-
       <Box
         ref={chatBoxRef}
         overflowY="auto"
-        flex="1"
+        flex="1" // This line makes the Box expand and fill the VStack
         bg={bg}
+        width="100%" // Ensuring full width of the VStack
       >
         <Center
           as='b'
@@ -49,16 +49,17 @@ const Chat: React.FC<ChatProps> = ({ messages, newMessage, onNewMessageChange, o
         >
           Chat
         </Center>
-        <Box px={4}
-        >
+        <Box px={4} width="100%">
           {messages.map((message, index) => {
             const isSelf = message.sender === currentUser;
             return (
               <Flex
                 key={index}
                 align="flex-end"
-                direction={isSelf ? 'row-reverse' : 'row'}
+                direction={isSelf ? 'row' : 'row-reverse'} // Follow telegram/whatsapp layout
+                justify="flex-end"
                 mb={2}
+                width="100%"
               >
                 <Box
                   bg={isSelf ? selfMsgBg : otherMsgBg}
@@ -83,6 +84,12 @@ const Chat: React.FC<ChatProps> = ({ messages, newMessage, onNewMessageChange, o
           placeholder="Type your message..."
           value={newMessage}
           onChange={onNewMessageChange}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
+              onSendMessage();
+            }
+          }}
           size="sm"
           resize="none"
           borderRadius="10px"
@@ -98,6 +105,6 @@ const Chat: React.FC<ChatProps> = ({ messages, newMessage, onNewMessageChange, o
       </Flex>
     </VStack>
   );
-};
+}
 
 export default Chat;
