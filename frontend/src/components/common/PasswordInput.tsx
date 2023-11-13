@@ -1,5 +1,4 @@
 import { InputGroup, Input, InputRightElement, Button, Box, Text } from "@chakra-ui/react";
-import { PRIMARY_COLOR } from "../../CommonStyles";
 
 interface PasswordInputProps {
   label: string;
