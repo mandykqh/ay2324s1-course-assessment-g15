@@ -41,11 +41,16 @@ const QuestionDetailsModal: React.FC<Props> =
           colorScheme={'pink'}
         >
           <ModalOverlay />
-          <ModalContent bg='primary.blue3' borderRadius='15px'>
+          <ModalContent
+            bg='primary.blue3'
+            borderRadius='15px'
+            minWidth="2xl" // This sets the minimum width of the modal
+            maxWidth="70%" // This allows the modal to expand up to 95% of the viewport width
+          >
             <ModalHeader color={'white'}>{data.title}</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              <Grid gap={5}>
+              <Grid gap={5} maxHeight="lg" overflowY="auto">
                 <Flex>
                   <Box>
                     <Text color='white' as='b' marginRight={'3px'}>
@@ -60,14 +65,19 @@ const QuestionDetailsModal: React.FC<Props> =
                     <ComplexityTag complexity={data.complexity} />
                   </Box>
                 </Flex>
-                <Textarea
+                <Text color='white' as='b' marginRight={'3px'}>
+                      Description
+                </Text>
+                <div dangerouslySetInnerHTML={{ __html: data.description }} />
+                
+                {/* <Textarea
                   isReadOnly
                   rows={20}
                   resize={'none'}
                   value={data.description}
                   bg='primary.blue1'
                   border='2px solid #244153'
-                />
+                /> */}
               </Grid>
             </ModalBody>
             <ModalFooter>

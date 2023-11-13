@@ -1,3 +1,5 @@
+// If you change this, remember to change the 
+// enums in matching service and question service!!
 enum Category {
   'Array',
   'String',

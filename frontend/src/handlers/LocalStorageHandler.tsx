@@ -41,8 +41,17 @@ class LocalStorageHandler {
     localStorage.setItem(MATCH_DATA_KEY, JSON.stringify(obj));
   }
 
+  // Reverted impln as it crashes frontend collab
   static getMatchData(): MatchDataString | null {
-    return LocalStorageHandler.getData<MatchDataString>(MATCH_DATA_KEY);
+    try {
+      if (localStorage.getItem(MATCH_DATA_KEY) === null) {
+        return null;
+      }
+      const data = localStorage.getItem(MATCH_DATA_KEY)!;
+      return JSON.parse(data);
+    } catch (e) {
+      return null;
+    }
   }
 
   static isMatched(): boolean {
