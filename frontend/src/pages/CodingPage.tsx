@@ -87,7 +87,6 @@ const CodingPage = () => {
     });
 
     socket.on('newQuestion', (question) => {
-      console.log(`new question: ${question.title} | ${question.categories} | ${question.complexity} | ${question.description}`);
       if (!question) {
         toast({
           title: "Error",
@@ -205,8 +204,6 @@ const CodingPage = () => {
   const toast = useToast();
 
   const handleQuestionChange = () => {
-    console.log(`qn to change: current qid=${LocalStorageHandler.getMatchData()?.question.id} | ${categoryFilter} | ${complexityFilter}`);
-
     if (categoryFilter.length < 1 || !complexityFilter) {
       toast({
         title: "Error",
@@ -221,12 +218,8 @@ const CodingPage = () => {
 
       socket.on('newQuestion', (question) => {
         if (question) {
-          console.log(`new qn generated: ${question.title}`);
           setQuestion(question);
-          // LocalStorageHandler.updateMatchDataQuestion(question);
-          // updateHistory();
         }
-        console.log('in socket');
         setCategoryFilter(categoryFilter);
         setComplexityFilter(complexityFilter);
       })
@@ -255,9 +248,6 @@ const CodingPage = () => {
     const { categories, complexity } = filterOptions;
     setComplexityFilter(complexity);
     setCategoryFilter(categories);
-    // LocalStorageHandler.storeFilterData(categories, complexity, filtered);
-
-    console.log(`preferences updated: ${complexity} | ${categories}`);
   }
 
   const questionString = LocalStorageHandler.getMatchData()?.question;

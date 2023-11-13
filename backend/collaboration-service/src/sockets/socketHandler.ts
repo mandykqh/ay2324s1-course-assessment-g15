@@ -55,13 +55,8 @@ function handleSocketEvents(socket: Socket) {
     socket.on(RoomEvents.canvasClear, () => socket.to(room).emit('canvas-clear'))
 
     socket.on('changeQuestion', async (data) => {
-      // Listen for code changes from a client and broadcast them to others in the room
-      // console.log(`question data propogated: ${data.categories}, ${data.complexity}`);
       socket.to(room).emit('changeQuestion', data);
-      // const question = await getQuestions(data.qnCategory, data.qnComplexity);
       const question = await getFilteredQuestion(data.id, data.categories, data.complexity); //PROBLEM HERE
-
-      console.log(`Question changed: ${question.id} | ${question.complexity} | ${question.categories} | ${question.title}`);
       socket.to(room).emit('newQuestion', question);
       socket.emit('newQuestion', question);
     });
