@@ -33,7 +33,7 @@ const QuestionDetails: React.FC<QuestionString> = ({ id, title, complexity, cate
                 <Spacer />
                 <ComplexityTag complexity={complexity} />
             </HStack>
-            <Text color='white'>{description}</Text>
+            <div dangerouslySetInnerHTML={{ __html: description }} />
             <span>
                 <Link href={link} target="_blank" rel="noopener noreferrer"><u>Link</u></Link>
             </span>
