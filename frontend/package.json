@@ -22,6 +22,7 @@
     "@types/md5": "^2.3.2",
     "@types/socket.io-client": "^3.0.0",
     "@uiw/codemirror-theme-okaidia": "^4.21.20",
+    "@uiw/codemirror-theme-tokyo-night-storm": "^4.21.20",
     "@uiw/react-codemirror": "^4.21.20",
     "axios": "^1.5.0",
     "chakra-react-select": "^4.7.2",

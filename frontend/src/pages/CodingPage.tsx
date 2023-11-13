@@ -19,6 +19,8 @@ import { python } from '@codemirror/lang-python';
 import { cpp } from '@codemirror/lang-cpp';
 import { javascript } from '@codemirror/lang-javascript';
 import { okaidia } from '@uiw/codemirror-theme-okaidia';
+// import { tokyoNightStorm, tokyoNightStormInit } from '@uiw/codemirror-theme-tokyo-night-storm';
+
 import HistoryRequestHandler from '../handlers/HistoryRequestHandler';
 import Select from 'react-select';
 import { selectorStyles, singleSelectStyles } from '../CommonStyles';
@@ -316,6 +318,7 @@ const CodingPage = () => {
                 ]}
                 onChange={handleCodeChange}
                 theme={okaidia}
+              // theme={tokyoNightStorm}
               />
 
             </VStack>
