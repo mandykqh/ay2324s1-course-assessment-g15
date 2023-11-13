@@ -353,28 +353,6 @@ const CodingPage = () => {
           </DrawerContent>
         </Drawer> */}
 
-        {/* <Slide direction="left" in={isOpen} style={{ zIndex: 10 }}>
-          <Box
-            p="40px"
-            color="white"
-            bg="teal.500"
-            rounded="md"
-            shadow="md"
-            h="100vh"
-            w="30vw"
-            position="fixed"
-            left='100vw' // This will slide in from the left
-            top="0"
-          >
-            <Chat
-              messages={chatHistory}
-              newMessage={newMessage}
-              onNewMessageChange={handleNewMessageChange}
-              onSendMessage={handleSendMessage}
-            />
-          </Box>
-        </Slide> */}
-
         <Slide direction='left' in={isChatOpen} style={{
           zIndex: 10, height: "100vh",
           width: "30vw",
