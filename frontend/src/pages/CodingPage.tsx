@@ -42,6 +42,16 @@ const CodingPage = () => {
   const [isCanvasDrawerOpen, setIsCanvasDrawerOpen] = useState(false);
 
   useEffect(() => {
+    toast({
+      title: "Welcome!",
+      description: "You have entered the collaborative room.",
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+    });
+  }, []);
+
+  useEffect(() => {
     AuthRequestHandler.isAuth()
       .then(res => {
         setIsAuthenticated(res.isAuth);
@@ -97,6 +107,7 @@ const CodingPage = () => {
         LocalStorageHandler.updateMatchDataQuestion(question);
         setCategoryFilter(categoryFilter);
         setComplexityFilter(complexityFilter);
+        updateHistory();
       }
 
     })
@@ -212,7 +223,8 @@ const CodingPage = () => {
         if (question) {
           console.log(`new qn generated: ${question.title}`);
           setQuestion(question);
-          LocalStorageHandler.updateMatchDataQuestion(question);
+          // LocalStorageHandler.updateMatchDataQuestion(question);
+          // updateHistory();
         }
         console.log('in socket');
         setCategoryFilter(categoryFilter);
@@ -225,6 +237,18 @@ const CodingPage = () => {
       })
 
     }
+  }
+
+  function updateHistory() {
+    let date = new Date();
+    HistoryRequestHandler.updateHistory({
+      userId: LocalStorageHandler.getUserData()?.id!,
+      attempt: {
+        questionId: LocalStorageHandler.getMatchData()?.question.id!,
+        timestamp: date.toISOString(),
+      },
+      complexity: LocalStorageHandler.getMatchData()?.question.complexity!
+    });
   }
 
   const handleFilterPreferences = (filterOptions: { categories: string[]; complexity: string }) => {
