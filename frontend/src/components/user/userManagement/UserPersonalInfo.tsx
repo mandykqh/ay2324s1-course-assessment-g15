@@ -11,8 +11,10 @@ const ValueLabel = ({ value }: { value: string }) => {
     <Input
       isReadOnly border={'none'}
       value={value}
-      background={SECONDARY_COLOR}
-      padding={3} />
+      padding={3}
+      bg='primary.blue1'
+      border='2px solid #244153'
+      mr='15px' />
   );
 }
 
@@ -21,7 +23,8 @@ const EditiableInput = ({ value, setter }:
   return (
     <Input
       value={value}
-      background={PRIMARY_COLOR}
+      bg='primary.blue1'
+      border='2px solid #244153'
       onChange={(e) => setter(e.target.value)}
       padding={3}
     />
@@ -84,13 +87,13 @@ const UserPersonalInfo = ({ user }: { user: UserDataString }) => {
 
   return (
     <Box
-      border={'1px solid white'}
-      borderRadius={5}
+      border={'2px solid #244153'}
+      borderRadius={15}
       p={5}
       width={'50%'}
-      backgroundColor={SECONDARY_COLOR}
+      bg='primary.blue3'
     >
-      <Text as='b' fontSize={25}>Personal Info</Text>
+      <Text as='b' fontSize={25} color='primary.blue4'>Personal Information</Text>
       <Box>
         <Label value={'Name'} />
         <Flex>

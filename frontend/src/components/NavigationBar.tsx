@@ -55,7 +55,11 @@ const NavigationBar: React.FC<Props> = ({ index }) => {
     return (
       <Tabs variant={'line'} index={index}>
         <TabList>
-          {tabHeadings.map(h => <Tab key={h.label} onClick={h.onClick}>{h.label}</Tab>)}
+          {tabHeadings.map(h =>
+            <Tab color='primary.green'
+              textStyle='h1'
+              key={h.label} onClick={h.onClick}>{h.label}
+            </Tab>)}
         </TabList>
       </Tabs>
     );
@@ -63,9 +67,14 @@ const NavigationBar: React.FC<Props> = ({ index }) => {
 
   function renderTitleText() {
     return (
-      <Box onClick={() => navigate('../home')} cursor={'pointer'}>
-        <Text as='b' fontSize={25} mr={50}>PeerPrep</Text>
-      </Box>
+      <HStack>
+        <Box onClick={() => navigate('../home')} cursor={'pointer'}>
+          <Image h={30} src='/src/assets/logo.svg' />
+        </Box>
+        <Box onClick={() => navigate('../home')} cursor={'pointer'}>
+          <Text as='b' color='primary.green' fontSize={25} mr={50}>PeerPrep</Text>
+        </Box>
+      </HStack>
     );
   }
 
@@ -74,12 +83,19 @@ const NavigationBar: React.FC<Props> = ({ index }) => {
       <Menu>
         <MenuButton>
           <Center h={HEIGHT} mr={50} cursor={'pointer'}>
-            <Image h={30} src='src\assets\images\user.png' />
+            {LocalStorageHandler.getUserData()?.role === 'ADMIN' && (
+              <>
+                <Tag mx='15px' colorScheme="cyan">Administrator</Tag>
+                <Divider orientation="vertical" />
+              </>
+            )}
+            <Text textStyle='h1' px='15px'>{LocalStorageHandler.getUserData()?.username}</Text>
+            <Image h={30} src='/src/assets/images/user.png' />
           </Center>
         </MenuButton>
-        <MenuList>
-          <MenuItem onClick={() => navigate('../profile')}>Edit profile</MenuItem>
-          <MenuItem onClick={signoutHandler}>Sign out</MenuItem>
+        <MenuList bg='primary.blue2' border='2px solid #244153'>
+          <MenuItem bg='primary.blue2' _hover={{ bg: 'primary.blue3', color: 'white' }} onClick={() => navigate('../profile')}>Your profile</MenuItem>
+          <MenuItem bg='primary.blue2' _hover={{ bg: 'primary.blue3', color: 'white' }} onClick={signoutHandler}>Sign out</MenuItem>
         </MenuList>
       </Menu>
     );

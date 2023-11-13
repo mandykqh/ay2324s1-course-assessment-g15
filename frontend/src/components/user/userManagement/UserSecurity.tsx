@@ -1,12 +1,12 @@
+import { Input, Box, Text, Flex, Spacer, Image, Center, Button, InputRightElement, InputGroup, background, useToast } from "@chakra-ui/react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Input, Box, Text, Center, Button, useToast } from "@chakra-ui/react";
 import UserRequestHandler from "../../../handlers/UserRequestHandler";
-import AuthRequestHandler from "../../../handlers/AuthRequestHandler";
 import LocalStorageHandler from "../../../handlers/LocalStorageHandler";
-import PasswordInput from "../../common/PasswordInput";
 import { showError, showSuccess } from "../../../Util";
-import { SECONDARY_COLOR } from "../../../CommonStyles";
+import { useNavigate } from "react-router-dom";
+import { PRIMARY_COLOR, SECONDARY_COLOR } from "../../../CommonStyles";
+import PasswordInput from "../../common/PasswordInput";
+import AuthRequestHandler from "../../../handlers/AuthRequestHandler";
 
 const UserSecurity = () => {
   const [currentPasswordVisible, setCurrentPasswordVisible] = useState(false);
@@ -16,6 +16,7 @@ const UserSecurity = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [deleteInput, setDeleteInput] = useState('');
+  const userRequestHandler = new UserRequestHandler();
   const toast = useToast();
   const navigate = useNavigate();
 
@@ -28,159 +29,110 @@ const UserSecurity = () => {
     setConfirmPassword('');
   }
 
-  function renderCurrentPasswordInput() {
-    return (
-      <PasswordInput
-        label='Current password'
-        passwordShowing={currentPasswordVisible}
-        hiddenSetter={setCurrentPasswordVisible}
-        valueSetter={setCurrentPassword}
-        value={currentPassword}
-      />
-    );
-  }
-
-  function renderNewPasswordInput() {
-    return (
-      <PasswordInput
-        label='New password'
-        passwordShowing={newPasswordVisible}
-        hiddenSetter={setNewPasswordVisible}
-        valueSetter={setNewPassword}
-        value={newPassword}
-      />
-    );
-  }
-
-  function renderConfirmPasswordInput() {
-    return (
-      <PasswordInput
-        label='Confirm password'
-        passwordShowing={confirmPasswordVisible}
-        hiddenSetter={setConfirmPasswordVisible}
-        valueSetter={setConfirmPassword}
-        value={confirmPassword}
-      />
-    );
-  }
-
-  function renderChangePasswordButton() {
-    const changePasswordHandler = () => {
-      if (newPassword.length === 0) {
-        showError('New password cannot be empty!', toast);
-        return;
-      }
-      if (newPassword !== confirmPassword) {
-        showError('New password and confirm password do not match', toast);
-        return;
-      }
-      const username = LocalStorageHandler.getUserData()!.username;
-      const handleSuccess = () => {
-        showSuccess('Password Updated', toast);
-        resetFields();
-      }
-      UserRequestHandler.updatePassword(username, currentPassword, newPassword)
-        .then(handleSuccess)
-        .catch((e) => {
-          showError((e as Error).message, toast);
-        });
+  function changePasswordHandler() {
+    if (newPassword.length === 0) {
+      showError('New password cannot be empty!', toast);
+      return;
     }
-
-    return (
-      <Button
-        colorScheme={'blue'}
-        float={'right'}
-        marginTop={10}
-        onClick={changePasswordHandler}
-      >
-        Save
-      </Button>
-    );
+    if (newPassword !== confirmPassword) {
+      showError('New password and confirm password do not match', toast);
+      return;
+    }
+    UserRequestHandler.updatePassword(LocalStorageHandler.getUserData()!.username, currentPassword, newPassword)
+      .then(
+        () => {
+          showSuccess('Password Updated', toast);
+          resetFields();
+        }
+      ).catch((e) => {
+        showError((e as Error).message, toast);
+      });
   }
 
-  function renderPasswordForm() {
-    return (
-      <Box border={'1px solid white'} borderRadius={5} p={5} w={'60%'} backgroundColor={SECONDARY_COLOR}>
+  function deleteHandler() {
+    if (deleteInput !== 'DELETE') {
+      showError(`Please enter 'DELETE' to delete your account`, toast);
+      return;
+    }
+    const username = LocalStorageHandler.getUserData()!.username;
+    UserRequestHandler.deleteUser(username)
+      .then(() => {
+        showSuccess('Account deleted!', toast); // TO DEDICATE A PAGE FOR ACCOUN DELETION
+        AuthRequestHandler.signout(username);
+        LocalStorageHandler.clearUserData();
+        navigate('/');
+      }
+      ).catch((e) =>
+        showError((e as Error).message, toast)
+      )
+  }
+
+  return (
+    <Center flexDirection={'column'} w={'100rem'} pt={100} pb={100}>
+      <Box borderRadius={15} p={5} w={'60%'} bg='primary.blue3'
+        border='2px solid #244153'>
         <Box marginBottom={10}>
           <Text as='b' fontSize={25}>
             Change Password
           </Text>
         </Box>
-        {renderCurrentPasswordInput()}
-        {renderNewPasswordInput()}
-        {renderConfirmPasswordInput()}
-        {renderChangePasswordButton()}
+        <PasswordInput
+          label='Current password'
+          passwordShowing={currentPasswordVisible}
+          hiddenSetter={setCurrentPasswordVisible}
+          valueSetter={setCurrentPassword}
+          value={currentPassword}
+        />
+        <PasswordInput
+          label='New password'
+          passwordShowing={newPasswordVisible}
+          hiddenSetter={setNewPasswordVisible}
+          valueSetter={setNewPassword}
+          value={newPassword}
+        />
+        <PasswordInput
+          label='Confirm password'
+          passwordShowing={confirmPasswordVisible}
+          hiddenSetter={setConfirmPasswordVisible}
+          valueSetter={setConfirmPassword}
+          value={confirmPassword}
+        />
+        <Button
+          colorScheme={'blue'}
+          float={'right'}
+          onClick={changePasswordHandler}
+        >
+          Save
+        </Button>
       </Box >
-    );
-  }
 
-  function renderDeleteAccountButton() {
-    function deleteHandler() {
-      if (deleteInput !== 'DELETE') {
-        showError(`Please enter 'DELETE' to delete your account`, toast);
-        return;
-      }
-      const username = LocalStorageHandler.getUserData()!.username;
-      UserRequestHandler.deleteUser(username)
-        .then(() => {
-          showSuccess('Account deleted!', toast);
-          AuthRequestHandler.signout(username);
-          LocalStorageHandler.clearAll();
-          navigate('/');
-        }
-        ).catch((e) =>
-          showError((e as Error).message, toast)
-        )
-    }
-
-    return (
-      <Button
-        colorScheme={'red'}
-        float={'right'}
-        marginTop={5}
-        onClick={deleteHandler}
-      >
-        Delete Account
-      </Button>
-    );
-  }
-
-  function renderDeleteInput() {
-    return (
-      <>
-        <Box mt={10}>
-          <Box mb={5}>
-            <Text>
-              Deleting your accout will remove all your information from our database. This cannot be undone.
-            </Text>
-          </Box>
-          <Text as='sub' color={'#999999'}>To confirm this, type "DELETE"</Text>
-        </Box>
-        <Center height={50}>
-          <Input onChange={(e) => { setDeleteInput(e.target.value) }}></Input>
-        </Center>
-      </>
-    );
-  }
-
-  function renderDeleteAccountForm() {
-    return (
-      <Box border={'1px solid white'} borderRadius={5} p={5} mt={10} w={'60%'} backgroundColor={SECONDARY_COLOR}>
-        <Box marginBottom={10}>
+      <Box borderRadius={15} p={5} w={'60%'} bg='primary.blue3' mt={10} border='2px solid #244153'>
+        <Box marginBottom={10} >
           <Text as='b' fontSize={25}>
             Delete Account
           </Text>
-          {renderDeleteInput()}
-          {renderDeleteAccountButton()}
+          <Box mt={10}>
+            <Box mb={5}>
+              <Text>
+                Deleting your accout will remove all your information from our database. This cannot be undone.
+              </Text>
+            </Box>
+            <Text as='sub' color={'#999999'}>To confirm this, type "DELETE"</Text>
+          </Box>
+          <Center height={50}>
+            <Input bg='primary.blue1'
+              border='2px solid #244153' borderRadius={15} onChange={(e) => { setDeleteInput(e.target.value) }}></Input>
+          </Center>
+          <Button
+            colorScheme={'red'}
+            float={'right'}
+            marginTop={5}
+            onClick={deleteHandler}
+          >
+            Delete Account
+          </Button>
         </Box>
       </Box>
-    );
-  }
-
-  return (
-    <Center flexDirection={'column'} w={'100rem'} pt={100} pb={100}>
-      {renderPasswordForm()}
-      {renderDeleteAccountForm()}
     </Center>
   );
 }

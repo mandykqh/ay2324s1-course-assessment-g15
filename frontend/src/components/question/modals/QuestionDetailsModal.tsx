@@ -14,9 +14,9 @@ import {
   Grid
 } from '@chakra-ui/react'
 import { Button } from '@chakra-ui/button';
-import { PRIMARY_COLOR } from '../../../CommonStyles';
 import { QuestionString } from '../../../Commons';
 import LocalStorageHandler from '../../../handlers/LocalStorageHandler';
+import ComplexityTag from '../ComplexityTag';
 
 interface Props {
   isVisible: boolean;
@@ -41,31 +41,32 @@ const QuestionDetailsModal: React.FC<Props> =
           colorScheme={'pink'}
         >
           <ModalOverlay />
-          <ModalContent backgroundColor={PRIMARY_COLOR} style={{ color: 'white' }}>
+          <ModalContent bg='primary.blue3' borderRadius='15px'>
             <ModalHeader color={'white'}>{data.title}</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
               <Grid gap={5}>
                 <Flex>
-                  <Text color='white' as='b' marginRight={'3px'}>
-                    Category:
-                  </Text>
-                  <Text color='white'>
-                    {data.categories.join(', ')}
-                  </Text>
+                  <Box>
+                    <Text color='white' as='b' marginRight={'3px'}>
+                      Category
+                    </Text>
+                    <Text color='white'>
+                      {data.categories.join(', ')}
+                    </Text>
+                  </Box>
                   <Spacer />
-                  <Text color='white' as='b' marginRight={'3px'}>
-                    Complexity:
-                  </Text>
-                  <Text color='white'>
-                    {data.complexity}
-                  </Text>
+                  <Box>
+                    <ComplexityTag complexity={data.complexity} />
+                  </Box>
                 </Flex>
                 <Textarea
                   isReadOnly
                   rows={20}
                   resize={'none'}
                   value={data.description}
+                  bg='primary.blue1'
+                  border='2px solid #244153'
                 />
               </Grid>
             </ModalBody>

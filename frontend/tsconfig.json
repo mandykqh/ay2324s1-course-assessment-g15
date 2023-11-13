@@ -19,7 +19,14 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "types": ["vite/client"]
+    "types": [
+      "vite/client"
+    ],
+    "paths": {
+      "@/*": [
+        "./frontend/*"
+      ]
+    }
   },
   "include": [
     "src"

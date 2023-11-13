@@ -103,6 +103,7 @@ services:
     ports:
       - "5173:5173"
     environment:
+      CHOKIDAR_USEPOLLING: "true"
       VITE_FRONTEND_URL: "http://localhost"
       VITE_AUTH_SERVICE_URL: "/api/user-service/auth" 
       VITE_COLLABORATION_SERVICE_URL: "/api/collaboration-service/socket.io" 
@@ -118,6 +119,9 @@ services:
       - collaboration-service
     networks:
       - peerprep-network
+    volumes:
+      - /app/node_modules
+      - ./frontend:/app
 
   proxy:
     build:

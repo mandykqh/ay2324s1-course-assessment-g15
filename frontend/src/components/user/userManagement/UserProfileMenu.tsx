@@ -14,8 +14,9 @@ const MenuItem: React.FC<MenuItemProps> = ({ label, imageUrl, index, selectedInd
   return (
     <Box
       p={3}
-      backgroundColor={backgroundColor}
-      style={{ cursor: 'pointer' }}
+      style={{
+        cursor: 'pointer'
+      }}
       onClick={onClick}
     >
       <Flex marginLeft={5}>
@@ -41,10 +42,11 @@ const UserProfileMenu: React.FC<MenuProps> =
   ({ currentMenuIndex, setCurrentMenuIndex }) => {
     return (
       <Box width='20vw' height={'100vh'} pb={10} pt={10} mt={10}>
+
         <MenuItem
           index={0}
           selectedIndex={currentMenuIndex}
-          label='Personal Info'
+          label='Personal Information'
           imageUrl='src\assets\images\personal_info.png'
           onClick={() => { setCurrentMenuIndex(0) }} />
         <MenuItem
@@ -53,12 +55,7 @@ const UserProfileMenu: React.FC<MenuProps> =
           label='Security'
           imageUrl='src\assets\images\security.png'
           onClick={() => { setCurrentMenuIndex(1) }} />
-        <MenuItem
-          index={2}
-          selectedIndex={currentMenuIndex}
-          label='History'
-          imageUrl='src\assets\images\history.png'
-          onClick={() => { setCurrentMenuIndex(2) }} />
+
       </Box>
     );
   }

@@ -10,6 +10,8 @@ import {
   CircularProgressLabel
 } from "@chakra-ui/react";
 import { PRIMARY_COLOR } from "../../CommonStyles";
+import ComplexityTag from "../question/ComplexityTag";
+
 
 interface Props {
   total: number;
@@ -49,24 +51,33 @@ const HistoryOverview: React.FC<Props> =
       completed = 0;
     }
     return (
-      <Card width={'600px'}>
+      <Card width={'520px'} bg='primary.blue3' borderRadius='15px' border='2px solid #244153'>
         <CardBody>
           <Stack>
             <Flex>
-              <Stack flexDirection={'column'} ml={70}>
-                <Text fontSize={15}>Questions Attempted</Text>
-                <Text fontSize={30} fontWeight={'bold'}>{attempted}</Text>
+              <Stack flexDirection={'column'} mx={4} alignItems="center">
+                {/* <Text fontSize={30} fontWeight={'bold'}>{attempted}</Text> */}
+                <Text textStyle='h1' pt='30px'> {attempted} Questions Attempted</Text>
                 <Flex
                   justifyContent={'space-between'}
-                  bg={PRIMARY_COLOR}
-                  pt={1} pb={1} pl={5} pr={5}
-                  w={250}
-                  borderRadius={5}
-                  mt={50}
+                  bg='primary.blue1'
+                  pb={3} pl={5} pr={5}
+                  w={280}
+                  borderRadius={10}
+                  mt={3}
                 >
-                  <CountLabel color='#77DD77' label='Easy' value={easy} />
-                  <CountLabel color='#FFFAA0' label='Medium' value={medium} />
-                  <CountLabel color='#FF6961' label='Hard' value={hard} />
+                  <Center flexDirection={'column'} pt='19px'>
+                    <ComplexityTag complexity={'Easy'} />
+                    <Text>{easy}</Text>
+                  </Center>
+                  <Center flexDirection={'column'} pt='19px'>
+                    <ComplexityTag complexity={'Medium'} />
+                    <Text >{medium}</Text>
+                  </Center>
+                  <Center flexDirection={'column'} pt='19px'>
+                    <ComplexityTag complexity={'Hard'} />
+                    <Text>{hard}</Text>
+                  </Center>
                 </Flex>
               </Stack>
               <Spacer />

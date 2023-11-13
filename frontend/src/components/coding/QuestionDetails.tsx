@@ -1,16 +1,37 @@
-import { Tag, Text, HStack, Link, Heading, Grid } from '@chakra-ui/react'
-import React from 'react';
+import { Spacer, Button, Tag, Text, HStack, Link, Heading, Grid } from '@chakra-ui/react'
+import React, { useState } from 'react';
 import { QuestionString } from '../../Commons';
+import QuestionPreferences from './QuestionPreferences';
+import ComplexityTag from '../question/ComplexityTag';
 
-const QuestionDetails: React.FC<QuestionString> = ({ id, title, complexity, categories, description, link }) => {
+
+const QuestionDetails: React.FC<QuestionString> = ({ id, title, complexity, categories, description, link, onQuestionChange, onFilter }) => {
+    const [isPreferencesModalVisible, setIsPreferencesModalVisible] = useState(false);
+
+
     return (
-        <Grid gap='0.5rem'>
-            <Heading color='white' as='b' size='md'>{id}. {title}</Heading>
-            <HStack spacing='0.5rem'>
-                <Tag colorScheme='purple'>{complexity}</Tag>
+        <Grid gap='0.5rem' m='15px'>
+            <HStack>
+                <Heading color='white' as='b' textStyle='h2'>{id}. {title}</Heading>
+                <Spacer />
+                <Button colorScheme='blue' onClick={() => { setIsPreferencesModalVisible(true) }}>Change</Button>
+            </HStack>
+            <QuestionPreferences
+                onFilter={onFilter}
+                isVisible={isPreferencesModalVisible}
+                closeHandler={() => { setIsPreferencesModalVisible(false) }}
+                onQuestionChange={() => {
+                    onQuestionChange();
+                    setIsPreferencesModalVisible(false);
+                }
+                }
+            />
+            <HStack spacing='0.5rem' mb='10px'>
                 {categories.map((category, index) => (
-                    <Tag key={index} colorScheme='green'>{category}</Tag>
+                    <Tag key={index} colorScheme='cyan'>{category}</Tag>
                 ))}
+                <Spacer />
+                <ComplexityTag complexity={complexity} />
             </HStack>
             <Text color='white'>{description}</Text>
             <span>

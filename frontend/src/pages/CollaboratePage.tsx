@@ -1,21 +1,25 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Box, Grid, Button, Center, useToast } from "@chakra-ui/react";
+import React from 'react'
+import { GridItem, Box, Grid, Button, Center, useToast } from "@chakra-ui/react";
 import NavigationBar from "../components/NavigationBar";
+import { useEffect, useState } from "react";
+import { MatchingCacheContext } from "../contexts/MatchingCacheContext";
+import AuthRequestHandler from "../handlers/AuthRequestHandler";
 import LoadingPage from "./LoadingPage";
+import { showError, showSuccess } from "../Util";
 import MatchingForm from "../components/matching/MatchingForm";
+import { MatchingString, emptyMatchingString } from "../Commons";
 import TimerModal from "../components/matching/modals/TimerModal";
+import LocalStorageHandler from "../handlers/LocalStorageHandler";
+import MatchingSocketHandler from "../handlers/MatchingSocketHandler";
+import Match from "../models/match/Match";
+import { useNavigate } from "react-router-dom";
 import QuestionRequestHandler from '../handlers/QuestionRequestHandler';
 import HistoryRequestHandler from '../handlers/HistoryRequestHandler';
-import MatchingSocketHandler from "../handlers/MatchingSocketHandler";
-import LocalStorageHandler from "../handlers/LocalStorageHandler";
-import Match from "../models/match/Match";
-import { authChecker, showError } from "../Util";
-import { MatchingString, emptyMatchingString } from "../Commons";
-import { MatchingCacheContext } from "../contexts/MatchingCacheContext";
+
 
 const CollaboratePage = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const toast = useToast();
   const matchingSocket = MatchingSocketHandler.getSocket();
   const [matchingCache, setMatchingCache] = useState<MatchingString>(emptyMatchingString);
   const ctxValue = { matchingCache: matchingCache, setMatchingCache: setMatchingCache };
@@ -23,156 +27,157 @@ const CollaboratePage = () => {
   const [matchMessage, setMatchMessage] = useState<string>('');
   const [isMatchFound, setIsMatchFound] = useState<boolean>(false);
   const [isTimeout, setIsTimeout] = useState<boolean>(false);
-  const toast = useToast();
   const navigate = useNavigate();
 
   useEffect(() => {
+    AuthRequestHandler.isAuth()
+      .then(res => {
+        setIsAuthenticated(res.isAuth);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+
     // Redirect to collaboration room if matched
     if (LocalStorageHandler.isMatched()) {
       navigate('/collaborate/code');
     }
   }, []);
 
-  function renderTimerModal() {
-    async function cancelMatch(matchingCache: MatchingString) {
-      try {
-        const matchData = new Match(
-          LocalStorageHandler.getUserData()!.id.toString(),
-          matchingCache.categories,
-          matchingCache.complexity
-        );
-        await MatchingSocketHandler.cancelMatch(matchData);
-        setIsModalOpen(false);
-      } catch (e) {
-        showError((e as Error).message, toast)
-      }
-    }
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
 
-    return (
-      <TimerModal
-        isOpen={isModalOpen}
-        onClose={() => cancelMatch(matchingCache)}
-        initialTime={30}
-        status={matchMessage.toString()}
-        isTimeout={isTimeout}
-        isMatchFound={isMatchFound}
-      />
-    );
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  async function cancelMatch(matchingCache: MatchingString) {
+    try {
+      const matchData = new Match(
+        LocalStorageHandler.getUserData()!.id.toString(),
+        matchingCache.categories,
+        matchingCache.complexity
+      );
+      await MatchingSocketHandler.cancelMatch(matchData);
+      handleCloseModal();
+    } catch (e) {
+      console.error(e)
+    }
   }
 
-  function renderFindMatchButton() {
-    function updateHistory() {
-      const userData = LocalStorageHandler.getUserData();
-      const matchQuestionData = LocalStorageHandler.getMatchData()?.question;
-      if (userData && matchQuestionData) {
-        const date = new Date();
-        const historyData = {
-          userId: LocalStorageHandler.getUserData()?.id!,
-          attempt: {
-            questionId: matchQuestionData.id!,
-            timestamp: date.toISOString(),
-          },
-          complexity: matchQuestionData.complexity!
-        };
-        try {
-          HistoryRequestHandler.updateHistory(historyData);
-        } catch (e) {
-          showError((e as Error).message, toast);
-        }
-      }
+  function updateHistory() {
+    let date = new Date();
+    HistoryRequestHandler.updateHistory({
+      userId: LocalStorageHandler.getUserData()?.id!,
+      attempt: {
+        questionId: LocalStorageHandler.getMatchData()?.question.id!,
+        timestamp: date.toISOString(),
+      },
+      complexity: LocalStorageHandler.getMatchData()?.question.complexity!
+    });
+  }
+
+  async function findMatch(matchingCache: MatchingString) {
+    setIsTimeout(false);
+    setMatchMessage('');
+    if (matchingCache.categories.length === 0) {
+      showError('Please select at least one category', toast);
+      return;
+    }
+    if (matchingCache.complexity.length === 0) {
+      showError('Please select a complexity level', toast);
+      return;
     }
 
-    async function findMatch(matchingCache: MatchingString) {
-      // Reset State
-      setIsTimeout(false);
-      setMatchMessage('');
-
-      // Validate user input
-      if (matchingCache.categories.length === 0 || matchingCache.complexity.length === 0) {
-        let errorMessage = matchingCache.categories.length === 0
-          ? 'Please select at least one category' : 'Please select a complexity level';
-        showError(errorMessage, toast);
-        return;
+    // Validate user input
+    try {
+      const check = await QuestionRequestHandler.checkMatchFilter(matchingCache.categories, matchingCache.complexity);
+      // if check is an object, it means there is no question available
+      if (typeof check === 'object') {
+        showError(`${check.message} ${check.emptyCategories.join(",")}`, toast);
+        return; // Exit the entire findMatch function
       }
+    } catch (error) {
+      showError('Failed to check question availability', toast);
+      return;
+    }
 
-      try {
-        const check = await QuestionRequestHandler.checkMatchFilter(matchingCache.categories, matchingCache.complexity);
-        // if check is an object, it means there is no question available
-        if (typeof check === 'object') {
-          showError(`${check.message} ${check.emptyCategories.join(",")}`, toast);
-          return; // Exit the entire findMatch function
-        }
-      } catch (error) {
-        showError('Failed to check question availability', toast);
-        return;
-      }
-
-      const handleFindMatch = () => {
+    // Attempt matching with collaboration service
+    try {
+      handleOpenModal();
+      const matchData = new Match(
+        LocalStorageHandler.getUserData()!.id.toString(),
+        matchingCache.categories,
+        matchingCache.complexity
+      );
+      matchingSocket.connect();
+      matchingSocket.on('finding_match', (data) => {
+        console.log(data);
         setMatchMessage("Finding match...");
-      }
+      });
 
-      const handleMatchFound = (data: any) => {
+      matchingSocket.on('match_found', (data: any) => {
+        console.log(data);
         setIsMatchFound(true);
         setMatchMessage(data.msg);
         LocalStorageHandler.storeMatchData(data);
         matchingSocket.disconnect();
         updateHistory();
         navigate('/collaborate/code');
-      }
+      });
 
-      const handleTimeOut = () => {
+      matchingSocket.on('timeout', (data) => {
         setIsTimeout(true);
         setMatchMessage("Connection timed out. Please try again!");
         matchingSocket.disconnect();
-      }
+      });
 
-      // Attempt matching with collaboration service
-      try {
-        setIsModalOpen(true);
-        const matchData = new Match(
-          LocalStorageHandler.getUserData()!.id.toString(),
-          matchingCache.categories,
-          matchingCache.complexity
-        );
-        matchingSocket.connect();
-        matchingSocket.on('finding_match', handleFindMatch);
-        matchingSocket.on('match_found', handleMatchFound);
-        matchingSocket.on('timeout', handleTimeOut);
-        await MatchingSocketHandler.findMatch(matchData);
-      } catch (e) {
-        showError((e as Error).message, toast)
-      }
+      await MatchingSocketHandler.findMatch(matchData);
+    } catch (e) {
+      console.log(e);
     }
-
-    return (
-      <Button
-        colorScheme="blue"
-        onClick={() => findMatch(matchingCache)}
-      >
-        Find Match
-      </Button>
-    );
   }
 
-  function renderAuthenticatedPage() {
+  if (isAuthenticated) {
     return (
       <MatchingCacheContext.Provider value={ctxValue}>
-        <Box>
+        <Box >
           <NavigationBar index={1} />
           <Center height='100vh'>
-            <Grid gap={4}>
-              <MatchingForm />
-              {renderFindMatchButton()}
-              {renderTimerModal()}
+            <Grid gap={4} >
+              <GridItem bg='primary.blue3'
+                p='30px'
+                borderRadius={10}
+                border='2px solid #244153'
+                boxShadow='lg' >
+                <MatchingForm />
+                <Button
+                  w='100%'
+                  mt='40px'
+                  colorScheme="blue"
+                  onClick={() => findMatch(matchingCache)}
+                >
+                  Find Match
+                </Button>
+              </GridItem>
+
             </Grid>
+            <TimerModal
+              isOpen={isModalOpen}
+              onClose={() => cancelMatch(matchingCache)}
+              initialTime={30}
+              status={matchMessage.toString()}
+              isTimeout={isTimeout}
+              isMatchFound={isMatchFound}
+            />
           </Center>
         </Box>
-      </MatchingCacheContext.Provider>
+      </MatchingCacheContext.Provider >
     );
+  } else {
+    return <LoadingPage />
   }
-
-  authChecker(setIsAuthenticated);
-  return isAuthenticated ? renderAuthenticatedPage() : <LoadingPage />
 }
 
 export default CollaboratePage;

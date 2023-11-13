@@ -13,7 +13,7 @@ const CanvasPage: React.FC<CanvasProps> = ({ socket }) => {
   const [isEraserMode, setIsEraserMode] = useState(false);
   const [lineWidth, setLineWidth] = useState(5);
 
-  useEffect(() => { 
+  useEffect(() => {
     const ctx = canvasRef.current?.getContext("2d");
     ctxRef.current = ctx as CanvasRenderingContext2D | null;
 
@@ -65,8 +65,8 @@ const CanvasPage: React.FC<CanvasProps> = ({ socket }) => {
   function createLine({ prevPoint, currentPoint, ctx }: Draw) {
     // Emit the draw-line event with the updated drawing history
     const width = lineWidth;
-    socket?.emit("draw-line", { prevPoint, currentPoint, color, width});
-    drawLine({ prevPoint, currentPoint,ctx, color, width});
+    socket?.emit("draw-line", { prevPoint, currentPoint, color, width });
+    drawLine({ prevPoint, currentPoint, ctx, color, width });
 
     if (canvasRef.current) {
       const roomId = LocalStorageHandler.getMatchData()?.room_id!;
@@ -75,7 +75,7 @@ const CanvasPage: React.FC<CanvasProps> = ({ socket }) => {
     }
   }
 
-  function handleLineWidthChange(newWidth:number) {
+  function handleLineWidthChange(newWidth: number) {
     setLineWidth(newWidth);
   }
 
@@ -84,7 +84,7 @@ const CanvasPage: React.FC<CanvasProps> = ({ socket }) => {
     // Change the color to white when eraser mode is enabled
     setColor(isEraserMode ? '#000000' : '#ffffff');
   };
-  
+
 
   const clearCanvas = () => {
     const ctx = ctxRef.current;
@@ -101,55 +101,55 @@ const CanvasPage: React.FC<CanvasProps> = ({ socket }) => {
   return (
     <Flex justifyContent="center" alignItems="center">
       <VStack>
-      <HStack mr="auto" >
-        <HStack>
-          <ChromePicker color={color} onChange={(e) => setColor(e.hex)} />
-          <VStack>
-            <Button
-              type="button"
-              p={2}
-              rounded="md"
-              borderWidth={1}
-              color="white"
-              borderColor="white"
-              onClick={() => {
-                socket?.emit("canvas-clear");
-                clearCanvas();
-                clearCanvasHistory();
-              }}
-            >
-              Clear
-            </Button>
-            <HStack>
-              <Text fontSize="md" mb={2} color={'white'}>Eraser</Text>
-              <Switch
-                size="sm"
-                colorScheme="gray"
-                color={"blue"}
-                isChecked={isEraserMode}
-                onChange={toggleEraserMode}
-              />
-            </HStack>
-            <Box>
-              <Text fontSize="md" color={"white"} mb={2}>
-                Line Width
-              </Text>
-              <Slider
-                min={5} // Set the minimum line width
-                max={25} // Set the maximum line width
-                value={lineWidth}
-                onChange={(newWidth) => handleLineWidthChange(newWidth)}
+        <HStack mr="auto" >
+          <HStack>
+            <ChromePicker color={color} onChange={(e) => setColor(e.hex)} />
+            <VStack>
+              <Button
+                type="button"
+                p={2}
+                rounded="md"
+                borderWidth={1}
+                color="white"
+                borderColor="white"
+                onClick={() => {
+                  socket?.emit("canvas-clear");
+                  clearCanvas();
+                  clearCanvasHistory();
+                }}
               >
-              <SliderTrack>
-                <SliderFilledTrack />
-              </SliderTrack>
-              <SliderThumb />
-              </Slider>
-            </Box>
-          </VStack>
+                Clear
+              </Button>
+              <HStack>
+                <Text fontSize="md" mb={2} color={'white'}>Eraser</Text>
+                <Switch
+                  size="sm"
+                  colorScheme="gray"
+                  color={"blue"}
+                  isChecked={isEraserMode}
+                  onChange={toggleEraserMode}
+                />
+              </HStack>
+              <Box>
+                <Text fontSize="md" color={"white"} mb={2}>
+                  Line Width
+                </Text>
+                <Slider
+                  min={5} // Set the minimum line width
+                  max={25} // Set the maximum line width
+                  value={lineWidth}
+                  onChange={(newWidth) => handleLineWidthChange(newWidth)}
+                >
+                  <SliderTrack>
+                    <SliderFilledTrack />
+                  </SliderTrack>
+                  <SliderThumb />
+                </Slider>
+              </Box>
+            </VStack>
+          </HStack>
         </HStack>
-      </HStack>
-        <Box flex="1" bg="white" style={{ position: 'relative', width: '900px', height: '800px'  }}>
+        <Box flex="1" bg="white" style={{ position: 'relative', width: '900px', height: '800px' }}>
           <canvas
             ref={canvasRef}
             onMouseDown={onMouseDown}

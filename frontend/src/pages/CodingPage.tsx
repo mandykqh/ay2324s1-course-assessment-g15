@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import {
+  Flex, Slide, useDisclosure, Text,
   Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, IconButton,
-  useToast, Box, Button, Grid, VStack, GridItem, Select, HStack, Textarea, Center
+  useToast, Box, Button, Grid, VStack, GridItem, HStack, Textarea, Center, SimpleGrid
 } from '@chakra-ui/react';
+import { ChatIcon, EditIcon } from '@chakra-ui/icons';
 import { io, Socket } from 'socket.io-client';
 import NavigationBar from '../components/NavigationBar';
 import LocalStorageHandler from '../handlers/LocalStorageHandler';
@@ -17,11 +19,13 @@ import { python } from '@codemirror/lang-python';
 import { cpp } from '@codemirror/lang-cpp';
 import { javascript } from '@codemirror/lang-javascript';
 import { okaidia } from '@uiw/codemirror-theme-okaidia';
+// import { tokyoNightStorm, tokyoNightStormInit } from '@uiw/codemirror-theme-tokyo-night-storm';
+
 import HistoryRequestHandler from '../handlers/HistoryRequestHandler';
-import QuestionPreferences from '../components/coding/QuestionPreferences';
+import Select from 'react-select';
+import { selectorStyles, singleSelectStyles } from '../CommonStyles';
 import Chat from '../components/chat/chatDetails';
 import { ChatMessage } from '../Commons';
-import { ChatIcon, EditIcon } from "@chakra-ui/icons";
 import Canvas from '../components/canvas/canvas';
 
 const CodingPage = () => {
@@ -33,10 +37,13 @@ const CodingPage = () => {
   const [question, setQuestion] = useState(LocalStorageHandler.getMatchData()?.question);
   const [complexityFilter, setComplexityFilter] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
+  const [isPreferencesModalVisible, setIsPreferencesModalVisible] = useState(false);
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [isChatDrawerOpen, setIsChatDrawerOpen] = useState(false);
   const [isCanvasDrawerOpen, setIsCanvasDrawerOpen] = useState(false);
+  const { isOpen: isChatOpen, onToggle: toggleChat } = useDisclosure();
+  const { isOpen: isCanvasOpen, onToggle: toggleCanvas } = useDisclosure();
 
   useEffect(() => {
     AuthRequestHandler.isAuth()
@@ -228,6 +235,14 @@ const CodingPage = () => {
   }
 
   const questionString = LocalStorageHandler.getMatchData()?.question;
+
+
+  const languageOptions = [
+    { value: 'javascript', label: 'JavaScript' },
+    { value: 'python', label: 'Python' },
+    { value: 'java', label: 'Java' },
+    { value: 'cpp', label: 'C++' },
+  ];
   if (isAuthenticated) {
     const questionString = LocalStorageHandler.getMatchData()?.question;
     return (
@@ -235,8 +250,6 @@ const CodingPage = () => {
         <NavigationBar index={1} />
         <Grid height='100%' templateColumns='repeat(2, 1fr)' gap='20px' padding='20px' paddingTop='70px'>
           <GridItem colSpan={1}>
-            <QuestionPreferences onFilter={handleFilterPreferences} />
-            <Button onClick={handleQuestionChange}>Change Question</Button>
             <QuestionDetails
               id={questionString?.id || ""}
               title={questionString?.title || ""}
@@ -244,24 +257,69 @@ const CodingPage = () => {
               categories={questionString?.categories || []}
               description={questionString?.description || ""}
               link={questionString?.link || ""}
+              onFilter={handleFilterPreferences}
+              onQuestionChange={handleQuestionChange}
             />
           </GridItem>
-          <GridItem colSpan={1}>
+          <GridItem colSpan={1} m='15px'>
+            <Flex gap='10px' pb='15px'>
+              <Box flex='4'>
+                <Select
+                  value={languageOptions.find(option => option.value === language)}
+                  onChange={handleLanguageChange}
+                  options={languageOptions}
+                  styles={{
+                    ...selectorStyles,
+                    ...singleSelectStyles,
+                  }}
+                  components={{
+                    IndicatorSeparator: () => null
+                  }}
+                />
+              </Box>
+              <Box>
+                <IconButton
+                  aria-label="Chat"
+                  icon={<ChatIcon />}
+                  // bg='white'
+                  // onClick={toggleChatDrawer}
+                  onClick={() => {
+                    if (isCanvasOpen) {
+                      toggleCanvas();
+                    }
+                    toggleChat();
+                  }}
+                /></Box>
+              <Box>
+                <IconButton
+                  aria-label="Canvas"
+                  icon={<EditIcon />}
+                  // onClick={toggleCanvasDrawer}
+                  // onClick={toggleCanvas}
+                  onClick={() => {
+                    if (isChatOpen) {
+                      toggleChat();
+                    }
+                    toggleCanvas();
+                  }}
+                /></Box>
+              <Box>
+                <Button
+                  colorScheme='red'
+                  onClick={() => handleDisconnect()}
+
+                >
+                  Disconnect
+                </Button>
+              </Box>
+            </Flex>
             <VStack gap='1rem'>
               {/* // TODO: Add a chat box for messaging */}
-              <HStack width='100%' gap='1rem'>
-                <Select value={language} onChange={(e) => handleLanguageChange(e.target.value)}>
-                  <option value='javascript'>JavaScript</option>
-                  <option value='python'>Python</option>
-                  <option value='java'>Java</option>
-                  <option value='cpp'>C++</option>
-                </Select>
-                <Button onClick={() => handleDisconnect()}> Disconnect </Button>
-              </HStack>
               <CodeMirror
                 value={code}
                 height='80vh'
                 width='50vw'
+
                 extensions={[
                   language === 'java'
                     ? java()
@@ -273,29 +331,13 @@ const CodingPage = () => {
                 ]}
                 onChange={handleCodeChange}
                 theme={okaidia}
+              // theme={tokyoNightStorm}
               />
-              <IconButton
-                aria-label="Chat"
-                icon={<ChatIcon />}
-                position="absolute"
-                bottom="0px"
-                right="20px"
-                onClick={toggleChatDrawer}
-                zIndex="1"
-              />
-              <IconButton
-                aria-label="Canvas"
-                icon={<EditIcon />}
-                position="absolute"
-                bottom="0px"
-                right="70px"
-                onClick={toggleCanvasDrawer}
-                zIndex="1"
-              />
+
             </VStack>
           </GridItem>
         </Grid>
-        <Drawer placement="left" isOpen={isChatDrawerOpen} onClose={toggleChatDrawer}>
+        {/* <Drawer placement="left" isOpen={isChatDrawerOpen} onClose={toggleChatDrawer}>
           <DrawerOverlay />
           <DrawerContent>
             <DrawerCloseButton />
@@ -309,8 +351,32 @@ const CodingPage = () => {
               />
             </DrawerBody>
           </DrawerContent>
-        </Drawer>
-        <Drawer placement="left" isOpen={isCanvasDrawerOpen} onClose={toggleCanvasDrawer} size={'xl'}>
+        </Drawer> */}
+
+        <Slide direction='left' in={isChatOpen} style={{
+          zIndex: 10, height: "100vh",
+          width: "30vw",
+        }}>
+
+          <Box
+            p="00px"
+            color="white"
+            bg="primary.blue1"
+            // rounded="md"
+            shadow="md"
+            h='calc(100vh)'
+            w='30vw'
+          >
+            <Chat
+              messages={chatHistory}
+              newMessage={newMessage}
+              onNewMessageChange={handleNewMessageChange}
+              onSendMessage={handleSendMessage}
+            />
+          </Box>
+        </Slide>
+
+        {/* <Drawer placement="left" isOpen={isCanvasDrawerOpen} onClose={toggleCanvasDrawer} size={'xl'}>
           <DrawerOverlay />
           <DrawerContent>
             <DrawerCloseButton />
@@ -321,7 +387,29 @@ const CodingPage = () => {
               />
             </DrawerBody>
           </DrawerContent>
-        </Drawer>
+        </Drawer> */}
+
+
+        <Slide direction='left' in={isCanvasOpen} style={{
+          zIndex: 10, height: "100vh",
+          width: "70vw",
+        }}>
+          <Box
+            p="40px"
+            color="white"
+            bg="primary.boxBorder"
+            rounded="md"
+            shadow="md"
+            h='calc(100vh)'
+            w='70vw'
+          >
+            <Canvas
+              socket={socket}
+            />
+          </Box>
+        </Slide>
+
+
       </Box>
     );
   } else {
