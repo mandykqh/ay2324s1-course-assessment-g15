@@ -1,8 +1,9 @@
-import ReactDOM from 'react-dom/client'
+
 import theme from './theme.js';
-import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
 import router from './router.js';
+import ReactDOM from 'react-dom/client'
 import { RouterProvider } from 'react-router-dom';
+import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

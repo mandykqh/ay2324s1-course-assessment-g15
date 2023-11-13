@@ -70,8 +70,8 @@ const QuestionDetailsModal: React.FC<Props> =
               </Grid>
             </ModalBody>
             <ModalFooter>
-              {userRole === 'ADMIN' 
-              &&
+              {userRole === 'ADMIN'
+                &&
                 <Box>
                   <Button colorScheme='red' mr={3} onClick={() => deleteHandler(data.id)}>
                     Delete
@@ -92,6 +92,5 @@ const QuestionDetailsModal: React.FC<Props> =
       </>
     );
   }
-
 
 export default QuestionDetailsModal;

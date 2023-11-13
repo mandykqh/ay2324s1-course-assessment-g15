@@ -1,65 +1,64 @@
 import { MatchDataString, QuestionString, UserDataString } from "../Commons";
 
+const USER_DATA_KEY = "userData";
+const MATCH_DATA_KEY = "matchData";
+const FILTER_DATA_KEY = "filterData";
+
 class LocalStorageHandler {
 
-  /*--- User Data ---*/
+  // Commons
+  private static getData<T>(key: string): T | null {
+    try {
+      const storedData = localStorage.getItem(USER_DATA_KEY);
+      return storedData ? JSON.parse(storedData) : null;
+    } catch (error) {
+      return null
+    }
+  }
+
+  // User Data
   static storeUserData(userData: UserDataString) {
-    localStorage.setItem("userData", JSON.stringify(userData));
+    localStorage.setItem(USER_DATA_KEY, JSON.stringify(userData));
   }
 
   static getUserData(): UserDataString | null {
-    if (localStorage.getItem("userData") === null) {
-      return null;
-    }
-    const data = localStorage.getItem("userData")!;
-    return JSON.parse(data);
+    return LocalStorageHandler.getData<UserDataString>(USER_DATA_KEY);
   }
 
   static clearUserData() {
-    localStorage.removeItem('userData');
+    localStorage.removeItem(USER_DATA_KEY);
   }
 
-  /*--- Match Data ---*/
-
+  // Match Data
   static storeMatchData(matchData: any) {
-    const obj: { [key: string]: any } = {}; // define obj as a dictionary with string keys and any values
-    obj["user_id"] = matchData.user_id;
-    obj["other_user"] = matchData.other_user;
-    obj["room_id"] = matchData.room_id;
-    obj["question"] = matchData.question;
-    localStorage.setItem("matchData", JSON.stringify(obj));
+    const { user_id, other_user, room_id, question } = matchData;
+    const obj: { [key: string]: any } = {
+      user_id,
+      other_user,
+      room_id,
+      question
+    }
+    localStorage.setItem(MATCH_DATA_KEY, JSON.stringify(obj));
   }
 
   static getMatchData(): MatchDataString | null {
-    try {
-      if (localStorage.getItem("matchData") === null) {
-        return null;
-      }
-      const data = localStorage.getItem("matchData")!;
-      return JSON.parse(data);
-    } catch (e) {
-      return null;
-    }
+    return LocalStorageHandler.getData<MatchDataString>(MATCH_DATA_KEY);
   }
 
   static isMatched(): boolean {
     try {
-      if (localStorage.getItem("matchData") === null) {
-        return false;
-      }
-      return true;
+      return localStorage.getItem(MATCH_DATA_KEY) !== null;
     } catch (e) {
       return false;
     }
   }
 
   static deleteMatchData() {
-    localStorage.removeItem('matchData');
+    localStorage.removeItem(MATCH_DATA_KEY);
   }
 
   static updateMatchDataQuestion(newQuestion: QuestionString) {
     const matchData = this.getMatchData();
-
     if (matchData) {
       matchData.question = newQuestion;
       this.storeMatchData(matchData);
@@ -67,20 +66,20 @@ class LocalStorageHandler {
   }
 
   // Chat data
-  static storeChatData(key:string, chatData: any) {
+  static storeChatData(key: string, chatData: any) {
     localStorage.setItem(key, JSON.stringify(chatData));
   }
 
-  static getChatData(key:string) {
+  static getChatData(key: string) {
     return JSON.parse(localStorage.getItem(key) || '[]');
   }
 
   // Canvas data
-  static storeCanvasData(key:string, canvasData: any) {
+  static storeCanvasData(key: string, canvasData: any) {
     localStorage.setItem(key, canvasData);
   }
 
-  static getCanvasData(key:string) {
+  static getCanvasData(key: string) {
     return localStorage.getItem(key);
   }
 
@@ -91,18 +90,11 @@ class LocalStorageHandler {
       complexityFilter,
       filteredQuestions,
     };
-    console.log('filter data qns: ' + filterData.categoryFilter);
-    localStorage.setItem('filterData', JSON.stringify(filterData));
-    console.log('stored filter data');
+    localStorage.setItem(FILTER_DATA_KEY, JSON.stringify(filterData));
   }
 
-  static getFilterData() {
-    const data = localStorage.getItem('filterData');
-    return data ? JSON.parse(data) : null;
-  }
-
-  static clearFilterData() {
-    localStorage.removeItem('filterData');
+  static clearAll() {
+    localStorage.clear();
   }
 }
 

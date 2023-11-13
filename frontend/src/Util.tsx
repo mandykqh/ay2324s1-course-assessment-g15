@@ -2,20 +2,22 @@ import { UseToastOptions } from "@chakra-ui/toast";
 import Category from "./models/enums/Category";
 import Complexity from "./models/enums/Complexity";
 import { NotificationOptions } from "./Commons";
+import { useEffect } from "react";
+import AuthRequestHandler from "./handlers/AuthRequestHandler";
 
 function enumToString(e: unknown[]) {
   return e.slice(0, e.length / 2);
 }
 
-function getComplexityStrings() {
+export function getComplexityStrings() {
   return enumToString(Object.values(Complexity)) as string[];
 }
 
-function getCategoriesString() {
+export function getCategoriesString() {
   return enumToString(Object.values(Category)) as string[];
 }
 
-function stringToOptionsMapper(input: string) {
+export function stringToOptionsMapper(input: string) {
   if (input.length === 0) {
     return [];
   }
@@ -43,4 +45,10 @@ export function showError(message: string, toast: (options: UseToastOptions) => 
   showNotification({ message: message, type: 'error' }, toast);
 }
 
-export { getComplexityStrings, getCategoriesString, stringToOptionsMapper };
+export function authChecker(setIsAuthenticated: React.Dispatch<React.SetStateAction<null>>) {
+  useEffect(() => {
+    AuthRequestHandler.isAuth()
+      .then(res => { setIsAuthenticated(res.isAuth); })
+      .catch(e => { console.log("Error: " + e.message); });
+  }, []);
+}

@@ -11,7 +11,7 @@ import QuestionRequestHandler from "../../handlers/QuestionRequestHandler";
 interface SelectOption {
     value: string;
     label: string;
-  }
+}
 
 const categoryOptions = getCategoriesString().map((value: any) => {
     return ({ value: value, label: value });
@@ -31,11 +31,11 @@ const MatchingForm: React.FC = () => {
 
     useEffect(() => {
         setMatchingCache({
-          categories: categories,
-          complexity: complexity,
+            categories: categories,
+            complexity: complexity,
         }
         );
-      }, [categories, complexity])
+    }, [categories, complexity])
 
     return (
         <Grid gap={4}>
@@ -45,9 +45,9 @@ const MatchingForm: React.FC = () => {
                     <Select
                         onChange={(e: MultiValue<SelectOption | unknown>) => {
                             const inputStringArr = e.map(
-                            (q) => {
-                                return ((q as SelectOption).value);
-                            }
+                                (q) => {
+                                    return ((q as SelectOption).value);
+                                }
                             );
                             setCategories(inputStringArr);
                         }}
@@ -55,7 +55,7 @@ const MatchingForm: React.FC = () => {
                         options={categoryOptions}
                         placeholder="Select Category"
                         closeMenuOnSelect={false}
-                        value={ stringToOptionsMapper(matchingCache.categories.join(', ')) }
+                        value={stringToOptionsMapper(matchingCache.categories.join(', '))}
                     />
                 </Box>
             </Grid>
@@ -65,8 +65,8 @@ const MatchingForm: React.FC = () => {
                     <Select
                         onChange={(e) => { setComplexity((e as SelectOption).value) }}
                         options={complexityOptions}
-                        placeholder="Select Category"
-                        value={ stringToOptionsMapper(matchingCache.complexity) }
+                        placeholder="Select Complexity"
+                        value={stringToOptionsMapper(matchingCache.complexity)}
                     />
                 </Box>
             </Grid>
