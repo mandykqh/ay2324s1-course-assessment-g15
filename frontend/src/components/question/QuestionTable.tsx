@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Question from '../../models/question/Question';
 import { QuestionString } from '../../Commons';
-import { Text, TableContainer, Table, Thead, Tr, Th, Tbody, Td, Button, Box } from '@chakra-ui/react';
+import { Center, Text, TableContainer, Table, Thead, Tr, Th, Tbody, Td, Button, Box } from '@chakra-ui/react';
 import LocalStorageHandler from "../../handlers/LocalStorageHandler";
 import ComplexityTag from "./ComplexityTag";
 
@@ -70,7 +70,9 @@ const QuestionTable: React.FC<Props> =
                     <QuestionTd value={qn.id.toString()} />
                     <QuestionTd value={qn.title} />
                     <QuestionTd value={qn.getCategoriesString()} textWrap={true} />
-                    <ComplexityTag complexity={qn.getComplexityString()} />
+                    <Center pt='18px'>
+                      <ComplexityTag complexity={qn.getComplexityString()} />
+                    </Center>
 
                   </Tr>
                 );

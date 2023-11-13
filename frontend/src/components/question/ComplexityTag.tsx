@@ -8,15 +8,10 @@ interface ComplexityTagProps {
 
 const ComplexityTag: React.FC<ComplexityTagProps> = ({ complexity }) => {
     return (
-        // <Tag colorScheme={complexityColorMap[complexity]}
-        //     variant='outline'
-        //     borderRadius='xl'
-        // >{complexity}</Tag>
         <Tag colorScheme={complexityColorMap[complexity]}
-            borderRadius='xl'
             w='70px'
-            m='auto'
-            mt='18px'
+            // m='auto'
+            // mt='18px'
             style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
         >{complexity}</Tag>
     );

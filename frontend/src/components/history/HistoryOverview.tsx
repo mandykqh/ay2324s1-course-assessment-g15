@@ -64,21 +64,17 @@ const HistoryOverview: React.FC<Props> =
                   pb={3} pl={5} pr={5}
                   w={280}
                   borderRadius={10}
-                  mt={5}
+                  mt={3}
                 >
-                  <Center flexDirection={'column'}>
-                    {/* <CountLabel color='#77DD77' label='Easy' value={easy} />
-                  <CountLabel color='#FFFAA0' label='Medium' value={medium} />
-                  <CountLabel color='#FF6961' label='Hard' value={hard} /> */}
+                  <Center flexDirection={'column'} pt='19px'>
                     <ComplexityTag complexity={'Easy'} />
-                    {/* <Text color={'#77DD77'}>Easy</Text> */}
                     <Text>{easy}</Text>
                   </Center>
-                  <Center flexDirection={'column'}>
+                  <Center flexDirection={'column'} pt='19px'>
                     <ComplexityTag complexity={'Medium'} />
                     <Text >{medium}</Text>
                   </Center>
-                  <Center flexDirection={'column'}>
+                  <Center flexDirection={'column'} pt='19px'>
                     <ComplexityTag complexity={'Hard'} />
                     <Text>{hard}</Text>
                   </Center>
