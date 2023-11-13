@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   Flex,
   Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, IconButton,
-  useToast, Box, Button, Grid, VStack, GridItem, HStack, Textarea, Center
+  useToast, Box, Button, Grid, VStack, GridItem, HStack, Textarea, Center, SimpleGrid
 } from '@chakra-ui/react';
 import { ChatIcon, EditIcon } from '@chakra-ui/icons';
 import { io, Socket } from 'socket.io-client';
@@ -258,31 +258,48 @@ const CodingPage = () => {
             />
           </GridItem>
           <GridItem colSpan={1} m='15px'>
-            <VStack gap='1rem'>
-              {/* // TODO: Add a chat box for messaging */}
-              <Flex width='100%' gap='1rem' mb='8px'>
-                <Box flex='80%'>
-                  <Select
-                    value={languageOptions.find(option => option.value === language)}
-                    onChange={handleLanguageChange}
-                    options={languageOptions}
-                    styles={{
-                      ...selectorStyles,
-                      ...singleSelectStyles,
-                    }}
-                    components={{
-                      IndicatorSeparator: () => null
-                    }}
-                  />
-                </Box>
+            <Flex gap='10px' pb='15px'>
+              <Box flex='4'>
+                <Select
+                  value={languageOptions.find(option => option.value === language)}
+                  onChange={handleLanguageChange}
+                  options={languageOptions}
+                  styles={{
+                    ...selectorStyles,
+                    ...singleSelectStyles,
+                  }}
+                  components={{
+                    IndicatorSeparator: () => null
+                  }}
+                />
+              </Box>
+              <Box>
+                <IconButton
+                  aria-label="Chat"
+                  icon={<ChatIcon />}
+                  // bg='white'
+                  onClick={toggleChatDrawer}
+                  zIndex="1"
+                /></Box>
+              <Box>
+                <IconButton
+                  aria-label="Canvas"
+                  icon={<EditIcon />}
+                  onClick={toggleCanvasDrawer}
+                  zIndex="1"
+                /></Box>
+              <Box>
                 <Button
                   colorScheme='red'
                   onClick={() => handleDisconnect()}
-                  flex="7" // The Button will take up 30% of the Flex container
+
                 >
                   Disconnect
                 </Button>
-              </Flex>
+              </Box>
+            </Flex>
+            <VStack gap='1rem'>
+              {/* // TODO: Add a chat box for messaging */}
               <CodeMirror
                 value={code}
                 height='80vh'
@@ -300,25 +317,7 @@ const CodingPage = () => {
                 onChange={handleCodeChange}
                 theme={okaidia}
               />
-              <IconButton
-                aria-label="Chat"
-                icon={<ChatIcon />}
-                // bg='white'
-                position="absolute"
-                bottom="0px"
-                right="20px"
-                onClick={toggleChatDrawer}
-                zIndex="1"
-              />
-              <IconButton
-                aria-label="Canvas"
-                icon={<EditIcon />}
-                position="absolute"
-                bottom="0px"
-                right="70px"
-                onClick={toggleCanvasDrawer}
-                zIndex="1"
-              />
+
             </VStack>
           </GridItem>
         </Grid>
