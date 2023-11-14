@@ -3,7 +3,7 @@ import {
   Flex, Slide, useDisclosure, IconButton,
   useToast, Box, Button, Grid, VStack, GridItem, createIcon
 } from '@chakra-ui/react';
-import { ChatIcon, EditIcon } from '@chakra-ui/icons';
+import { ChatIcon } from '@chakra-ui/icons';
 import { io, Socket } from 'socket.io-client';
 import NavigationBar from '../components/NavigationBar';
 import LocalStorageHandler from '../handlers/LocalStorageHandler';
