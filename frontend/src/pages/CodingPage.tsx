@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Flex, Slide, useDisclosure, Text,
-  Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, IconButton,
-  useToast, Box, Button, Grid, VStack, GridItem, HStack, Textarea, Center, SimpleGrid
+  Flex, Slide, useDisclosure, IconButton,
+  useToast, Box, Button, Grid, VStack, GridItem
 } from '@chakra-ui/react';
 import { ChatIcon, EditIcon } from '@chakra-ui/icons';
 import { io, Socket } from 'socket.io-client';
@@ -19,9 +18,8 @@ import { python } from '@codemirror/lang-python';
 import { cpp } from '@codemirror/lang-cpp';
 import { javascript } from '@codemirror/lang-javascript';
 import { okaidia } from '@uiw/codemirror-theme-okaidia';
-// import { tokyoNightStorm, tokyoNightStormInit } from '@uiw/codemirror-theme-tokyo-night-storm';
+import { tokyoNightStorm, tokyoNightStormInit } from '@uiw/codemirror-theme-tokyo-night-storm';
 
-import HistoryRequestHandler from '../handlers/HistoryRequestHandler';
 import Select from 'react-select';
 import { selectorStyles, singleSelectStyles } from '../CommonStyles';
 import Chat from '../components/chat/chatDetails';
@@ -282,6 +280,8 @@ const CodingPage = () => {
                 <IconButton
                   aria-label="Chat"
                   icon={<ChatIcon />}
+                  bg={isChatOpen ? '#90CDF4' : 'gray.800'}
+                  color={isChatOpen && 'primary.blue2'}
                   onClick={() => {
                     if (isCanvasOpen) {
                       toggleCanvas();
@@ -293,6 +293,8 @@ const CodingPage = () => {
                 <IconButton
                   aria-label="Canvas"
                   icon={<EditIcon />}
+                  bg={isCanvasOpen ? '#90CDF4' : 'gray.800'}
+                  color={isCanvasOpen && 'primary.blue2'}
                   onClick={() => {
                     if (isChatOpen) {
                       toggleChat();
