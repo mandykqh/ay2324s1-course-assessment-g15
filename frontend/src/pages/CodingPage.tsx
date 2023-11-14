@@ -106,6 +106,15 @@ const CodingPage = () => {
       updateChatHistory(newMessageObj);
     });
 
+    socket.on('userLeft', (data) => {
+      toast({
+        title: "Match Disconnected",
+        description: "Your match has left the session.",
+        status: "warning",
+        duration: null,
+        isClosable: true,
+      });
+    });
     return () => {
       socket.disconnect();
     };
@@ -184,6 +193,9 @@ const CodingPage = () => {
   };
 
   function handleDisconnect() {
+    if (socket) {
+      socket.emit('userLeft', { roomId: LocalStorageHandler.getMatchData()?.room_id });
+    }
     LocalStorageHandler.deleteMatchData();
     clearChatHistory();
     clearCanvasHistory();
@@ -258,7 +270,7 @@ const CodingPage = () => {
     return (
       <Box>
         <NavigationBar index={1} />
-        <Grid height='100%' templateColumns='repeat(2, 1fr)' gap='20px' padding='20px' paddingTop='70px'>
+        <Grid height='100%' templateColumns='repeat(2, 1fr)' gap='10px' padding='20px' paddingTop='70px'>
           <GridItem colSpan={1}>
             <QuestionDetails
               id={questionString?.id || ""}
