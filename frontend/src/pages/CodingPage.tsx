@@ -359,16 +359,16 @@ const CodingPage = () => {
 
         <Slide direction='left' in={isCanvasOpen} style={{
           zIndex: 10, height: "100vh",
-          width: "70vw",
+          width: "45vw",
         }}>
           <Box
-            p="40px"
             color="white"
             bg="primary.boxBorder"
             rounded="md"
             shadow="md"
             h='calc(100vh)'
-            w='70vw'
+            w='45vw'
+            overflowY='auto'
           >
             <Canvas
               socket={socket}
