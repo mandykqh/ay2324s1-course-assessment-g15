@@ -111,8 +111,7 @@ const CodingPage = () => {
         title: "Match Disconnected",
         description: "Your match has left the session.",
         status: "warning",
-        duration: null,
-        isClosable: true,
+        duration: 9999,
       });
     });
     return () => {
