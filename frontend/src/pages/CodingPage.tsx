@@ -243,6 +243,7 @@ const CodingPage = () => {
     { value: 'java', label: 'Java' },
     { value: 'cpp', label: 'C++' },
   ];
+
   if (isAuthenticated) {
     const questionString = LocalStorageHandler.getMatchData()?.question;
     return (
@@ -281,8 +282,6 @@ const CodingPage = () => {
                 <IconButton
                   aria-label="Chat"
                   icon={<ChatIcon />}
-                  // bg='white'
-                  // onClick={toggleChatDrawer}
                   onClick={() => {
                     if (isCanvasOpen) {
                       toggleCanvas();
@@ -294,8 +293,6 @@ const CodingPage = () => {
                 <IconButton
                   aria-label="Canvas"
                   icon={<EditIcon />}
-                  // onClick={toggleCanvasDrawer}
-                  // onClick={toggleCanvas}
                   onClick={() => {
                     if (isChatOpen) {
                       toggleChat();
@@ -314,12 +311,10 @@ const CodingPage = () => {
               </Box>
             </Flex>
             <VStack gap='1rem'>
-              {/* // TODO: Add a chat box for messaging */}
               <CodeMirror
                 value={code}
                 height='80vh'
                 width='50vw'
-
                 extensions={[
                   language === 'java'
                     ? java()
@@ -331,27 +326,11 @@ const CodingPage = () => {
                 ]}
                 onChange={handleCodeChange}
                 theme={okaidia}
-              // theme={tokyoNightStorm}
               />
 
             </VStack>
           </GridItem>
         </Grid>
-        {/* <Drawer placement="left" isOpen={isChatDrawerOpen} onClose={toggleChatDrawer}>
-          <DrawerOverlay />
-          <DrawerContent>
-            <DrawerCloseButton />
-            <DrawerHeader>Chat</DrawerHeader>
-            <DrawerBody>
-              <Chat
-                messages={chatHistory}
-                newMessage={newMessage}
-                onNewMessageChange={handleNewMessageChange}
-                onSendMessage={handleSendMessage}
-              />
-            </DrawerBody>
-          </DrawerContent>
-        </Drawer> */}
 
         <Slide direction='left' in={isChatOpen} style={{
           zIndex: 10, height: "100vh",
@@ -362,7 +341,6 @@ const CodingPage = () => {
             p="00px"
             color="white"
             bg="primary.blue1"
-            // rounded="md"
             shadow="md"
             h='calc(100vh)'
             w='30vw'
@@ -375,20 +353,6 @@ const CodingPage = () => {
             />
           </Box>
         </Slide>
-
-        {/* <Drawer placement="left" isOpen={isCanvasDrawerOpen} onClose={toggleCanvasDrawer} size={'xl'}>
-          <DrawerOverlay />
-          <DrawerContent>
-            <DrawerCloseButton />
-            <DrawerHeader>Canvas</DrawerHeader>
-            <DrawerBody>
-              <Canvas
-                socket={socket}
-              />
-            </DrawerBody>
-          </DrawerContent>
-        </Drawer> */}
-
 
         <Slide direction='left' in={isCanvasOpen} style={{
           zIndex: 10, height: "100vh",

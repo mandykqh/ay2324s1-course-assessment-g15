@@ -71,7 +71,7 @@ const MatchingForm: React.FC = () => {
             <Select
               onChange={(e) => { setComplexity((e as SelectOption).value) }}
               options={complexityOptions}
-              placeholder="Select Category"
+              placeholder="Select Complexity"
               value={stringToOptionsMapper(matchingCache.complexity)}
               styles={{
                 ...selectorStyles,
