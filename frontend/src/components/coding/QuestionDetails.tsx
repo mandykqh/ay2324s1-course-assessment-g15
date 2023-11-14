@@ -43,9 +43,11 @@ const QuestionDetails: React.FC<QuestionString> =
           <Spacer />
           <ComplexityTag complexity={complexity} />
         </HStack>
-        {renderQuestionHTML()}
-        <Box>
-          <Link href={link} target="_blank" rel="noopener noreferrer"><u>Link</u></Link>
+        <Box overflowY='auto' h='70vh'>
+          {renderQuestionHTML()}
+          <Box my='20px'>
+            <Link href={link} target="_blank" rel="noopener noreferrer"><u>Go to LeetCode</u></Link>
+          </Box>
         </Box>
       </Grid>
     );

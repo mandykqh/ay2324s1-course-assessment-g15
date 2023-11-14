@@ -315,8 +315,9 @@ const CodingPage = () => {
             <VStack gap='1rem'>
               <CodeMirror
                 value={code}
-                height='80vh'
+                height='77vh'
                 width='50vw'
+                overflowY='auto'
                 extensions={[
                   language === 'java'
                     ? java()
