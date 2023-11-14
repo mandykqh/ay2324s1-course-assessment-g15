@@ -22,7 +22,7 @@ const PasswordInput: React.FC<PasswordInputProps> =
             placeholder={`Enter ${label.toLowerCase()}`}
             onChange={(e) => valueSetter(e.target.value)}
             value={value}
-            borderRadius={15}
+            borderRadius={10}
             bg='primary.blue1'
             border='2px solid #244153'
           />

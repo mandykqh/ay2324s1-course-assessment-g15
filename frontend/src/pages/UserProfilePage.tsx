@@ -25,11 +25,10 @@ const UserProfilePage = () => {
 
   function renderContent() {
     return (
-      <Box width={'80vw'}>
+      <Box width={'80vw'} ml="20vw" mt='20vh'>
         <Center alignItems={'center'} justifyItems={'center'} height={'100%'}>
           {currentMenuIndex === 0 && <UserPersonalInfo user={userDataString} />}
           {currentMenuIndex === 1 && <UserSecurity />}
-          {currentMenuIndex === 2 && <UserHistory />}
         </Center>
       </Box>
     );
