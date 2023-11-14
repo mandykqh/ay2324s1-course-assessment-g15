@@ -64,8 +64,8 @@ const QuestionTable: React.FC<Props> =
           <QuestionTd value={qn.id.toString()} />
           <QuestionTd value={qn.title} />
           <QuestionTd value={qn.getCategoriesString()} />
-          <Td>
-            <Center pt='18px'>
+          <Td border='none'>
+            <Center textAlign='center'>
               <ComplexityTag complexity={qn.getComplexityString()} />
             </Center>
           </Td>
