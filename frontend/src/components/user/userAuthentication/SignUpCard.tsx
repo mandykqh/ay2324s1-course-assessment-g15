@@ -37,7 +37,7 @@ const SignUpCard: React.FC<Props>
             placeholder='Enter email address'
             bg='primary.blue3'
             border='2px solid #244153'
-            borderRadius={15}
+            borderRadius={10}
             mb={5}
           />
           <Box mb='10px'>
@@ -51,7 +51,7 @@ const SignUpCard: React.FC<Props>
             placeholder='Enter username'
             bg='primary.blue3'
             border='2px solid #244153'
-            borderRadius={15}
+            borderRadius={10}
             mb={5}
           />
           <PasswordInput
