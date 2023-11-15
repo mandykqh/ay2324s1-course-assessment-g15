@@ -77,7 +77,7 @@ const QuestionDetailsModal: React.FC<Props> =
                   <Button colorScheme='red' mr={3} onClick={() => deleteHandler(data.id)}>
                     Delete
                   </Button>
-                  <Button colorScheme='cyan' mr={3} onClick={() => {
+                  <Button colorScheme='green' mr={3} onClick={() => {
                     closeHandler()
                     editHandler();
                   }}>

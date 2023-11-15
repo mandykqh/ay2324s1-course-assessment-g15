@@ -106,7 +106,7 @@ const QuestionPage = () => {
         let validator = new QuestionValidator();
         validator.validateEmptyFields(questionCache);
         QuestionRequestHandler.updateQuestion(questionCache).then(() => {
-          setQuestions(questions.map((q) => (q.id === questionCache.id ? questionCache : q)!));
+          setFilteredQuestions(questions.map((q) => (q.id === questionCache.id ? questionCache : q)!));
           setEditModalIsVisible(false);
           showSuccess(`Question ${question.id} updated!`, toast)
         });

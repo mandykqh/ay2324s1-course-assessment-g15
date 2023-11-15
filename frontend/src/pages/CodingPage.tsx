@@ -18,8 +18,7 @@ import { python } from '@codemirror/lang-python';
 import { cpp } from '@codemirror/lang-cpp';
 import { javascript } from '@codemirror/lang-javascript';
 import { okaidia } from '@uiw/codemirror-theme-okaidia';
-import { tokyoNightStorm, tokyoNightStormInit } from '@uiw/codemirror-theme-tokyo-night-storm';
-
+import HistoryRequestHandler from '../handlers/HistoryRequestHandler';
 import Select from 'react-select';
 import { selectorStyles, singleSelectStyles } from '../CommonStyles';
 import Chat from '../components/chat/chatDetails';
@@ -42,6 +41,17 @@ const CodingPage = () => {
   const [isCanvasDrawerOpen, setIsCanvasDrawerOpen] = useState(false);
   const { isOpen: isChatOpen, onToggle: toggleChat } = useDisclosure();
   const { isOpen: isCanvasOpen, onToggle: toggleCanvas } = useDisclosure();
+
+
+  useEffect(() => {
+    toast({
+      title: "Welcome!",
+      description: "You have entered the collaborative room.",
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+    });
+  }, []);
 
   useEffect(() => {
     AuthRequestHandler.isAuth()
@@ -79,11 +89,10 @@ const CodingPage = () => {
     });
 
     socket.on('newQuestion', (question) => {
-      // console.log(`new question: ${question.title} | ${question.categories} | ${question.complexity} | ${question.description}`);
       if (!question) {
         toast({
           title: "Error",
-          description: `Change question request by User ${LocalStorageHandler.getUserData()?.username}: No question found.`,
+          description: `Change question requested: No question found.`,
           status: "error",
           duration: 3000,
         });
@@ -96,8 +105,10 @@ const CodingPage = () => {
         duration: 3000,
       });
       setQuestion(question);
+      LocalStorageHandler.updateMatchDataQuestion(question);
       setCategoryFilter(categoryFilter);
       setComplexityFilter(complexityFilter);
+      updateHistory();
     })
 
     socket.on('messageChange', (message, user) => {
@@ -108,10 +119,10 @@ const CodingPage = () => {
 
     socket.on('userLeft', (data) => {
       toast({
-        title: "Match Disconnected",
+        title: "Match Left",
         description: "Your match has left the session.",
         status: "warning",
-        duration: 9999,
+        duration: 3000,
       });
     });
     return () => {
@@ -119,12 +130,22 @@ const CodingPage = () => {
     };
   }, []);
 
-
   useEffect(() => {
     const clientChatHistory = getChatHistory();
     setChatHistory(clientChatHistory);
   }, []);
 
+  function updateHistory() {
+    let date = new Date();
+    HistoryRequestHandler.updateHistory({
+      userId: LocalStorageHandler.getUserData()?.id!,
+      attempt: {
+        questionId: LocalStorageHandler.getMatchData()?.question.id!,
+        timestamp: date.toISOString(),
+      },
+      complexity: LocalStorageHandler.getMatchData()?.question.complexity!
+    });
+  }
 
   const getChatHistory = () => {
     const clientId = LocalStorageHandler.getUserData()?.id!;
@@ -204,8 +225,6 @@ const CodingPage = () => {
   const toast = useToast();
 
   const handleQuestionChange = () => {
-    console.log(`qn to change: current qid=${LocalStorageHandler.getMatchData()?.question.id} | ${categoryFilter} | ${complexityFilter}`);
-
     if (categoryFilter.length < 1 || !complexityFilter) {
       toast({
         title: "Error",
@@ -238,9 +257,6 @@ const CodingPage = () => {
     const { categories, complexity } = filterOptions;
     setComplexityFilter(complexity);
     setCategoryFilter(categories);
-    // LocalStorageHandler.storeFilterData(categories, complexity, filtered);
-
-    console.log(`preferences updated: ${complexity} | ${categories}`);
   }
 
   const questionString = LocalStorageHandler.getMatchData()?.question;

@@ -39,7 +39,8 @@ export const getFilteredQuestion = async (req: express.Request, res: express.Res
             return res.status(200).json(filteredQuestions[0]);
         }
 
-        return res.status(200).json(filteredQuestions);
+        const randomIndex = Math.floor(Math.random() * filteredQuestions.length);
+        return res.status(200).json(filteredQuestions[randomIndex]);
     } catch (error) {
         console.error(error);
         return res.sendStatus(500).send("internal server error");
@@ -79,7 +80,7 @@ export const getRandomFilteredQuestion = async (req: express.Request, res: expre
 // We need to check if there are questions for each combination of categories and complexity
 export const checkCategoryAndComplexity = async (req: express.Request, res: express.Response) => {
     try {
-        
+
         // check if categories are a single string or an array
         if (typeof req.query.categories === "string") {
             const questions = await QuestionModel.find({
