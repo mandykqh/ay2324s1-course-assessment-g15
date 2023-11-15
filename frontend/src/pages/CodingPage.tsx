@@ -18,7 +18,6 @@ import { python } from '@codemirror/lang-python';
 import { cpp } from '@codemirror/lang-cpp';
 import { javascript } from '@codemirror/lang-javascript';
 import { okaidia } from '@uiw/codemirror-theme-okaidia';
-import { tokyoNightStorm, tokyoNightStormInit } from '@uiw/codemirror-theme-tokyo-night-storm';
 import HistoryRequestHandler from '../handlers/HistoryRequestHandler';
 import Select from 'react-select';
 import { selectorStyles, singleSelectStyles } from '../CommonStyles';
@@ -90,7 +89,6 @@ const CodingPage = () => {
     });
 
     socket.on('newQuestion', (question) => {
-      // console.log(`new question: ${question.title} | ${question.categories} | ${question.complexity} | ${question.description}`);
       if (!question) {
         toast({
           title: "Error",
@@ -227,8 +225,6 @@ const CodingPage = () => {
   const toast = useToast();
 
   const handleQuestionChange = () => {
-    console.log(`qn to change: current qid=${LocalStorageHandler.getMatchData()?.question.id} | ${categoryFilter} | ${complexityFilter}`);
-
     if (categoryFilter.length < 1 || !complexityFilter) {
       toast({
         title: "Error",
@@ -261,9 +257,6 @@ const CodingPage = () => {
     const { categories, complexity } = filterOptions;
     setComplexityFilter(complexity);
     setCategoryFilter(categories);
-    // LocalStorageHandler.storeFilterData(categories, complexity, filtered);
-
-    console.log(`preferences updated: ${complexity} | ${categories}`);
   }
 
   const questionString = LocalStorageHandler.getMatchData()?.question;
