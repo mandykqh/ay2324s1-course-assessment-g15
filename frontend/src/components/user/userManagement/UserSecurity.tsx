@@ -99,7 +99,7 @@ const UserSecurity = () => {
 
   function renderPasswordForm() {
     return (
-      <Box borderRadius={15} p={5} w={'60%'}
+      <Box borderRadius={10} p={5} w={'60%'}
         bg='primary.blue3' border='2px solid #244153'>
         <Box marginBottom={10}>
           <Text as='b' fontSize={25}>
@@ -157,7 +157,17 @@ const UserSecurity = () => {
           <Text as='sub' color={'#999999'}>To confirm this, type "DELETE"</Text>
         </Box>
         <Center height={50}>
-          <Input onChange={(e) => { setDeleteInput(e.target.value) }}></Input>
+          <Input
+            mt='5px'
+            borderRadius='10px'
+            border='2px solid #244153'
+            bg='primary.blue1'
+            sx={{
+              _hover: {
+                borderColor: 'white',
+              }
+            }}
+            onChange={(e) => { setDeleteInput(e.target.value) }}></Input>
         </Center>
       </>
     );
@@ -178,7 +188,7 @@ const UserSecurity = () => {
   }
 
   return (
-    <Center flexDirection={'column'} w={'100rem'} pt={100} pb={100}>
+    <Center flexDirection={'column'} w={'70vw'} pb={100}>
       {renderPasswordForm()}
       {renderDeleteAccountForm()}
     </Center>

@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Flex, Slide, useDisclosure, Text,
-  Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, IconButton,
-  useToast, Box, Button, Grid, VStack, GridItem, HStack, Textarea, Center, SimpleGrid
+  Flex, Slide, useDisclosure, IconButton,
+  useToast, Box, Button, Grid, VStack, GridItem, createIcon
 } from '@chakra-ui/react';
-import { ChatIcon, EditIcon } from '@chakra-ui/icons';
+import { ChatIcon } from '@chakra-ui/icons';
 import { io, Socket } from 'socket.io-client';
 import NavigationBar from '../components/NavigationBar';
 import LocalStorageHandler from '../handlers/LocalStorageHandler';
@@ -19,9 +18,8 @@ import { python } from '@codemirror/lang-python';
 import { cpp } from '@codemirror/lang-cpp';
 import { javascript } from '@codemirror/lang-javascript';
 import { okaidia } from '@uiw/codemirror-theme-okaidia';
-// import { tokyoNightStorm, tokyoNightStormInit } from '@uiw/codemirror-theme-tokyo-night-storm';
+import { tokyoNightStorm, tokyoNightStormInit } from '@uiw/codemirror-theme-tokyo-night-storm';
 
-import HistoryRequestHandler from '../handlers/HistoryRequestHandler';
 import Select from 'react-select';
 import { selectorStyles, singleSelectStyles } from '../CommonStyles';
 import Chat from '../components/chat/chatDetails';
@@ -108,6 +106,14 @@ const CodingPage = () => {
       updateChatHistory(newMessageObj);
     });
 
+    socket.on('userLeft', (data) => {
+      toast({
+        title: "Match Disconnected",
+        description: "Your match has left the session.",
+        status: "warning",
+        duration: 9999,
+      });
+    });
     return () => {
       socket.disconnect();
     };
@@ -186,6 +192,9 @@ const CodingPage = () => {
   };
 
   function handleDisconnect() {
+    if (socket) {
+      socket.emit('userLeft', { roomId: LocalStorageHandler.getMatchData()?.room_id });
+    }
     LocalStorageHandler.deleteMatchData();
     clearChatHistory();
     clearCanvasHistory();
@@ -244,12 +253,23 @@ const CodingPage = () => {
     { value: 'cpp', label: 'C++' },
   ];
 
+  const CanvasIcon = createIcon({
+    displayName: 'PencilIcon',
+    viewBox: '-6.5 0 32 32',
+    path: (
+      <path
+        fill="currentColor"
+        d="M19.28 10.32c0-0.24-0.080-0.44-0.24-0.6l-3.12-3.12c-0.32-0.32-0.84-0.32-1.2 0l-2.36 2.36-11.32 11.36c-0.12 0.12-0.2 0.28-0.24 0.44l-0.8 3.92c-0.040 0.28 0.040 0.56 0.24 0.76 0.16 0.16 0.36 0.24 0.6 0.24 0.040 0 0.12 0 0.16 0l3.92-0.8c0.16-0.040 0.32-0.12 0.44-0.24l13.68-13.68c0.16-0.2 0.24-0.4 0.24-0.64zM4.32 23.24l-2.44 0.48 0.52-2.4 10.56-10.56 1.92 1.92-10.56 10.56zM16.080 11.52l-1.92-1.92 1.2-1.2 1.92 1.92-1.2 1.2z"
+      />
+    ),
+  });
+
   if (isAuthenticated) {
     const questionString = LocalStorageHandler.getMatchData()?.question;
     return (
       <Box>
         <NavigationBar index={1} />
-        <Grid height='100%' templateColumns='repeat(2, 1fr)' gap='20px' padding='20px' paddingTop='70px'>
+        <Grid height='100%' templateColumns='repeat(2, 1fr)' gap='10px' padding='20px' paddingTop='70px'>
           <GridItem colSpan={1}>
             <QuestionDetails
               id={questionString?.id || ""}
@@ -282,6 +302,8 @@ const CodingPage = () => {
                 <IconButton
                   aria-label="Chat"
                   icon={<ChatIcon />}
+                  bg={isChatOpen ? '#90CDF4' : 'gray.800'}
+                  color={isChatOpen && 'primary.blue2'}
                   onClick={() => {
                     if (isCanvasOpen) {
                       toggleCanvas();
@@ -292,7 +314,9 @@ const CodingPage = () => {
               <Box>
                 <IconButton
                   aria-label="Canvas"
-                  icon={<EditIcon />}
+                  icon={<CanvasIcon boxSize={7} />}
+                  bg={isCanvasOpen ? '#90CDF4' : 'gray.800'}
+                  color={isCanvasOpen && 'primary.blue2'}
                   onClick={() => {
                     if (isChatOpen) {
                       toggleChat();
@@ -313,8 +337,9 @@ const CodingPage = () => {
             <VStack gap='1rem'>
               <CodeMirror
                 value={code}
-                height='80vh'
+                height='77vh'
                 width='50vw'
+                overflowY='auto'
                 extensions={[
                   language === 'java'
                     ? java()
@@ -356,16 +381,16 @@ const CodingPage = () => {
 
         <Slide direction='left' in={isCanvasOpen} style={{
           zIndex: 10, height: "100vh",
-          width: "70vw",
+          width: "45vw",
         }}>
           <Box
-            p="40px"
             color="white"
             bg="primary.boxBorder"
             rounded="md"
             shadow="md"
             h='calc(100vh)'
-            w='70vw'
+            w='45vw'
+            overflowY='auto'
           >
             <Canvas
               socket={socket}

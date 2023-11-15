@@ -22,7 +22,7 @@ const QuestionDetails: React.FC<QuestionString> =
     return (
       <Grid gap='0.5rem' m='15px'>
         <HStack>
-          <Heading color='white' as='b' textStyle='h2'>{id}. {title}</Heading>
+          <Heading color='primary.blue4' as='b' textStyle='h2'>{id}. {title}</Heading>
           <Spacer />
           <Button colorScheme='blue' onClick={() => { setIsPreferencesModalVisible(true) }}>Change</Button>
         </HStack>
@@ -36,16 +36,18 @@ const QuestionDetails: React.FC<QuestionString> =
           }
           }
         />
-        <HStack spacing='0.5rem' mb='10px'>
+        <HStack spacing='0.5rem' my='10px'>
           {categories.map((category, index) => (
             <Tag key={index} colorScheme='cyan'>{category}</Tag>
           ))}
           <Spacer />
           <ComplexityTag complexity={complexity} />
         </HStack>
-        {renderQuestionHTML()}
-        <Box>
-          <Link href={link} target="_blank" rel="noopener noreferrer"><u>Link</u></Link>
+        <Box overflowY='auto' h='70vh' pr='5px'>
+          {renderQuestionHTML()}
+          <Box my='20px'>
+            <Link href={link} target="_blank" rel="noopener noreferrer"><u>Go to LeetCode</u></Link>
+          </Box>
         </Box>
       </Grid>
     );

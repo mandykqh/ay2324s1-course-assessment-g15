@@ -65,10 +65,10 @@ const TimerModal: React.FC<TimerModalProps> = ({ isOpen, onClose, initialTime, s
     <Modal isOpen={isOpen} onClose={() => { onClose(); setTime(initialTime); }}>
       <ModalOverlay />
       <Center>
-        <ModalContent mt={'10%'} h={'30%'} w={'30%'}>
+        <ModalContent mt={'10%'} h={'30%'} w={'30%'} bg='primary.blue3' borderRadius={15}>
           <ModalHeader>
             <Center>
-              <Text textAlign="center">Finding a match...</Text>
+              <Text pt='5px' textAlign="center">Finding a match...</Text>
             </Center>
           </ModalHeader>
           <ModalCloseButton />
@@ -87,7 +87,7 @@ const TimerModal: React.FC<TimerModalProps> = ({ isOpen, onClose, initialTime, s
                 <>
                   <Spinner thickness='12px' speed='0.85s' color='blue.500' size="xl" />
                   <Text mt={2}>{status}</Text>
-                  <Text mt={2}>Time Remaining: {time} seconds</Text>
+                  <Text mt={5}>Time Remaining: {time} seconds</Text>
                 </>
               ))}
             </Center>

@@ -4,6 +4,7 @@ import UserRequestHandler from "../../../handlers/UserRequestHandler";
 import LocalStorageHandler from "../../../handlers/LocalStorageHandler";
 import { showSuccess, showError } from "../../../Util";
 import { UserDataString } from "../../../Commons";
+import { selectorStyles } from "../../../CommonStyles";
 
 const ValueLabel = ({ value }: { value: string }) => {
   return (
@@ -12,8 +13,12 @@ const ValueLabel = ({ value }: { value: string }) => {
       value={value}
       padding={3}
       bg='primary.blue1'
+      color='grey'
       border='2px solid #244153'
-      mr='15px' />
+      borderRadius='10px'
+      mr='15px'
+    />
+
   );
 }
 
@@ -26,6 +31,12 @@ const EditiableInput = ({ value, setter }:
       border='2px solid #244153'
       onChange={(e) => setter(e.target.value)}
       padding={3}
+      borderRadius='10px'
+      sx={{
+        _hover: {
+          borderColor: 'white',
+        }
+      }}
     />
   );
 }
@@ -88,7 +99,7 @@ const UserPersonalInfo = ({ user }: { user: UserDataString }) => {
       border={'2px solid #244153'}
       borderRadius={15}
       p={5}
-      width={'50%'}
+      width={'40vw'}
       bg='primary.blue3'
     >
       <Text as='b' fontSize={25} color='primary.blue4'>Personal Information</Text>
@@ -116,6 +127,7 @@ const UserPersonalInfo = ({ user }: { user: UserDataString }) => {
         Save
       </Button>
     </Box >
+
   );
 };
 

@@ -23,7 +23,7 @@ import LocalStorageHandler from "../handlers/LocalStorageHandler";
 import AuthRequestHandler from "../handlers/AuthRequestHandler";
 import { showError } from "../Util";
 
-const HEIGHT = 50;
+const HEIGHT = 55;
 
 interface Props {
   index: number;
@@ -105,7 +105,7 @@ const NavigationBar: React.FC<Props> = ({ index }) => {
   }
 
   return (
-    <Box w={'100%'} h={HEIGHT} backgroundColor={SECONDARY_COLOR} position={'absolute'}>
+    <Box w={'100%'} h={HEIGHT} backgroundColor={SECONDARY_COLOR} position={'fixed'} zIndex={1}>
       <Flex>
         <Center h={HEIGHT} ml={150}>
           {renderTitleText()}
