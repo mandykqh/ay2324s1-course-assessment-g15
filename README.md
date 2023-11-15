@@ -9,6 +9,7 @@
 2. Edit `.env' to fill in the environmental variables.
 3. Start Docker and run `docker-compose up --build` (If developing, always run with `--build`. the `--build` tag creates new images with code changes reflected).
 4. Delete dangling images from your docker images repository.
+5. Access the app through http://localhost/
 
 ## Port mappings:
 - Frontend: 5173
