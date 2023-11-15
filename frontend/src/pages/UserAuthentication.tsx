@@ -32,9 +32,14 @@ function LoginPage() {
   const toast = useToast();
   const navigate = useNavigate();
 
-  function toggleView() {
-    setDisplayLoginForm(!displayLoginForm);
-    setDisplaySignupForm(!displaySignupForm);
+  function showLoginForm() {
+    setDisplayLoginForm(true);
+    setDisplaySignupForm(false);
+  }
+  
+  function showSignUpForm() {
+    setDisplayLoginForm(false);
+    setDisplaySignupForm(true);
   }
 
   function renderLoginCard() {
@@ -81,7 +86,7 @@ function LoginPage() {
       UserRequestHandler.createUser(signUpUsername, email, signUpPassword)
         .then(() => {
           showSuccess('You are now registered! proceed to login', toast);
-          toggleView();
+          showLoginForm();
         }).catch((e: any) => showError(e.response.data.message, toast));
     }
 
@@ -102,8 +107,8 @@ function LoginPage() {
 
   function renderTabs() {
     const tabs = [
-      { label: 'Login', onClick: () => toggleView() },
-      { label: 'Sign Up', onClick: () => toggleView() },
+      { label: 'Login', onClick: () => showLoginForm() },
+      { label: 'Sign Up', onClick: () => showSignUpForm() },
     ]
     return (
       <Tabs w={'200px'} mb='10px' variant={'line'} borderRadius={5}>
