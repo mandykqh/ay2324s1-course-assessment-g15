@@ -29,17 +29,20 @@ function LoginPage() {
   const [displayLoginForm, setDisplayLoginForm] = useState(true);
   const [displaySignupForm, setDisplaySignupForm] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const [activeTabIndex, setActiveTabIndex] = useState(0);
   const toast = useToast();
   const navigate = useNavigate();
 
   function showLoginForm() {
     setDisplayLoginForm(true);
     setDisplaySignupForm(false);
+    setActiveTabIndex(0);
   }
   
   function showSignUpForm() {
     setDisplayLoginForm(false);
     setDisplaySignupForm(true);
+    setActiveTabIndex(1);
   }
 
   function renderLoginCard() {
@@ -111,7 +114,7 @@ function LoginPage() {
       { label: 'Sign Up', onClick: () => showSignUpForm() },
     ]
     return (
-      <Tabs w={'200px'} mb='10px' variant={'line'} borderRadius={5}>
+      <Tabs index={activeTabIndex} w={'200px'} mb='10px' variant={'line'} borderRadius={5}>
         <TabList>
           {tabs.map((tab) =>
             <Tab w={'100px'} textStyle='h1' color='primary.green' onClick={tab.onClick} key={tab.label}>
