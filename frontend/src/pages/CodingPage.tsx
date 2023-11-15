@@ -19,7 +19,7 @@ import { cpp } from '@codemirror/lang-cpp';
 import { javascript } from '@codemirror/lang-javascript';
 import { okaidia } from '@uiw/codemirror-theme-okaidia';
 import { tokyoNightStorm, tokyoNightStormInit } from '@uiw/codemirror-theme-tokyo-night-storm';
-
+import HistoryRequestHandler from '../handlers/HistoryRequestHandler';
 import Select from 'react-select';
 import { selectorStyles, singleSelectStyles } from '../CommonStyles';
 import Chat from '../components/chat/chatDetails';
@@ -42,6 +42,16 @@ const CodingPage = () => {
   const [isCanvasDrawerOpen, setIsCanvasDrawerOpen] = useState(false);
   const { isOpen: isChatOpen, onToggle: toggleChat } = useDisclosure();
   const { isOpen: isCanvasOpen, onToggle: toggleCanvas } = useDisclosure();
+
+  useEffect(() => {
+    toast({
+      title: "Welcome!",
+      description: "You have entered the collaborative room.",
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+    });
+  }, []);
 
   useEffect(() => {
     AuthRequestHandler.isAuth()
@@ -83,7 +93,7 @@ const CodingPage = () => {
       if (!question) {
         toast({
           title: "Error",
-          description: `Change question request by User ${LocalStorageHandler.getUserData()?.username}: No question found.`,
+          description: `Change question requested: No question found.`,
           status: "error",
           duration: 3000,
         });
@@ -96,8 +106,10 @@ const CodingPage = () => {
         duration: 3000,
       });
       setQuestion(question);
+      LocalStorageHandler.updateMatchDataQuestion(question);
       setCategoryFilter(categoryFilter);
       setComplexityFilter(complexityFilter);
+      updateHistory();
     })
 
     socket.on('messageChange', (message, user) => {
@@ -125,6 +137,17 @@ const CodingPage = () => {
     setChatHistory(clientChatHistory);
   }, []);
 
+  function updateHistory() {
+    let date = new Date();
+    HistoryRequestHandler.updateHistory({
+      userId: LocalStorageHandler.getUserData()?.id!,
+      attempt: {
+        questionId: LocalStorageHandler.getMatchData()?.question.id!,
+        timestamp: date.toISOString(),
+      },
+      complexity: LocalStorageHandler.getMatchData()?.question.complexity!
+    });
+  }
 
   const getChatHistory = () => {
     const clientId = LocalStorageHandler.getUserData()?.id!;
