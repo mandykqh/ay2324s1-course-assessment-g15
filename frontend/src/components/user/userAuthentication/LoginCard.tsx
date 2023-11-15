@@ -28,7 +28,7 @@ const LoginCard: React.FC<Props> =
             border='2px solid #244153'
             value={username}
             onChange={(e) => usernameSetter(e.target.value)}
-            borderRadius={15} />
+            borderRadius={10} />
           <PasswordInput
             label={'Password'}
             passwordShowing={passwordShowing}
