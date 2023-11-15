@@ -43,6 +43,7 @@ const CodingPage = () => {
   const { isOpen: isChatOpen, onToggle: toggleChat } = useDisclosure();
   const { isOpen: isCanvasOpen, onToggle: toggleCanvas } = useDisclosure();
 
+
   useEffect(() => {
     toast({
       title: "Welcome!",
@@ -120,17 +121,16 @@ const CodingPage = () => {
 
     socket.on('userLeft', (data) => {
       toast({
-        title: "Match Disconnected",
+        title: "Match Left",
         description: "Your match has left the session.",
         status: "warning",
-        duration: 9999,
+        duration: 3000,
       });
     });
     return () => {
       socket.disconnect();
     };
   }, []);
-
 
   useEffect(() => {
     const clientChatHistory = getChatHistory();
